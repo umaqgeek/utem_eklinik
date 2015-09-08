@@ -6,4 +6,6 @@
 <body>
 <H1>About My Self</H1>
 <H2>Hi, Assalamualaikum</H2>
-<P>My Name is Nazlinurdoa' binti Wesidid</H3>
+<H3>My Name is Nazlinurdoa' binti Wesidid</H3>
+</body>
+</html>
