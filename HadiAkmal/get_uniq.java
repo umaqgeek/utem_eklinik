@@ -19,9 +19,12 @@ public class get_uniq {
             ResultSet rs = st.executeQuery(query);
             
             ArrayList<String> list= new ArrayList<String>(); //create dynamic array with the name "list" and data type as String.
+            ArrayList<String> list_block = new ArrayList<String>();
+            ArrayList<String> listing = new ArrayList<String>();
             
             while (rs.next()) {
             	list.add(rs.getString("icd10_chapter")); //assign mysql result to list
+            	list_block.add(rs.getString("icd10_block")); //assign mysql result to list
                 String icd10_chapter_result = rs.getString("icd10_chapter");
                 String icd10_block_result = rs.getString("icd10_block");
                 String icd10_code_result = rs.getString("icd10_code");
@@ -31,9 +34,25 @@ public class get_uniq {
                 //int idc = rs.getInt("idc");
                 System.out.format("%s, %s, %s, %s, %s, %s\n", icd10_chapter_result, icd10_block_result, icd10_code_result.substring(5), DiagnosisCd, LOCATION_CODE, PatientTotal);
                 //System.out.format("%s", Integer.valueOf(String.valueOf(icd10_chapter_result) + String.valueOf(icd10_block_result) +  String.valueOf(icd10_code_result.substring(5))));
-                //System.out.println(icd10_code_result);
-            
+                //System.out.println(list);
+                listing.add(icd10_chapter_result);      
+                listing.add(icd10_block_result);           
+                listing.add(icd10_code_result.substring(5)); 
+                listing.add(DiagnosisCd); 
+                listing.add(LOCATION_CODE); 
+                listing.add(PatientTotal);
             }
+            
+            String[] simpleArray = new String[ listing.size() ];
+            simpleArray = listing.toArray( simpleArray );
+
+           // System.out.println(simpleArray); // prints "[1, 2, 3]"
+            for (String number : simpleArray) {
+            	   System.out.println(number);
+            	   }
+            
+            
+            
             
             String[] result = new String[list.size()]; //Get the list size. List = 3
             //System.out.println(list.size());
@@ -44,6 +63,14 @@ public class get_uniq {
                 System.out.println(unique[i]); //print unique icd10_chapter_result
             }
             
+            String[] result_block = new String[list_block.size()];
+            result_block = list_block.toArray(result_block);
+
+            String[] unique_block = new HashSet<String>(Arrays.asList(result_block)).toArray(new String[0]); // Use HashSet to get unique value from array
+            for(int i =0; i<unique_block.length; i++){
+                System.out.println(unique_block[i]); //print unique icd10_chapter_result
+            }            
+     
             
             st.close();
         }
