@@ -73,14 +73,10 @@ public class report_by_fac {
                 
                 while (rs.next()) {
                 	
-                	String icd10_chapter_result = rs.getString("Diagnosis_Cd");
+                	String icd10_block_result = rs.getString("Diagnosis_Cd");
                 	String total = rs.getString("total");
-                    System.out.format("%s, %s\n", icd10_chapter_result, total);
+                    System.out.format("%s, %s\n", icd10_block_result, total);
             }
-                
-
-                
-                
 
                 System.out.println("Total Patient by Block :");
                 
@@ -89,7 +85,36 @@ public class report_by_fac {
          catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
-         }        
+         }// try end
+        
+        
+        
+        try {
+            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
+            Connection conn = DriverManager.getConnection(connectionURL);
+            
+
+                
+                ArrayList<String> list= new ArrayList<String>();
+                String query = "select substring(DiagnosisCd,1,2) AS diag, count(*) AS total from lhr_diagnosis group by substring(DiagnosisCd,1,2);";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                
+                while (rs.next()) {
+                	
+                	String icd10_chapter_result = rs.getString("diag");
+                	String total = rs.getString("total");
+                    System.out.format("%s, %s\n", icd10_chapter_result, total);
+            }
+
+                System.out.println("Total Patient by Block :");
+                
+            st.close();
+        }
+         catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+         }    
         
         
         
