@@ -67,14 +67,15 @@ public class report_by_fac {
 
                 
                 ArrayList<String> list= new ArrayList<String>();
-                String query = "select DiagnosisCd, COUNT(*) AS 'total' from lhr_diagnosis where substring(DiagnosisCd, 1, 2) GROUP BY DiagnosisCd;";
+                String query = "select substring(DiagnosisCd,3,3) AS 'Diagnosis_Cd', count(*) AS 'total' from lhr_diagnosis group by substring(DiagnosisCd,3,3);";
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(query);
                 
                 while (rs.next()) {
                 	
-                	String icd10_chapter_result = rs.getString("DiagnosisCd");
-                    System.out.println("Total Patient by Chapter :" + icd10_chapter_result);
+                	String icd10_chapter_result = rs.getString("Diagnosis_Cd");
+                	String total = rs.getString("total");
+                    System.out.format("%s, %s\n", icd10_chapter_result, total);
             }
                 
 
