@@ -48,9 +48,7 @@ public class report_by_fac {
                 
                 System.out.println("------------------------------------------------------------------\n");
                 
-                
-                System.out.println("Total Patient by Chapter :");
-                System.out.println("Total Patient by Block :");
+            
                 
             st.close();
         }
@@ -64,21 +62,21 @@ public class report_by_fac {
             String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
             Connection conn = DriverManager.getConnection(connectionURL);
             
-
+            System.out.println("Total Patient by Block :");
                 
                 ArrayList<String> list= new ArrayList<String>();
-                String query = "select substring(DiagnosisCd,3,3) AS 'Diagnosis_Cd', count(*) AS 'total' from lhr_diagnosis group by substring(DiagnosisCd,3,3);";
+                String query = "select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3);";
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(query);
                 
                 while (rs.next()) {
                 	
-                	String icd10_block_result = rs.getString("Diagnosis_Cd");
+                	String icd10_block_result = rs.getString("diag");
                 	String total = rs.getString("total");
                     System.out.format("%s, %s\n", icd10_block_result, total);
             }
 
-                System.out.println("Total Patient by Block :");
+
                 
             st.close();
         }
@@ -93,10 +91,10 @@ public class report_by_fac {
             String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
             Connection conn = DriverManager.getConnection(connectionURL);
             
-
+            System.out.println("Total Patient by Chapter :");
                 
                 ArrayList<String> list= new ArrayList<String>();
-                String query = "select substring(DiagnosisCd,1,2) AS diag, count(*) AS total from lhr_diagnosis group by substring(DiagnosisCd,1,2);";
+                String query = "select substring(DiagnosisCd,1,2) AS diag, count(*) AS total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,1,2);";
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(query);
                 
@@ -107,7 +105,7 @@ public class report_by_fac {
                     System.out.format("%s, %s\n", icd10_chapter_result, total);
             }
 
-                System.out.println("Total Patient by Block :");
+
                 
             st.close();
         }
@@ -115,7 +113,38 @@ public class report_by_fac {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
          }    
+        // catch end
         
+        
+        
+        
+        try {
+            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
+            Connection conn = DriverManager.getConnection(connectionURL);
+            
+            System.out.println("Total Patient by Chapter :");
+                
+                ArrayList<String> list= new ArrayList<String>();
+                String query = "select DiagnosisCd as diag, COUNT(DiagnosisCd) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd, 6,3) Union all select 'SUM' DiagnosisCd, COUNT(DiagnosisCd) from lhr_Diagnosis;";
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                
+                while (rs.next()) {
+                	
+                	String icd10_code_result = rs.getString("diag");
+                	String total = rs.getString("total");
+                    System.out.format("%s, %s\n", icd10_code_result, total);
+            }
+
+
+                
+            st.close();
+        }
+         catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+         }    
+        // catch end
         
         
         }
