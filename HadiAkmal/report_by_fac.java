@@ -10,47 +10,101 @@ public class report_by_fac {
     private static final int String = 0;
 	private static final int Set = 0;
 
-	public static void main(String[] args) {
-        try {
-            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
-            Connection conn = DriverManager.getConnection(connectionURL);
-            
-                String a = "FTMK"; //--------------> (temporarily) will update base on user selected
-                String faculty = a;
-                //------------------------- header--------------------
-                System.out.println("Faculty : " + faculty);
-                System.out.println("==============\n");
-                System.out.println("------------------------------------------------------------------");
-                System.out.println("|| CODE\t\t|| DESCRIPTION\t\t\t|| TOTAL PATIENT||");
-                System.out.println("------------------------------------------------------------------");
-                //------------------------- end header--------------------
+	public static void main(String[] args) throws SQLException {
+		
+        String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
+        Connection conn = DriverManager.getConnection(connectionURL);
+        Statement st = conn.createStatement(), st2 = conn.createStatement(), st3 = conn.createStatement();
+        String query = null;
+
+		
+		try {
+
+
                 
-                //String LC = "FTMK";
+                ArrayList<String> list = new ArrayList<String>();
+                query = "SELECT * FROM `icd10_chapters` ORDER BY `icd10_chapters`.`Id` ASC ;";
                 
-                ArrayList<String> list= new ArrayList<String>();
-                String query = "SELECT icd10_codes.icd10_code, icd10_codes.icd10_chapter, icd10_codes.icd10_block, icd10_codes.icd10_desc, lhr_diagnosis.DiagnosisCd, lhr_diagnosis.LOCATION_CODE, COUNT(*) AS PatientTotal FROM icd10_codes, lhr_diagnosis WHERE icd10_codes.icd10_code = lhr_diagnosis.DiagnosisCd and LOCATION_CODE= 'FTMK' GROUP BY icd10_code, LOCATION_CODE ORDER BY icd10_codes.icd10_code ASC;";
-                Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery(query);
                 
                 while (rs.next()) {
-                    list.add(rs.getString("icd10_chapter")); //assign mysql result to list
-                    String icd10_chapter_result = rs.getString("icd10_chapter");
-                    String icd10_block_result = rs.getString("icd10_block");
-                    String icd10_code_result = rs.getString("icd10_code");
-                    String icd10_desc = rs.getString("icd10_desc");
-                    String DiagnosisCd = rs.getString("DiagnosisCd");
-                    String LOCATION_CODE = rs.getString("LOCATION_CODE");
-                    String PatientTotal = rs.getString("PatientTotal");
+                    list.add(rs.getString("id")); //assign mysql result to list
+                    list.add(rs.getString("name")); //assign mysql result to list
+                   // Integer icd10_id_result = rs.getInt("Id");
+                    //String icd10_name_result = rs.getString("name");
 
-                    //------------nak buat loop kat sini pecahkan base on chapter/block/code 3 level
-                    System.out.println("|| "+ icd10_code_result +"\t|| "+ icd10_desc +"||\t "+ PatientTotal +"\t||");
+                   // System.out.println("|| "+ icd10_id_result +"\t|| "+ icd10_name_result + "");
             }
+               
+
+
+                
+                try {
+                	
+
+                    query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '01';";
+                    ResultSet rs3 = st3.executeQuery(query);
+                	String chapter1_total = null;
+                    while (rs3.next()) {
+                    	
+                    	chapter1_total= rs3.getString("count");
+                    }
+                  
+                    System.out.println("Total patient by chapter : \n");
+            
+					System.out.println(list.get(0) + "   " + list.get(1) + "   " + chapter1_total);
+
+                    System.out.println("\n\tTotal Patient by Block :");
+
+                        ArrayList<String> list_01 = new ArrayList<String>();
+                        String query_01 = "SELECT id, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag";
+                        ResultSet rs_01 = st.executeQuery(query_01);
+                        
+                        while (rs_01.next()) {
+                            //list_01.add(rs_01.getString("diag")); //assign mysql result to list
+                        	String icd10_block_id_result = rs_01.getString("id");
+                        	String icd10_block_name_result = rs_01.getString("name");
+                        	String total = rs_01.getString("total");
+                            System.out.format("\t%s   %s   %s\n", icd10_block_id_result, icd10_block_name_result, total);
+                            
+                            String remove_last_char;
+                            //System.out.println(icd10_block_id_result.substring(0, icd10_block_id_result.length()-1));
+                            remove_last_char = icd10_block_id_result.substring(0, icd10_block_id_result.length()-1);
+                            
+                            System.out.println("\n\t\tTotal Patient by Code :");
+                            ArrayList<String> list_01_code = new ArrayList<String>();
+                            String query_01_code = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
+                            //String query_01_code = "SELECT substring(DiagnosisCd,6,5) as diag, COUNT(DiagnosisCd) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"'  group by DiagnosisCd";
+                            ResultSet rs_01_code = st2.executeQuery(query_01_code);
+                            
+                            while (rs_01_code.next()) {
+                            	
+                            	String icd10_code_01_result = rs_01_code.getString("icd10_code_strip");
+                            	String icd10_code_desc_01_result = rs_01_code.getString("icd10_desc");
+                            	String total_code_01 = rs_01_code.getString("total");
+                                System.out.format("\t\t%s\t%s\t%s\n", icd10_code_01_result, icd10_code_desc_01_result, total_code_01);
+                            }
+                        }
+
+                        //System.out.println(list_01);
+
+                        
+                  
+                }
+                 catch (Exception e) {
+                    System.err.println("Got an exception! hh ");
+                    System.err.println(e.getMessage());
+                 }// try end
+                
                 
                 System.out.println("------------------------------------------------------------------\n");
                 
-            
+                System.out.println(list);
+                System.out.println(list.get(1));
                 
-            st.close();
+
+                
+      
         }
          catch (Exception e) {
             System.err.println("Got an exception! ");
@@ -58,94 +112,9 @@ public class report_by_fac {
          }
         
         
-        try {
-            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
-            Connection conn = DriverManager.getConnection(connectionURL);
-            
-            System.out.println("Total Patient by Block :");
-                
-                ArrayList<String> list= new ArrayList<String>();
-                String query = "select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3);";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
-                
-                while (rs.next()) {
-                	
-                	String icd10_block_result = rs.getString("diag");
-                	String total = rs.getString("total");
-                    System.out.format("%s, %s\n", icd10_block_result, total);
-            }
-
-
-                
-            st.close();
-        }
-         catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-         }// try end
         
         
-        
-        try {
-            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
-            Connection conn = DriverManager.getConnection(connectionURL);
-            
-            System.out.println("Total Patient by Chapter :");
-                
-                ArrayList<String> list= new ArrayList<String>();
-                String query = "select substring(DiagnosisCd,1,2) AS diag, count(*) AS total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,1,2);";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
-                
-                while (rs.next()) {
-                	
-                	String icd10_chapter_result = rs.getString("diag");
-                	String total = rs.getString("total");
-                    System.out.format("%s, %s\n", icd10_chapter_result, total);
-            }
-
-
-                
-            st.close();
-        }
-         catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-         }    
-        // catch end
-        
-        
-        
-        
-        try {
-            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
-            Connection conn = DriverManager.getConnection(connectionURL);
-            
-            System.out.println("Total Patient by Chapter :");
-                
-                ArrayList<String> list= new ArrayList<String>();
-                String query = "select DiagnosisCd as diag, COUNT(DiagnosisCd) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd, 6,3) Union all select 'SUM' DiagnosisCd, COUNT(DiagnosisCd) from lhr_Diagnosis;";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
-                
-                while (rs.next()) {
-                	
-                	String icd10_code_result = rs.getString("diag");
-                	String total = rs.getString("total");
-                    System.out.format("%s, %s\n", icd10_code_result, total);
-            }
-
-
-                
-            st.close();
-        }
-         catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-         }    
-        // catch end
-        
+        conn.close();
         
         }
 }
