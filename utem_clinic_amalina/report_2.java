@@ -2,6 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 import java.awt.List;
 import java.io.*;
@@ -12,20 +13,30 @@ public class report_2 {
 
 	public static void main(String[] args) throws SQLException {
 		
-        String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=1234";
+	    String faculty;
+	    ResultSet rs;
+	    ResultSet rs_block;
+	    ResultSet rs_code;
+	    String query = null;
+	    String remove_last_char;
+	    String connectionURL;
+	      
+	    Scanner in = new Scanner(System.in);
+	 
+	    System.out.println("Enter a faculty : ");
+	    faculty = in.nextLine();
+	    System.out.println("You entered string "+faculty);
+		
+        connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=1234";
         Connection conn = DriverManager.getConnection(connectionURL);
+        
         PreparedStatement st1 = conn.prepareStatement(connectionURL), st2 = conn.prepareStatement(connectionURL), st3 = conn.prepareStatement(connectionURL);
-        ResultSet rs;
-        ResultSet rs_block;
-        ResultSet rs_code;
-        String query = null;
-        String remove_last_char;
 
 		
 		try {
                 
                 ArrayList<String> chapter_list = new ArrayList<String>();
-                query = "SELECT * FROM `icd10_chapters` ORDER BY `icd10_chapters`.`Id` ASC ;";              
+                query = "SELECT * FROM `icd10_chapters` ORDER BY `icd10_chapters`.`Id` ASC";              
                 rs = st1.executeQuery(query);
                 
                 while (rs.next()) {
@@ -38,8 +49,11 @@ public class report_2 {
                 }
                 
             		String chapter_total_result = null;
-                    query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '01';";
-                    rs = st1.executeQuery(query);
+                    query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '01' AND LOCATION_CODE = ?";
+                    
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                     while (rs.next()) {
                     	chapter_total_result = rs.getString("count");
@@ -51,8 +65,11 @@ public class report_2 {
 
                     System.out.println("\n\tTotal Patient by Block :");
 
-                        query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(0) +"'";
-                        rs_block = st1.executeQuery(query);
+                        query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc = '"+ chapter_list.get(0) +"'";
+                        
+                        st1 = conn.prepareStatement(query); //recreate statement
+                        st1.setString(1, faculty); // set input parameter
+                        rs_block = st1.executeQuery();
                         
                         while (rs_block.next()) {
                         	String block_id_result = rs_block.getString("id");
@@ -62,12 +79,16 @@ public class report_2 {
                             
 
                             //System.out.println(icd10_block_id_result.substring(0, icd10_block_id_result.length()-1));
-                            remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
-                            
+                            remove_last_char = block_id_result.substring(0, block_id_result.length()-1); //remove last character in 'id' resultset retrieve from icd10_blocks table. A00 = A0 
+
                             System.out.println("\n\t\tTotal Patient by Code :");
-                            query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
+                            query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                             //String query_01_code = "SELECT substring(DiagnosisCd,6,5) as diag, COUNT(DiagnosisCd) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"'  group by DiagnosisCd";
-                            rs_code = st2.executeQuery(query);
+                            
+                            st1 = conn.prepareStatement(query); //recreate statement
+                            st1.setString(1, faculty); // set input parameter
+                            rs_code = st1.executeQuery();
+                            //rs_code = st2.executeQuery(query);
                             
                             while (rs_code.next()) {
                             	
@@ -83,8 +104,10 @@ public class report_2 {
                
                 
                 //chapter 02
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '02';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '02' AND LOCATION_CODE = ?";
+                st1 = conn.prepareStatement(query);
+                st1.setString(1, faculty);
+                rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -94,8 +117,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(2) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(2) +"'";
+                st1 = conn.prepareStatement(query);
+                st1.setString(1, faculty);
+                rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -106,8 +131,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query);
+                    st1.setString(1, faculty);
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -123,8 +150,10 @@ public class report_2 {
                 
                 
                 //chapter 03
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '03';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '03' AND LOCATION_CODE = ?";
+                st1 = conn.prepareStatement(query);
+                st1.setString(1, faculty);
+                rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -134,8 +163,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(4) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(4) +"'";
+                st1 = conn.prepareStatement(query);
+                st1.setString(1, faculty);
+                rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -146,8 +177,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query);
+                    st1.setString(1, faculty);
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -163,8 +196,10 @@ public class report_2 {
                 
                 
                 //chapter 04
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '04';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '04' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query);
+                st1.setString(1, faculty);
+                rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -174,8 +209,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(6) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(6) +"'";
+                st1 = conn.prepareStatement(query);
+                st1.setString(1, faculty);
+                rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -186,8 +223,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query);
+                    st1.setString(1, faculty);
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -202,8 +241,10 @@ public class report_2 {
                 
                 
                 //chapter 05
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '05';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '05' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -213,8 +254,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(8) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(8) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -225,8 +268,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -242,8 +287,10 @@ public class report_2 {
                 
                 
                 //chapter 06
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '06';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '06' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -253,8 +300,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(10) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(10) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -265,8 +314,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -282,8 +333,10 @@ public class report_2 {
                 
                 
                 //chapter 07
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '07';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '07' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -293,8 +346,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(12) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(12) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -305,8 +360,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -322,8 +379,10 @@ public class report_2 {
                 
                 
                 //chapter 08
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '08';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '08' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -333,8 +392,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(14) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(14) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -345,8 +406,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -363,8 +426,10 @@ public class report_2 {
                 
                 
                 //chapter 09
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '09';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '09' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -374,8 +439,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(16) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(16) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -386,8 +453,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -404,8 +473,10 @@ public class report_2 {
                 
                 
                 //chapter 10
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '10';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '10' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -415,8 +486,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(18) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(18) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -427,8 +500,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -445,8 +520,10 @@ public class report_2 {
                 
                 
                 //chapter 11
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '11';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '11' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -456,8 +533,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(20) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(20) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -468,8 +547,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -485,8 +566,10 @@ public class report_2 {
                 
                 
                 //chapter 12
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '12';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '12' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -496,8 +579,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(22) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(22) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -508,8 +593,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -525,8 +612,10 @@ public class report_2 {
                 
                 
                 //chapter 13
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '13';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '13' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -536,8 +625,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(24) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(24) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -548,8 +639,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -566,8 +659,10 @@ public class report_2 {
                 
                 
                 //chapter 14
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '14';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '14' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -577,8 +672,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(26) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(26) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -589,8 +686,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -607,8 +706,10 @@ public class report_2 {
                 
                 
                 //chapter 15
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '15';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '15' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -618,8 +719,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(28) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(28) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -630,8 +733,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -646,8 +751,10 @@ public class report_2 {
                 
                 
                 //chapter 16
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '16';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '16' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -657,8 +764,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(30) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(30) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -669,8 +778,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -687,8 +798,10 @@ public class report_2 {
                 
                 
                 //chapter 17
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '17';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '17' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -698,8 +811,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(32) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(32) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -710,8 +825,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -727,9 +844,10 @@ public class report_2 {
                 
                 
                 //chapter 18
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '18';";
-                rs = st1.executeQuery(query);
-
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '18' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
                 }
@@ -738,8 +856,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(34) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(34) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -750,8 +870,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -768,8 +890,10 @@ public class report_2 {
                 
                 
                 //chapter 19
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '19';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '19' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -779,8 +903,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(36) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(36) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -791,8 +917,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -808,8 +936,10 @@ public class report_2 {
                 
                 
                 //chapter 20
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '20';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '20' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -819,8 +949,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(38) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(38) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -831,8 +963,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -848,8 +982,10 @@ public class report_2 {
                 
                 
                 //chapter 21
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '21';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '21' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -859,8 +995,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(40) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(40) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -871,8 +1009,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
@@ -888,8 +1028,10 @@ public class report_2 {
                 
                 
                 //chapter 22
-                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '22';";
-                rs = st1.executeQuery(query);
+                query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '22' AND LOCATION_CODE = ?;";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs = st1.executeQuery();
 
                 while (rs.next()) {
                 	chapter_total_result = rs.getString("count");
@@ -899,8 +1041,10 @@ public class report_2 {
 				
                 System.out.println("\n\tTotal Patient by Block :");
 
-                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(42) +"'";
-                rs_block = st1.executeQuery(query);
+                query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc ='"+ chapter_list.get(42) +"'";
+                st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_block = st1.executeQuery();
                 
                 while (rs_block.next()) {
                 	String block_id_result = rs_block.getString("id");
@@ -911,8 +1055,10 @@ public class report_2 {
                     remove_last_char = block_id_result.substring(0, block_id_result.length()-1);
                     
                     System.out.println("\n\t\tTotal Patient by Code :");
-                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code  group by DiagnosisCd;";
-                    rs_code = st2.executeQuery(query);
+                    query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                    st1 = conn.prepareStatement(query); //recreate statement
+                    st1.setString(1, faculty); // set input parameter
+                    rs_code = st1.executeQuery();
                     
                     while (rs_code.next()) {
                     	
