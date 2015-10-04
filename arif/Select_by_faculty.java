@@ -8,9 +8,11 @@ public class Select_by_faculty
     public static void main(String[]args) throws SQLException
     {
         String connectionURL = "jdbc:mysql://127.0.0.1/dump?user=root&password=";
-        Connection conn = DriverManager.getConnection(connectionURL);
+        Connection myconn = DriverManager.getConnection(connectionURL);
+        PreparedStatement myStmt = null;
+        ResultSet myRs =null;
         String query0 =" Select distinct location_code from lhr_signs";
-        Statement st0=conn.createStatement();
+        Statement st0=myconn.createStatement();
         ResultSet rs0 = st0.executeQuery(query0);
         while (rs0.next())
         {
@@ -29,24 +31,24 @@ for(int i=0; i<Faculty.length; i++)
                 System.out.println("----------------------------------------------------------------------------------");
                 
                 //------------------------- end header-------------------
-            String query1 = "select lhr_signs.Signs_code,Signs_desc,count(*) as Bilangan_pelajar from lhr_signs where LOCATION_CODE='" +Faculty[i]+"' group by Signs_desc ORDER BY `Signs_desc` ASC " ;
-            Statement st= conn.createStatement();
-            ResultSet rs = st.executeQuery(query1);
-            while (rs.next()) {
-                String signs_code = rs.getString("Signs_code");
-                String Signs_Description = rs.getString("Signs_desc");
-                String Bilangan_pelajar = rs.getString("Bilangan_pelajar");
+            myStmt  = myconn.prepareStatement ("select lhr_signs.Signs_code,Signs_desc,count(*) as Bilangan_pelajar from lhr_signs where LOCATION_CODE=? group by Signs_desc ORDER BY `Signs_desc` ASC ") ;
+            myStmt.setString (1,Faculty[i]);
+            myRs = myStmt.executeQuery();
+            while (myRs.next()) {
+                String signs_code = myRs.getString("Signs_code");
+                String Signs_Description = myRs.getString("Signs_desc");
+                String Bilangan_pelajar = myRs.getString("Bilangan_pelajar");
 
                System.out.println("||"+ signs_code +"||\b\b||"+ Signs_Description +"||\b\b||"+ Bilangan_pelajar +"||");
                     //----------------testing
                System.out.println("----------------------------------------------------------------------------------");
             }
          try {
-            String query2="select count(*)  Signs_desc from lhr_signs where location_code='" +Faculty[i]+"' group by Location_code" ;
-            Statement st1=conn.createStatement();
-            ResultSet rs2= st1.executeQuery(query2);
-            while(rs2.next()) {
-                String Total = rs2.getString("Signs_desc");
+            myStmt = myconn.prepareStatement ("select count(*)  Signs_desc from lhr_signs where location_code=? group by Location_code") ;
+            myStmt.setString (1,Faculty[i]);
+            myRs = myStmt.executeQuery();
+            while(myRs.next()) {
+                String Total = myRs.getString("Signs_desc");
                 System.out.println("Total patient from "+Faculty[i]+" = "+ Total +"\n\n");
             }
          }
