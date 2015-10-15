@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 07, 2015 at 04:48 AM
+-- Generation Time: Oct 16, 2015 at 03:52 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -90,7 +90,6 @@ INSERT INTO `lhr_diagnosis` (`PMI_no`, `hfc_cd`, `Episode_date`, `encounterdate`
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '01B65B812', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKE'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '01B65B813', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTK'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '01B65B814', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTK'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '01B65B815', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTK'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '01B95B960', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FPTT'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '01B95B961', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTMK'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '01B95B962', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FPTT'),
@@ -123,10 +122,10 @@ INSERT INTO `lhr_diagnosis` (`PMI_no`, `hfc_cd`, `Episode_date`, `encounterdate`
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C40C412', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKE'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C40C413', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTMK'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C40C414', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTMK'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C51C501', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKE'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C51C502', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKE'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C51C508', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKE'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C51C509', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTMK'),
+('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C50C501', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKE'),
+('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C50C502', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKE'),
+('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C50C508', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKE'),
+('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C50C509', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTMK'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C51C51', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTK'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C51C510', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTK'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '02C76C76', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKM'),
@@ -175,12 +174,12 @@ INSERT INTO `lhr_diagnosis` (`PMI_no`, `hfc_cd`, `Episode_date`, `encounterdate`
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '07H43H432', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FPTT'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '07H43H433', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FPTT'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '07H55H599', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTMK'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '091301300', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKM'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '091301301', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKM'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '091301308', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKP'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '091301309', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKP'),
-('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09130139', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKP'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09I30I30', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FTMK'),
+('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09I30I300', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKM'),
+('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09I30I301', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKM'),
+('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09I30I308', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKP'),
+('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09I30I309', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKP'),
+('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09I30I39', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKP'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09I60I68', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKEKK'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09I60I680', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKEKK'),
 ('PMS10015', 'Hospital Melaka', '2013-07-19', '2013-07-19', '2013-07-19', '09I60I681', 'tp001', 'At risk of heart disease ', '891031065213', 'M031210009', 'L', 'FKE'),
