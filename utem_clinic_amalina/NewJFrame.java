@@ -253,12 +253,6 @@ public class NewJFrame extends javax.swing.JFrame {
                                 //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                 jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                 
-                            	String blockLeftAlignFormat = "     | %-3s | %-93s | %5s|%n";
-
-                            	System.out.format("     +-----------------------------------------------------------------------------------------------------+------+%n");
-                            	System.out.format(blockLeftAlignFormat, block_id_result, block_name_result, block_total_result);
-                            	System.out.format("     +-----------------------------------------------------------------------------------------------------+------+%n");
-                                
                                 cell = new PdfPCell(new Phrase(""));
                                 cell.setColspan(1);
                                 cell.setBorder(Rectangle.NO_BORDER);
