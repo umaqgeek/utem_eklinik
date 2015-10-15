@@ -1,162 +1,454 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+//package eklinik;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
+import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.List;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class test {
-    private static final int String = 0;
-	private static final int Set = 0;
+//import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.html.WebColors;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
-	public static void main(String[] args) {
-            
-            //looping for faculty here
-            String fac = "FTMK";
-            faculty(fac);
-            testing();
-            viewChapter();
-            viewBlock();
-            viewCode();
-        }
-        
-        public static void faculty(String fac){
-            //------------------------- header--------------------
-                System.out.println("Faculty : " + fac);
-                System.out.println("==============\n");
-                System.out.println("------------------------------------------------------------------");
-                System.out.println("|| CODE\t\t|| DESCRIPTION\t\t\t|| TOTAL PATIENT||");
-                System.out.println("------------------------------------------------------------------");
-            //------------------------- end header--------------------
-        }
-        
-        public static void testing(){
-        try {
-            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=1234";
-            Connection conn = DriverManager.getConnection(connectionURL);
-            
-                ArrayList<String> list= new ArrayList<String>();
-                String query = "SELECT icd10_codes.icd10_code, icd10_codes.icd10_chapter, icd10_codes.icd10_block, icd10_codes.icd10_desc, lhr_diagnosis.DiagnosisCd, lhr_diagnosis.LOCATION_CODE, COUNT(*) AS PatientTotal FROM icd10_codes, lhr_diagnosis WHERE icd10_codes.icd10_code = lhr_diagnosis.DiagnosisCd and LOCATION_CODE= 'FTMK' GROUP BY icd10_code, LOCATION_CODE ORDER BY icd10_codes.icd10_code ASC;";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
-                
-                while (rs.next()) {
-                    list.add(rs.getString("icd10_chapter")); //assign mysql result to list
-                    String icd10_chapter_result = rs.getString("icd10_chapter");
-                    String icd10_block_result = rs.getString("icd10_block");
-                    String icd10_code_result = rs.getString("icd10_code");
-                    String icd10_desc = rs.getString("icd10_desc");
-                    String DiagnosisCd = rs.getString("DiagnosisCd");
-                    String LOCATION_CODE = rs.getString("LOCATION_CODE");
-                    String PatientTotal = rs.getString("PatientTotal");
+import java.awt.Desktop;
 
-                    //------------nak buat loop kat sini pecahkan base on chapter/block/code 3 level
-                    System.out.println("|| "+ icd10_code_result +"\t|| "+ icd10_desc +"||\t "+ PatientTotal +"\t||");
-            }
-                System.out.println("------------------------------------------------------------------\n");
-            st.close();
-        }
-         catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-         }
+/**
+ *
+ * @author Hadi Akmal
+ */
+public class test extends javax.swing.JFrame {
+
+    /**
+     * Creates new form NewJFrame
+     */
+    public test() {
+        initComponents();
     }
-        
-        public static void viewChapter() {
-        try {
-            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=1234";
-            Connection conn = DriverManager.getConnection(connectionURL);
-            
-            System.out.println("Total Patient by Chapter :");
-                
-                ArrayList<String> list= new ArrayList<String>();
-                String query = "select icd10_chapters.id, icd10_chapters.name, substring(lhr_diagnosis.DiagnosisCd,1,2) AS diag, count(*) AS total from icd10_chapters, lhr_diagnosis WHERE lhr_diagnosis.DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'and substring(lhr_diagnosis.DiagnosisCd,1,2)=icd10_chapters.id and LOCATION_CODE= 'FTMK' group by substring(lhr_diagnosis.DiagnosisCd,1,2);";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
-                
-                while (rs.next()) {
-                	
-                	String icd10_chapter_result = rs.getString("diag");
-                	String total = rs.getString("total");
-                        String icd10_chapter_name = rs.getString("name");
-                    //System.out.format("%s, %s\n", icd10_chapter_result, total);
-                    System.out.println("|| "+ icd10_chapter_result +"\t|| "+ icd10_chapter_name +"||\t "+ total +"\t||");
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jComboBox1 = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "FTMK", "FKP", "FKM", "FKEKK", "FKE", "FPTT", "FTK" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
             }
-       
-            st.close();
-        }
-         catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-         }    
-        }
-        
-        
-        
-        
-        
-        
-        public static void viewBlock() {
-        try {
-            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=1234";
-            Connection conn = DriverManager.getConnection(connectionURL);
-            
-            System.out.println("Total Patient by Block :");
+        });
+
+        jLabel1.setText("Select a faculty : ");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jButton1.setText("Generate Report");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 931, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(145, 145, 145)
+                        .addComponent(jButton1)))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+                .addGap(22, 22, 22))
+        );
+
+        pack();
+    }// </editor-fold>                        
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // TODO add your handling code here:
+    	
+    	Document document = new Document();
+        String faculty = null;
+        jTextArea1.setText(""); //clear textarea
+        Object selectedItem = jComboBox1.getSelectedItem();
+        if (selectedItem != null)
+        {
+		try {       
+		       
+		           
+					PdfWriter.getInstance(document,
+					new FileOutputStream("Report.pdf"));
+	            
+		            document.open(); 
+		            //buat column plg banyak dulu untuk mudahkan design
+		            
+		            PdfPTable table = new PdfPTable(6);
+		            table.getDefaultCell().setBorder(0);
+		            table.setWidths(new float[]{ 1.5f, 3, 3.5f, 3, 30, 3}); //guna float untuk precisekan column width
+		            PdfPCell cell;
+	                
+                    faculty = selectedItem.toString();
+                    //jTextArea1.append(faculty);
+                    
+                    
+                    //initialize mysql con and var data type
+                    Integer tot_by_fac = null;
+                    ResultSet rs;
+                    ResultSet rs_block;
+                    ResultSet rs_code;
+                    String query = null;
+                    String remove_last_char;
+                    String connectionURL;
+                    String chapter_total_result = null;
+                    
+                    //initialize pdf
+                    Font teks = new Font(Font.HELVETICA, 18, Font.BOLD);
+                    Color orange = WebColors.getRGBColor("Orange");
+                    Color magenta = WebColors.getRGBColor("#FF00FF");
+                    Color cyan = WebColors.getRGBColor("#00FFFF");
+
+
+                    connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=1234";
+                    Connection conn = DriverManager.getConnection(connectionURL);
+                    PreparedStatement st1 = conn.prepareStatement(connectionURL);
+                    
+                    
+                    try {
+                        
+                        ArrayList<String> chapter_list = new ArrayList<String>();
+                        query = "SELECT * FROM `icd10_chapters` ORDER BY `icd10_chapters`.`Id` ASC";
+                        rs = st1.executeQuery(query);
+                        
+                        while (rs.next()) {
+                            chapter_list.add(rs.getString("id")); //assign mysql result to list
+                            chapter_list.add(rs.getString("name")); //assign mysql result to list
+                            // Integer icd10_id_result = rs.getInt("Id");
+                            //String icd10_name_result = rs.getString("name");
+                            
+                            // System.out.println("|| "+ icd10_id_result +"\t|| "+ icd10_name_result + "");
+                        }
+                        
+                        query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` WHERE `lhr_diagnosis`.`LOCATION_CODE` = ?";
+                        st1 = conn.prepareStatement(query);
+                        st1.setString(1, faculty);
+                        rs = st1.executeQuery();
+                        
+                        while (rs.next()) {
+                            tot_by_fac = rs.getInt("tot_by_fac");
+                        }
+
+                        jTextArea1.append("Total patient by faculty : " + tot_by_fac);
+                        jTextArea1.append("\nTotal patient by chapter : \n\n");
+                        document.add(new Phrase("Report for " + faculty, teks));
+                        document.add(new Phrase("\nTotal patient by faculty : " + tot_by_fac));
+                        document.add(new Phrase("\nTotal patient by chapter : \n"));
+                        
+
+                        
+                        jTextArea1.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                        
+                        // chapter 1                    
+                        query = "select COUNT(DiagnosisCd) as COUNT from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,1,2) = '01' AND LOCATION_CODE = ?";
+                        
+                        st1 = conn.prepareStatement(query); //recreate statement
+                        st1.setString(1, faculty); // set input parameter
+                        rs = st1.executeQuery();
+                        
+                        while (rs.next()) {
+                            chapter_total_result = rs.getString("count");
+                        }
+                        
+                        jTextArea1.append(chapter_list.get(0) + "   " + chapter_list.get(1) + "   " + chapter_total_result);
+                        
+                    	String chapterLeftAlignFormat = "| %-2s | %-99s | %5s|%n";
+
+                    	System.out.format("+----------------------------------------------------------------------------------------------------------+------+%n");
+                    	System.out.format(chapterLeftAlignFormat, chapter_list.get(0), chapter_list.get(1), chapter_total_result);
+                    	System.out.format("+----+-----------------------------------------------------------------------------------------------------+------+%n");
+                        
+                        //chapter row
+                        cell = new PdfPCell(new Phrase(chapter_list.get(0)));
+                        cell.setColspan(1);
+                        cell.setBackgroundColor(orange);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase(chapter_list.get(1)));
+                        cell.setColspan(4);
+                        cell.setBackgroundColor(orange);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase(chapter_total_result));
+                        cell.setColspan(1);
+                        cell.setBackgroundColor(orange);
+                        table.addCell(cell);
+                        
+                        if (!"0".equals(chapter_total_result)){	// check chapter_total_result. if != 0 enter loop
+                        
+                            jTextArea1.append("\n\n\tTotal Patient by Block :");
+
+                        	System.out.format("     | Total Patient by Block :                                                                                   |%n");
+                            
+                            //block row
+                            cell = new PdfPCell(new Phrase(""));
+                            //cell.setColspan(5);
+                            cell.setBorder(Rectangle.NO_BORDER); 
+                            table.addCell(cell);
+                            cell = new PdfPCell(new Phrase("Total Patient by Block :"));
+                            cell.setColspan(6);
+                            cell.setBackgroundColor(magenta);
+                            table.addCell(cell);
+                            
+                            query = "SELECT id, idc, name, total FROM icd10_blocks, (select substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc = '"+ chapter_list.get(0) +"'";
+                            
+                            st1 = conn.prepareStatement(query); //recreate statement
+                            st1.setString(1, faculty); // set input parameter
+                            rs_block = st1.executeQuery();
+                            
+                            while (rs_block.next()) {
+                                String block_id_result = rs_block.getString("id");
+                                String block_name_result = rs_block.getString("name");
+                                String block_total_result = rs_block.getString("total");
+                                //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
+                                jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
+                                
+                            	String blockLeftAlignFormat = "     | %-3s | %-93s | %5s|%n";
+
+                            	System.out.format("     +-----------------------------------------------------------------------------------------------------+------+%n");
+                            	System.out.format(blockLeftAlignFormat, block_id_result, block_name_result, block_total_result);
+                            	System.out.format("     +-----------------------------------------------------------------------------------------------------+------+%n");
+                                
+                                cell = new PdfPCell(new Phrase(""));
+                                cell.setColspan(1);
+                                cell.setBorder(Rectangle.NO_BORDER);
+                                table.addCell(cell);
+                                cell = new PdfPCell(new Phrase(block_id_result));
+                                cell.setColspan(1);
+                                cell.setBackgroundColor(magenta);
+                                table.addCell(cell);
+                                cell = new PdfPCell(new Phrase(block_name_result));
+                                cell.setColspan(3);
+                                cell.setBackgroundColor(magenta);
+                                table.addCell(cell);
+                                cell = new PdfPCell(new Phrase(block_total_result));
+                                cell.setColspan(1);
+                                cell.setBackgroundColor(magenta);
+                                table.addCell(cell);
+                                
+                                //System.out.println(icd10_block_id_result.substring(0, icd10_block_id_result.length()-1));
+                                remove_last_char = block_id_result.substring(0, block_id_result.length()-1); //remove last character in 'id' resultset retrieve from icd10_blocks table. A00 = A0
+                                
+                                jTextArea1.append("\n\t\tTotal Patient by Code :");
+                                
+                            	System.out.format("           | Total Patient by Code :                                                                              |%n");
+                                
+                                // code row
+                                cell = new PdfPCell(new Phrase(""));
+                                cell.setColspan(2);
+                                cell.setBorder(Rectangle.NO_BORDER); 
+                                table.addCell(cell);
+                                cell = new PdfPCell(new Phrase("Total Patient by Code :"));
+                                cell.setColspan(4);
+                                cell.setBackgroundColor(cyan);
+                                table.addCell(cell);
+                                
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                //String query_01_code = "SELECT substring(DiagnosisCd,6,5) as diag, COUNT(DiagnosisCd) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"'  group by DiagnosisCd";
+                                
+                                st1 = conn.prepareStatement(query); //recreate statement
+                                st1.setString(1, faculty); // set input parameter
+                                rs_code = st1.executeQuery();
+                                //rs_code = st2.executeQuery(query);
+                                
+                                while (rs_code.next()) {
+                                    
+                                    String code_strip_result = rs_code.getString("icd10_code_strip");
+                                    String code_desc_result = rs_code.getString("icd10_desc");
+                                    String code_total_result = rs_code.getString("total");
+                                    jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
+                                    //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
+                                    
+                                	String codeLeftAlignFormat = "           | %-3s | %-120s | %5s|%n";
+
+                                	System.out.format("           +-----------------------------------------------------------------------------------------------+------+%n");
+                                	System.out.format(codeLeftAlignFormat, code_strip_result, code_desc_result, code_total_result);
+                                    
+                                    cell = new PdfPCell(new Phrase(""));
+                                    cell.setColspan(2);
+                                    cell.setBorder(Rectangle.NO_BORDER); 
+                                    table.addCell(cell);
+                                    cell = new PdfPCell(new Phrase(code_strip_result));
+                                    cell.setColspan(1);
+                                    cell.setBackgroundColor(cyan);
+                                    table.addCell(cell);
+                                    cell = new PdfPCell(new Phrase(code_desc_result));
+                                    cell.setColspan(2);
+                                    cell.setBackgroundColor(cyan);
+                                    table.addCell(cell);
+                                    cell = new PdfPCell(new Phrase(code_total_result));
+                                    cell.setColspan(1);
+                                    cell.setBackgroundColor(cyan);
+                                    table.addCell(cell);
+                                }// code loop end
+                            }// block loop end
+                        }// if bracket end
+                        
+                        
+                        jTextArea1.append("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                       
+                        
+                        
+                        
+                        System.out.println(chapter_list);
+                        System.out.println(chapter_list.get(1));
+                        
+                        
+                    }
+                    catch (Exception e) {
+                        System.err.println("Got an exception! ");
+                        System.err.println(e.getMessage());
+                    }
+                    
+                    
+                    table.setWidthPercentage(100);
+                    document.add(table);
+                    
+                    document.close();
+                    
+                    conn.close();
+                    
+                }// if for select box end
                 
-                ArrayList<String> list= new ArrayList<String>();
-                String query = "select icd10_blocks.id, icd10_blocks.id2, icd10_blocks.name, substring(lhr_diagnosis.DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis, icd10_blocks WHERE ((substring(lhr_diagnosis.DiagnosisCd,3,3)>= icd10_blocks.id) && (substring(lhr_diagnosis.DiagnosisCd,3,3)<= icd10_blocks.id2)) and lhr_diagnosis.DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' and LOCATION_CODE= 'FTMK' group by substring(lhr_diagnosis.DiagnosisCd,3,3)";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
                 
-                while (rs.next()) {
-                	
-                	String icd10_block_result = rs.getString("diag");
-                	String total = rs.getString("total");
-                	String icd10_block_name = rs.getString("name");
-                    //System.out.format("%s, %s\n", icd10_block_result, total);
-                    System.out.println("|| "+ icd10_block_result +"\t|| "+ icd10_block_name +"||\t "+ total +"\t||");
-            } 
-            st.close();
-        }
-         catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
+                
+                
+                // jComboBox1ActionPerformed end bracket   
+
+         catch (SQLException ex) {
+                Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
          }
+		 catch (Exception e) {// catch itextpdf exception
+            e.printStackTrace();
+         }
+             
         }
         
-       
         
         
-        
-        public static void viewCode() {
-        try {
-            String connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=1234";
-            Connection conn = DriverManager.getConnection(connectionURL);
             
-            System.out.println("Total Patient by Code :");
-             
-                ArrayList<String> list= new ArrayList<String>();
-                String query = "select icd10_codes.icd10_code, icd10_codes.icd10_desc, lhr_diagnosis.DiagnosisCd as diag, COUNT(lhr_diagnosis.DiagnosisCd) as total from icd10_codes, lhr_diagnosis WHERE lhr_diagnosis.DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' and substring(lhr_diagnosis.DiagnosisCd, 6,3)=icd10_codes.icd10_code and LOCATION_CODE= 'FTMK' group by substring(lhr_diagnosis.DiagnosisCd, 6,3) Union all select 'SUM' lhr_diagnosis.DiagnosisCd, COUNT(lhr_diagnosis.DiagnosisCd) from lhr_Diagnosis;";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
-                
-                while (rs.next()) {
-                	
-                	String icd10_code_result = rs.getString("DiagnosisCd");
-                	String total = rs.getString("total");
-                	String icd10_desc  = rs.getString("icd10_desc ");
-                    //System.out.format("%s, %s\n", icd10_code_result, total);
-                    System.out.println("|| "+ icd10_code_result +"\t|| "+ icd10_desc +"||\t "+ total +"\t||");
+    }                                          
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+    	
+
+
+            
+            // open pdf file platform independent
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    File myFile = new File("Report.pdf");
+                    Desktop.getDesktop().open(myFile);
+                } catch (IOException ex) {
+                    // no application registered for PDFs
+                }
             }
 
 
-                
-            st.close();
+
+    } 
+    
+
+   
+    
+    
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-         catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-         }    
-        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new NewJFrame().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
+    // End of variables declaration                   
 }
