@@ -36,7 +36,9 @@ import java.awt.Desktop;
  * @author Hadi Akmal
  */
 public class NewJFrame extends javax.swing.JFrame {
-
+	
+    String faculty = null; //public var
+    
     /**
      * Creates new form NewJFrame
      */
@@ -117,16 +119,17 @@ public class NewJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     	
     	Document document = new Document();
-        String faculty = null;
+        //String faculty = null;
         jTextArea1.setText(""); //clear textarea
         Object selectedItem = jComboBox1.getSelectedItem();
+		faculty = selectedItem.toString();
         if (selectedItem != null)
         {
 		try {       
 		       
-		           
+
 					PdfWriter.getInstance(document,
-					new FileOutputStream("Report.pdf"));
+					new FileOutputStream("Report " + faculty + ".pdf"));
 	            
 		            document.open(); 
 		            //buat column plg banyak dulu untuk mudahkan design
@@ -136,9 +139,7 @@ public class NewJFrame extends javax.swing.JFrame {
 		            table.setWidths(new float[]{ 1.5f, 3, 3.5f, 3, 30, 3}); //guna float untuk precisekan column width
 		            PdfPCell cell;
 	                
-                    faculty = selectedItem.toString();
                     //jTextArea1.append(faculty);
-                    
                     
                     //initialize mysql con and var data type
                     Integer tot_by_fac = null;
@@ -152,7 +153,7 @@ public class NewJFrame extends javax.swing.JFrame {
                     
                     //initialize pdf
                     Font teks = new Font(Font.HELVETICA, 18, Font.BOLD);
-                    Color orange = WebColors.getRGBColor("#FFA500");
+                    Color orange = WebColors.getRGBColor("Orange");
                     Color magenta = WebColors.getRGBColor("#FF00FF");
                     Color cyan = WebColors.getRGBColor("#00FFFF");
 
@@ -173,8 +174,7 @@ public class NewJFrame extends javax.swing.JFrame {
                             chapter_list.add(rs.getString("name")); //assign mysql result to list
                             // Integer icd10_id_result = rs.getInt("Id");
                             //String icd10_name_result = rs.getString("name");
-                            
-                            // System.out.println("|| "+ icd10_id_result +"\t|| "+ icd10_name_result + "");
+
                         }
                         
                         query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` WHERE `lhr_diagnosis`.`LOCATION_CODE` = ?";
@@ -209,6 +209,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         
                         jTextArea1.append(chapter_list.get(0) + "   " + chapter_list.get(1) + "   " + chapter_total_result);
                         
+                    	
                         //chapter row
                         cell = new PdfPCell(new Phrase(chapter_list.get(0)));
                         cell.setColspan(1);
@@ -282,7 +283,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
                                 
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 //String query_01_code = "SELECT substring(DiagnosisCd,6,5) as diag, COUNT(DiagnosisCd) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"'  group by DiagnosisCd";
                                 
                                 st1 = conn.prepareStatement(query); //recreate statement
@@ -395,7 +396,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
                                 rs_code = st1.executeQuery();
@@ -503,11 +504,7 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query);
-                                st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
                                 rs_code = st1.executeQuery();
@@ -614,11 +611,7 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query);
-                                st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
                                 rs_code = st1.executeQuery();
@@ -725,13 +718,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -837,13 +826,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -949,13 +934,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -1061,13 +1042,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3, 3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -1174,13 +1151,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -1285,13 +1258,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -1398,13 +1367,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -1510,13 +1475,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -1622,13 +1583,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -1735,13 +1692,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -1848,13 +1801,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -1959,13 +1908,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -2072,13 +2017,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -2175,13 +2116,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -2280,13 +2217,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -2384,13 +2317,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -2488,13 +2417,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -2592,13 +2517,9 @@ jTextArea1.append("\n-----------------------------------------------------------
                                 cell.setColspan(4);
                                 cell.setBackgroundColor(cyan);
                                 table.addCell(cell);
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
+                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
                                 st1 = conn.prepareStatement(query);
                                 st1.setString(1, faculty);
-                                rs_code = st1.executeQuery();
-                                query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                st1 = conn.prepareStatement(query); //recreate statement
-                                st1.setString(1, faculty); // set input parameter
                                 rs_code = st1.executeQuery();
                                 
                                 while (rs_code.next()) {
@@ -2681,7 +2602,7 @@ jTextArea1.append("\n-----------------------------------------------------------
             // open pdf file platform independent
             if (Desktop.isDesktopSupported()) {
                 try {
-                    File myFile = new File("Report.pdf");
+                    File myFile = new File("Report " + faculty + ".pdf");
                     Desktop.getDesktop().open(myFile);
                 } catch (IOException ex) {
                     // no application registered for PDFs
