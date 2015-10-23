@@ -5,8 +5,10 @@
  */
 //package eklinik;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,6 +25,7 @@ import java.util.logging.Logger;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -198,9 +201,58 @@ public class NewJFrame extends javax.swing.JFrame {
 
                         jTextArea1.append("Total patient by faculty : " + tot_by_fac);
                         jTextArea1.append("\nTotal patient by chapter : \n\n");
-                        document.add(new Phrase("Report for " + faculty, teks));
-                        document.add(new Phrase("\nTotal patient by faculty : " + tot_by_fac));
-                        document.add(new Phrase("\nTotal patient by chapter : \n"));
+                        
+                        PdfPTable table2 = new PdfPTable(2);
+                        float[] columnWidths = {2f, 1.15f};
+                        table2.setWidths(columnWidths);
+                        // 2 columns.
+                        Image logo = Image.getInstance("logoUTeMPNG.png");
+                        logo.scaleAbsolute(230, 100); 
+                        //logo.scalePercent(5f);
+                        
+                        PdfPCell cell1 = new PdfPCell(logo);
+                        cell1.setBorder(Rectangle.NO_BORDER);
+                        cell1.setLeading(15f, 0.3f);
+                        
+                        PdfPCell cell2 = new PdfPCell(new Paragraph("Universiti Teknikal Malaysia Melaka\nHang Tuah Jaya, \n76100 Durian Tunggal, \nMelaka, Malaysia."));
+                        cell2.setBorder(Rectangle.NO_BORDER);
+                        //cell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        cell2.setLeading(15f, 0.3f);
+                        
+                        table2.addCell(cell1);
+                        table2.addCell(cell2);
+                        
+                        PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty", teks));
+                        cell3.setBorder(Rectangle.NO_BORDER);
+                        PdfPCell cell4 = new PdfPCell(new Paragraph("\n\n\n"));
+                        cell4.setBorder(Rectangle.NO_BORDER);
+                        table2.addCell(cell3);
+                        table2.addCell(cell4);
+                        
+                        PdfPCell cell5 = new PdfPCell(new Paragraph("Faculty : " + faculty));
+                        cell5.setBorder(Rectangle.NO_BORDER);
+                        
+                        String timeStamp = new SimpleDateFormat("dd-MM-yyyy h:mm a").format(Calendar.getInstance().getTime()); 
+                        PdfPCell cell6 = new PdfPCell(new Paragraph("Date : " + timeStamp));
+                        cell6.setBorder(Rectangle.NO_BORDER);
+                        table2.addCell(cell5);
+                        table2.addCell(cell6);
+                        
+                        PdfPCell cell7 = new PdfPCell(new Paragraph("Total Diagnosis: " + tot_by_fac));
+                        cell7.setBorder(Rectangle.NO_BORDER);
+                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : xxxx"));
+                        cell8.setBorder(Rectangle.NO_BORDER);
+                        table2.addCell(cell7);
+                        table2.addCell(cell8);
+
+                        document.add(table2);
+                        
+                        
+                        
+                       // document.add(new Phrase("Report for " + faculty, teks));
+                       // document.add(new Phrase("\nTotal patient by faculty : " + tot_by_fac));
+                       // document.add(new Phrase("\nTotal patient by chapter : \n"));
+                        document.add(new Phrase("\n"));
                         
                         int i = 0;
                         int x = 0;
@@ -235,22 +287,13 @@ public class NewJFrame extends javax.swing.JFrame {
                               while (rs.next()) {
                                   chapter_total_result = rs.getString("count");
                               }
-                              
-                              //Check for invalid data in DiagnosisCd column
-                              query = "select DiagnosisCd from lhr_diagnosis LEFT JOIN icd10_codes ON lhr_diagnosis.DiagnosisCd = icd10_codes.icd10_code WHERE substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND icd10_code IS NULL AND LOCATION_CODE = ?";
-                              
-                              st1 = conn.prepareStatement(query); //recreate statement
-                              st1.setString(1, faculty); // set input parameter
-                              rs = st1.executeQuery();
-                              
-                              while (rs.next()) {
-                                  chapter_total_result = rs.getString("DiagnosisCd");
-                                  System.out.println(chapter_total_result);
-                                  invalid_record_list.add(rs.getString("DiagnosisCd")); //assign mysql result to list
-                              }
-                              
+      
                               jTextArea1.append(chapter_list.get(chapter_num) + "   " + chapter_list.get(description_num) + "   " + chapter_total_result);
                               
+                              //System.out.format("Current cursor " +i + ": %f%n", writer.getVerticalPosition(true));
+                              if (writer.getVerticalPosition(true) <= 90.000000 || writer.getVerticalPosition(true) <= 112.000000) { //if chapter title is at the bottom then push it to new page. 112.000000 is title cursor for first page & 90.000000 is chapter title cursor other than 1st page.
+                            	  document.newPage();
+                              }
                           	
                               //chapter row
                               testObjs.get("chapter"+ i).getDefaultCell().setBorder(0);
@@ -295,7 +338,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                   testObjs.get("block_title"+ i).addCell(cell);                                 
                                   document.add(testObjs.get("block_title"+ i));
                                   
-                                  query = "SELECT DiagnosisCd, idc, id, name, total FROM icd10_blocks, (select DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE icd10_blocks.id = diag AND idc = '"+ chapter_list.get(chapter_num) +"'";
+                                  query = "SELECT DiagnosisCd, idc, id, name, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ chapter_list.get(chapter_num) +"'";
                                   
                                   st1 = conn.prepareStatement(query); //recreate statement
                                   st1.setString(1, faculty); // set input parameter
@@ -410,8 +453,16 @@ public class NewJFrame extends javax.swing.JFrame {
                                           cell.setColspan(1);
                                           cell.setBackgroundColor(cyan);
                                           testObjs.get("code").addCell(cell);
-                                          document.add(testObjs.get("code"));    
+                                          document.add(testObjs.get("code"));  
+                                          
                                       }// code loop end
+                                      
+                                      if (writer.getVerticalPosition(true) <= 88.000000) { //Block title at first page use 88.000000
+                                    	  document.newPage();
+                                      }
+                                      System.out.format("Current cursor " +i + ": %f%n", writer.getVerticalPosition(true));
+                                      
+                                      
                                   }// block loop end
                               }// if bracket end
                               
