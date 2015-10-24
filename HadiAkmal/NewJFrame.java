@@ -137,8 +137,8 @@ public class NewJFrame extends javax.swing.JFrame {
         {
 		try {       
 		       
-                    unikID = UUID.randomUUID().toString(); //generate unique ID : http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html
-			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(faculty + "-" + unikID.replaceAll("[\\s-]+", "") + ".pdf"));
+                    unikID = UUID.randomUUID().toString().replaceAll("[\\s-]+", "3"); //generate unique ID : http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html Replace white space and dash with number 3
+			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(faculty + "-" + unikID + ".pdf"));
 	            
 		            document.open(); 
 
@@ -242,12 +242,30 @@ public class NewJFrame extends javax.swing.JFrame {
                         PdfPCell cell7 = new PdfPCell(new Paragraph("Total Diagnosis: " + tot_by_fac));
                         cell7.setBorder(Rectangle.NO_BORDER);
                         
-                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : " + faculty + "-" + unikID.replaceAll("[\\s-]+", ""))); //remove with space and dash
+                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : " + faculty + "-" + unikID)); //remove with space and dash
                         cell8.setBorder(Rectangle.NO_BORDER);
                         table2.addCell(cell7);
                         table2.addCell(cell8);
 
                         document.add(table2);
+                        
+                        //temp validation
+                        /*
+                         
+                              //Check for invalid data in DiagnosisCd column
+                              query = "select DiagnosisCd from lhr_diagnosis LEFT JOIN icd10_codes ON lhr_diagnosis.DiagnosisCd = icd10_codes.icd10_code WHERE substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND icd10_code IS NULL AND LOCATION_CODE = ?";
+                              
+                              st1 = conn.prepareStatement(query); //recreate statement
+                              st1.setString(1, faculty); // set input parameter
+                              rs = st1.executeQuery();
+                              
+                              while (rs.next()) {
+                                  chapter_total_result = rs.getString("DiagnosisCd");
+                                  System.out.println(chapter_total_result);
+                                  invalid_record_list.add(rs.getString("DiagnosisCd")); //assign mysql result to list
+                              }
+                         
+                         */
                         
                         
                         
@@ -258,17 +276,8 @@ public class NewJFrame extends javax.swing.JFrame {
                         
                         int i = 0;
                         int x = 0;
-                        int count = 0;
                         
                         Map<String, PdfPTable> testObjs = new HashMap<String, PdfPTable>();
-                        for(int t = 0; t <= 50; t++){
-                            testObjs.put("chapter" + String.valueOf(t), new PdfPTable(6));
-                            testObjs.put("block_title" + String.valueOf(t), new PdfPTable(6));
-                            testObjs.put("block" + String.valueOf(t), new PdfPTable(6));
-                            testObjs.put("code_title" + String.valueOf(t), new PdfPTable(6));
-                            testObjs.put("code" + String.valueOf(t), new PdfPTable(6));
-  
-                        }  
 
                         for (i = 01; i <= 22; i++){ // loop it 22 times to represent 22 chapter
                                 
@@ -298,47 +307,49 @@ public class NewJFrame extends javax.swing.JFrame {
                               }
                           	
                               //chapter row
-                              testObjs.get("chapter"+ i).getDefaultCell().setBorder(0);
-                              testObjs.get("chapter"+ i).setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f}); //guna float untuk precisekan column width
-                              testObjs.get("chapter"+ i).setLockedWidth(true);
-                              testObjs.get("chapter"+ i).setTotalWidth(document.right() - document.left());
+                              testObjs.put("chapter", new PdfPTable(6)); //declare new object. this object will be overwrite by new similar object name during the next loop
+                              testObjs.get("chapter").getDefaultCell().setBorder(0);
+                              testObjs.get("chapter").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f}); //guna float untuk precisekan column width
+                              testObjs.get("chapter").setLockedWidth(true);
+                              testObjs.get("chapter").setTotalWidth(document.right() - document.left());
                           	
                               //chapter row
                               cell = new PdfPCell(new Phrase(chapter_list.get(chapter_num)));
                               cell.setColspan(1);
                               cell.setBackgroundColor(orange);
-                              testObjs.get("chapter"+ i).addCell(cell);
+                              testObjs.get("chapter").addCell(cell);
                               cell = new PdfPCell(new Phrase(chapter_list.get(description_num)));
                               cell.setBackgroundColor(orange);
                               cell.setColspan(4);
-                              testObjs.get("chapter"+ i).addCell(cell);
+                              testObjs.get("chapter").addCell(cell);
                               cell = new PdfPCell(new Phrase(chapter_total_result));
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
-                              testObjs.get("chapter"+ i).addCell(cell);
+                              testObjs.get("chapter").addCell(cell);
                               
-                              document.add(testObjs.get("chapter"+ i));
+                              document.add(testObjs.get("chapter"));
                               
                               if (!"0".equals(chapter_total_result)){	// check chapter_total_result. if != 0 enter loop
                               
                                   jTextArea1.append("\n\n\tTotal Patient by Block :");
                                   
-                                  //block row                                  
-                                  testObjs.get("block_title"+ i).getDefaultCell().setBorder(0);
-                                  testObjs.get("block_title"+ i).setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
-                                  testObjs.get("block_title"+ i).setLockedWidth(true);
-                                  testObjs.get("block_title"+ i).setTotalWidth(document.right() - document.left());
+                                  //block row     
+                                  testObjs.put("block_title", new PdfPTable(6));
+                                  testObjs.get("block_title").getDefaultCell().setBorder(0);
+                                  testObjs.get("block_title").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
+                                  testObjs.get("block_title").setLockedWidth(true);
+                                  testObjs.get("block_title").setTotalWidth(document.right() - document.left());
             	                  
                                   //block row
                                   cell = new PdfPCell(new Phrase(""));
                                   //cell.setColspan(5);
                                   cell.setBorder(Rectangle.NO_BORDER); 
-                                  testObjs.get("block_title"+ i).addCell(cell);
+                                  testObjs.get("block_title").addCell(cell);
                                   cell = new PdfPCell(new Phrase("Total Patient by Block :"));
                                   cell.setColspan(6);
                                   cell.setBackgroundColor(magenta);
-                                  testObjs.get("block_title"+ i).addCell(cell);                                 
-                                  document.add(testObjs.get("block_title"+ i));
+                                  testObjs.get("block_title").addCell(cell);                                 
+                                  document.add(testObjs.get("block_title"));
                                   
                                   query = "SELECT DiagnosisCd, idc, id, name, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ chapter_list.get(chapter_num) +"'";
                                   
@@ -352,38 +363,37 @@ public class NewJFrame extends javax.swing.JFrame {
 
                                 	  
                                 	  //System.out.println(block_counter++);
-                                	  String DiagnosisCd_result = rs_block.getString("DiagnosisCd");
                                       String block_id_result = rs_block.getString("id");
                                       String block_name_result = rs_block.getString("name");
                                       String block_total_result = rs_block.getString("total");
                                       //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                       jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                                                 
-                                      testObjs.put("block" + String.valueOf(i), new PdfPTable(6));
+                                      testObjs.put("block", new PdfPTable(6));
                                       
-                                      testObjs.get("block"+ i).getDefaultCell().setBorder(0);
-                                      testObjs.get("block"+ i).setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
-                                      testObjs.get("block"+ i).setLockedWidth(true);
-                                      testObjs.get("block"+ i).setTotalWidth(document.right() - document.left());	
+                                      testObjs.get("block").getDefaultCell().setBorder(0);
+                                      testObjs.get("block").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
+                                      testObjs.get("block").setLockedWidth(true);
+                                      testObjs.get("block").setTotalWidth(document.right() - document.left());	
                                       //System.out.println("loop block nombor :" + i);
                                       cell = new PdfPCell(new Phrase(""));
                                       cell.setColspan(1);
                                       cell.setBorder(Rectangle.NO_BORDER);
-                                      testObjs.get("block"+ i).addCell(cell);
+                                      testObjs.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_id_result));
                                       cell.setColspan(1);
                                       cell.setBackgroundColor(magenta);
-                                      testObjs.get("block"+ i).addCell(cell);
+                                      testObjs.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_name_result));
                                       cell.setColspan(3);
                                       cell.setBackgroundColor(magenta);
-                                      testObjs.get("block"+ i).addCell(cell);
+                                      testObjs.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_total_result));
                                       cell.setColspan(1);
                                       cell.setBackgroundColor(magenta);
-                                      testObjs.get("block"+ i).addCell(cell);
+                                      testObjs.get("block").addCell(cell);
                                       
-                                      document.add(testObjs.get("block"+ i));
+                                      document.add(testObjs.get("block"));
                                       
                                       
                                       //System.out.println(icd10_block_id_result.substring(0, icd10_block_id_result.length()-1));
@@ -395,23 +405,23 @@ public class NewJFrame extends javax.swing.JFrame {
                                       }
                                       jTextArea1.append("\n\t\tTotal Patient by Code :");
                                       
-                                      testObjs.put("code", new PdfPTable(6));
+                                      testObjs.put("code_title", new PdfPTable(6));
                                       
                                       // code row
-                                      testObjs.get("code").getDefaultCell().setBorder(0);
-                                      testObjs.get("code").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
-                                      testObjs.get("code").setLockedWidth(true);
-                                      testObjs.get("code").setTotalWidth(document.right() - document.left());	
+                                      testObjs.get("code_title").getDefaultCell().setBorder(0);
+                                      testObjs.get("code_title").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
+                                      testObjs.get("code_title").setLockedWidth(true);
+                                      testObjs.get("code_title").setTotalWidth(document.right() - document.left());	
                                       
                                       cell = new PdfPCell(new Phrase(""));
                                       cell.setColspan(2);
                                       cell.setBorder(Rectangle.NO_BORDER); 
-                                      testObjs.get("code").addCell(cell);
+                                      testObjs.get("code_title").addCell(cell);
                                       cell = new PdfPCell(new Phrase("Total Patient by Code :"));
                                       cell.setColspan(4);
                                       cell.setBackgroundColor(cyan);
-                                      testObjs.get("code").addCell(cell);                                      
-                                      document.add(testObjs.get("code"));
+                                      testObjs.get("code_title").addCell(cell);                                      
+                                      document.add(testObjs.get("code_title"));
                                       
                                       query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by DiagnosisCd";
                                       //query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
@@ -472,7 +482,8 @@ public class NewJFrame extends javax.swing.JFrame {
                               //jTextArea1.append("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                               jTextArea1.append("\n\n");
                         } // for loop end       
-                            
+
+                        
                         System.out.println(chapter_list);
                         System.out.println(chapter_list.get(1));
                         System.out.println(invalid_record_list);
@@ -521,7 +532,7 @@ public class NewJFrame extends javax.swing.JFrame {
             // open pdf file platform independent
             if (Desktop.isDesktopSupported()) {
                 try {
-                    File myFile = new File(faculty + "-" + unikID.replaceAll("[\\s-]+", "") + ".pdf"); 
+                    File myFile = new File(faculty + "-" + unikID + ".pdf"); 
                     Desktop.getDesktop().open(myFile);
                 } catch (IOException ex) {
                     // no application registered for PDFs
