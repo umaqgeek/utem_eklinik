@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.UUID;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.List;
@@ -44,6 +45,7 @@ import java.awt.Desktop;
 public class NewJFrame extends javax.swing.JFrame {
 	
     String faculty = null; //public var
+    String unikID = null;
     
     /**
      * Creates new form NewJFrame
@@ -135,9 +137,8 @@ public class NewJFrame extends javax.swing.JFrame {
         {
 		try {       
 		       
-
-			        PdfWriter writer = PdfWriter.getInstance(document,
-					new FileOutputStream("Report " + faculty + ".pdf"));
+                    unikID = UUID.randomUUID().toString(); //generate unique ID : http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html
+			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(faculty + "-" + unikID.replaceAll("[\\s-]+", "") + ".pdf"));
 	            
 		            document.open(); 
 
@@ -203,7 +204,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         jTextArea1.append("\nTotal patient by chapter : \n\n");
                         
                         PdfPTable table2 = new PdfPTable(2);
-                        float[] columnWidths = {2f, 1.15f};
+                        float[] columnWidths = {2f, 1.19f};
                         table2.setWidths(columnWidths);
                         // 2 columns.
                         Image logo = Image.getInstance("logoUTeMPNG.png");
@@ -240,7 +241,8 @@ public class NewJFrame extends javax.swing.JFrame {
                         
                         PdfPCell cell7 = new PdfPCell(new Paragraph("Total Diagnosis: " + tot_by_fac));
                         cell7.setBorder(Rectangle.NO_BORDER);
-                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : xxxx"));
+                        
+                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : " + faculty + "-" + unikID.replaceAll("[\\s-]+", ""))); //remove with space and dash
                         cell8.setBorder(Rectangle.NO_BORDER);
                         table2.addCell(cell7);
                         table2.addCell(cell8);
@@ -460,7 +462,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                       if (writer.getVerticalPosition(true) <= 88.000000) { //Block title at first page use 88.000000
                                     	  document.newPage();
                                       }
-                                      System.out.format("Current cursor " +i + ": %f%n", writer.getVerticalPosition(true));
+                                      //System.out.format("Current cursor " +i + ": %f%n", writer.getVerticalPosition(true));
                                       
                                       
                                   }// block loop end
@@ -519,7 +521,7 @@ public class NewJFrame extends javax.swing.JFrame {
             // open pdf file platform independent
             if (Desktop.isDesktopSupported()) {
                 try {
-                    File myFile = new File("Report " + faculty + ".pdf");
+                    File myFile = new File(faculty + "-" + unikID.replaceAll("[\\s-]+", "") + ".pdf"); 
                     Desktop.getDesktop().open(myFile);
                 } catch (IOException ex) {
                     // no application registered for PDFs
