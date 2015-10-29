@@ -301,15 +301,21 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                         //chapter row
                         cell = new PdfPCell(new Phrase(String.format("%02d", i)));
                         cell.setColspan(1);
+                        
+                                cell.setBorder(Rectangle.NO_BORDER);
                         //cell.setBackgroundColor(orange);
                         testObjs.get("chapter").addCell(cell);
                         cell = new PdfPCell(new Phrase(chapter_map.get(String.format("%02d", i))));
                         //cell.setBackgroundColor(orange);
                         cell.setColspan(4);
+                        
+                                cell.setBorder(Rectangle.NO_BORDER);
                         testObjs.get("chapter").addCell(cell);
                         cell = new PdfPCell(new Phrase(chapter_total_result));
                         //cell.setBackgroundColor(orange);
                         cell.setColspan(1);
+                        
+                                cell.setBorder(Rectangle.NO_BORDER);
                         testObjs.get("chapter").addCell(cell);
 
                         document.add(testObjs.get("chapter"));
@@ -332,6 +338,8 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                             testObjs.get("block_title").addCell(cell);
                             cell = new PdfPCell(new Phrase("Total Patient by Block :"));
                             cell.setColspan(6);
+                            
+                                cell.setBorder(Rectangle.NO_BORDER);
                             //cell.setBackgroundColor(magenta);
                             testObjs.get("block_title").addCell(cell);
                             document.add(testObjs.get("block_title"));
@@ -362,16 +370,22 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                                 cell.setColspan(1);
                                 cell.setBorder(Rectangle.NO_BORDER);
                                 testObjs.get("block").addCell(cell);
+                                
                                 cell = new PdfPCell(new Phrase(block_id_result));
                                 cell.setColspan(1);
+                                cell.setBorder(Rectangle.NO_BORDER);
                                 //cell.setBackgroundColor(magenta);
                                 testObjs.get("block").addCell(cell);
                                 cell = new PdfPCell(new Phrase(block_name_result));
                                 cell.setColspan(3);
+                                
+                                cell.setBorder(Rectangle.NO_BORDER);
                                 //cell.setBackgroundColor(magenta);
                                 testObjs.get("block").addCell(cell);
                                 cell = new PdfPCell(new Phrase(block_total_result));
                                 cell.setColspan(1);
+                                
+                                cell.setBorder(Rectangle.NO_BORDER);
                                 //cell.setBackgroundColor(magenta);
                                 testObjs.get("block").addCell(cell);
                                 document.add(testObjs.get("block"));
@@ -404,6 +418,8 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                                     testObjs.get("code_title").addCell(cell);
                                     cell = new PdfPCell(new Phrase("Total Patient by Code :"));
                                     cell.setColspan(4);
+                                    
+                                cell.setBorder(Rectangle.NO_BORDER);
                                     //cell.setBackgroundColor(cyan);
                                     testObjs.get("code_title").addCell(cell);
                                     document.add(testObjs.get("code_title"));
@@ -450,14 +466,20 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                                     testObjs.get("code").addCell(cell);
                                     cell = new PdfPCell(new Phrase(code_strip_result));
                                     cell.setColspan(1);
+                                    
+                                cell.setBorder(Rectangle.NO_BORDER);
                                     //cell.setBackgroundColor(cyan);
                                     testObjs.get("code").addCell(cell);
                                     cell = new PdfPCell(new Phrase(code_desc_result));
                                     cell.setColspan(2);
+                                    
+                                cell.setBorder(Rectangle.NO_BORDER);
                                     //cell.setBackgroundColor(cyan);
                                     testObjs.get("code").addCell(cell);
                                     cell = new PdfPCell(new Phrase(code_total_result));
                                     cell.setColspan(1);
+                                    
+                                cell.setBorder(Rectangle.NO_BORDER);
                                     //cell.setBackgroundColor(cyan);
                                     testObjs.get("code").addCell(cell);
                                     document.add(testObjs.get("code"));
