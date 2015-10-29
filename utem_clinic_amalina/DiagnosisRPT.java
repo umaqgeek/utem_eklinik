@@ -69,7 +69,7 @@ public class DiagnosisRPT extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+       // jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,17 +81,16 @@ public class DiagnosisRPT extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Select a faculty : ");
+        //jTextArea1.setColumns(20);
+        //jTextArea1.setRows(5);
+        //jScrollPane1.setViewportView(jTextArea1);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jButton1.setText("Generate Report");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+//        jButton1.setText("Generate Report");
+//        jButton1.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                jButton1ActionPerformed(evt);
+//            }
+//        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -106,7 +105,8 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(145, 145, 145)
-                                        .addComponent(jButton1)))
+                                        //.addComponent(jButton1)
+                                ))
                         .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -116,7 +116,8 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel1)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton1))
+                                //.addComponent(jButton1)
+                        )
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
                         .addGap(22, 22, 22))
@@ -130,10 +131,10 @@ public class DiagnosisRPT extends javax.swing.JFrame {
 
         Document document = new Document();
 
-        jTextArea1.setText(""); //clear textarea
+        //jTextArea1.setText(""); //clear textarea
         //----wrap lines AND wrap at word boundaries and not character boundaries
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setWrapStyleWord(true);
+        //jTextArea1.setLineWrap(true);
+        //jTextArea1.setWrapStyleWord(true);
         //--------------------------->
         Object selectedItem = jComboBox1.getSelectedItem();
         faculty = selectedItem.toString();
@@ -496,6 +497,7 @@ public class DiagnosisRPT extends javax.swing.JFrame {
 
                         //jTextArea1.append("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                         //jTextArea1.append("\n\n");
+                        
                     } // for loop end       
 
                     if (invalid_record_list.size() != 0) {
@@ -549,14 +551,7 @@ public class DiagnosisRPT extends javax.swing.JFrame {
             }
 
         }
-
-    }
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-
-        // open pdf file platform independent
-        if (Desktop.isDesktopSupported()) {
+         if (Desktop.isDesktopSupported()) {
             try {
                 File myFile = new File(faculty + "-" + unikID + ".pdf");
                 Desktop.getDesktop().open(myFile);
@@ -566,6 +561,21 @@ public class DiagnosisRPT extends javax.swing.JFrame {
         }
 
     }
+
+//    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+//        // TODO add your handling code here:
+//
+//        // open pdf file platform independent
+//        if (Desktop.isDesktopSupported()) {
+//            try {
+//                File myFile = new File(faculty + "-" + unikID + ".pdf");
+//                Desktop.getDesktop().open(myFile);
+//            } catch (IOException ex) {
+//                // no application registered for PDFs
+//            }
+//        }
+//
+//    }
 
     /**
      * @param args the command line arguments
