@@ -23,6 +23,8 @@ import java.awt.List;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
+
 
 //import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -81,9 +83,9 @@ public class DiagnosisRPT extends javax.swing.JFrame {
         });
 
         jLabel1.setText("Select a faculty : ");
-        //jTextArea1.setColumns(20);
-        //jTextArea1.setRows(5);
-        //jScrollPane1.setViewportView(jTextArea1);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
 //        jButton1.setText("Generate Report");
 //        jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -131,10 +133,19 @@ public class DiagnosisRPT extends javax.swing.JFrame {
 
         Document document = new Document();
 
-        //jTextArea1.setText(""); //clear textarea
+        jTextArea1.setText(""); //clear textarea
         //----wrap lines AND wrap at word boundaries and not character boundaries
-        //jTextArea1.setLineWrap(true);
-        //jTextArea1.setWrapStyleWord(true);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setWrapStyleWord(true);
+        
+        //------------------start searching time
+        jTextArea1.append("SUMMARY\n");
+        jTextArea1.append("===============\n\n");
+        String timeStamp1 = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a").format(Calendar.getInstance().getTime());
+        //PdfPCell cell6 = new PdfPCell(new Paragraph("\n\nDate : " + timeStamp));
+        jTextArea1.append("Start searching : "+timeStamp1);
+        //-----------------
+                    
         //--------------------------->
         Object selectedItem = jComboBox1.getSelectedItem();
         faculty = selectedItem.toString();
@@ -199,7 +210,8 @@ public class DiagnosisRPT extends javax.swing.JFrame {
 
                     //jTextArea1.append("Total patient by faculty : " + tot_by_fac);
                     //jTextArea1.append("\nTotal patient by chapter : \n\n");
-
+                    
+                    
                     PdfPTable table2 = new PdfPTable(2);
                     float[] columnWidths = {2f, 1.19f};
                     table2.setWidths(columnWidths);
@@ -211,12 +223,10 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                     PdfPCell cell1 = new PdfPCell(logo);
                     cell1.setBorder(Rectangle.NO_BORDER);
                     cell1.setLeading(15f, 0.3f);
-
                     PdfPCell cell2 = new PdfPCell(new Paragraph("Universiti Teknikal Malaysia Melaka\nHang Tuah Jaya, \n76100 Durian Tunggal, \nMelaka, Malaysia."));
                     cell2.setBorder(Rectangle.NO_BORDER);
                     //cell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     cell2.setLeading(15f, 0.3f);
-
                     table2.addCell(cell1);
                     table2.addCell(cell2);
 
@@ -227,11 +237,10 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                     table2.addCell(cell3);
                     table2.addCell(cell4);
 
-                    PdfPCell cell5 = new PdfPCell(new Paragraph("Faculty : " + faculty));
+                    PdfPCell cell5 = new PdfPCell(new Paragraph("\n\nFaculty : " + faculty));
                     cell5.setBorder(Rectangle.NO_BORDER);
-
                     String timeStamp = new SimpleDateFormat("dd-MM-yyyy h:mm a").format(Calendar.getInstance().getTime());
-                    PdfPCell cell6 = new PdfPCell(new Paragraph("Date : " + timeStamp));
+                    PdfPCell cell6 = new PdfPCell(new Paragraph("\n\nDate : " + timeStamp));
                     cell6.setBorder(Rectangle.NO_BORDER);
                     table2.addCell(cell5);
                     table2.addCell(cell6);
@@ -239,12 +248,20 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                     PdfPCell cell7 = new PdfPCell(new Paragraph(""));
                     //PdfPCell cell7 = new PdfPCell(new Paragraph("Total Diagnosis: " + tot_by_fac));
                     cell7.setBorder(Rectangle.NO_BORDER);
-
                     PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : ECSS_RPT_001")); //remove with space and dash
                     cell8.setBorder(Rectangle.NO_BORDER);
                     table2.addCell(cell7);
                     table2.addCell(cell8);
 
+                    
+                    PdfPCell cell9 = new PdfPCell(new Paragraph("\n"));
+                    //PdfPCell cell7 = new PdfPCell(new Paragraph("Total Diagnosis: " + tot_by_fac));
+                    cell9.setBorder(Rectangle.NO_BORDER);
+                    PdfPCell cell10 = new PdfPCell(new Paragraph("\n")); //remove with space and dash
+                    cell10.setBorder(Rectangle.NO_BORDER);
+                    table2.addCell(cell9);
+                    table2.addCell(cell10);
+                    
                     document.add(table2);
 
                         //temp validation         
@@ -559,6 +576,44 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                 // no application registered for PDFs
             }
         }
+         
+         //------------------finish searching time
+        String timeStamp2 = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a").format(Calendar.getInstance().getTime());
+        //PdfPCell cell6 = new PdfPCell(new Paragraph("\n\nDate : " + timeStamp));
+        jTextArea1.append("\nEnd searching : "+timeStamp2);
+        //-----------------
+        
+        
+        //-----------calculate respond time
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy h:mm:ss a");
+                Date d1 = null;
+		Date d2 = null;
+
+		try {
+			d1 = format.parse(timeStamp1);
+			d2 = format.parse(timeStamp2);
+
+			//in milliseconds
+			long diff = d2.getTime() - d1.getTime();
+
+			long diffSeconds = diff / 1000 % 60;
+			long diffMinutes = diff / (60 * 1000) % 60;
+			long diffHours = diff / (60 * 60 * 1000) % 24;
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+                        
+                        jTextArea1.append("\nRespond time: ");
+			jTextArea1.append(diffDays + " days, ");
+			jTextArea1.append(diffHours + " hours, ");
+			jTextArea1.append(diffMinutes + " minutes, ");
+			jTextArea1.append(diffSeconds + " seconds.");
+                        }
+                catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	
+
+        //------------
 
     }
 
