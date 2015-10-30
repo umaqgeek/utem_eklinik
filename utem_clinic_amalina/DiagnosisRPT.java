@@ -26,9 +26,11 @@ import java.util.logging.Logger;
 import java.util.Date;
 
 
+
 //import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
@@ -154,9 +156,9 @@ public class DiagnosisRPT extends javax.swing.JFrame {
 
                 unikID = UUID.randomUUID().toString().replaceAll("[\\s-]+", "3"); //generate unique ID : http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html Replace white space and dash with number 3
                 PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(faculty + "-" + unikID + ".pdf"));
-
+                
                 document.open();
-
+                
 		//buat column plg banyak dulu untuk mudahkan design
                 PdfPTable table = new PdfPTable(6);
                 table.getDefaultCell().setBorder(0);
@@ -219,7 +221,7 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                     Image logo = Image.getInstance("logoUTeMPNG.png");
                     logo.scaleAbsolute(230, 100);
                         //logo.scalePercent(5f);
-
+                    
                     PdfPCell cell1 = new PdfPCell(logo);
                     cell1.setBorder(Rectangle.NO_BORDER);
                     cell1.setLeading(15f, 0.3f);
@@ -552,7 +554,19 @@ public class DiagnosisRPT extends javax.swing.JFrame {
                     System.err.println("Got an exception! ");
                     System.err.println(e.getMessage());
                 }
-
+                //-----------------------start
+                //document.add(new Paragraph("\n\n\n-End of Report-"));
+                Font teks1 = new Font(Font.BOLD);
+                Paragraph paragraph = new Paragraph();
+			paragraph.add("\n\n\n-End of Report-");
+			paragraph.setAlignment(Element.ALIGN_CENTER);
+                        paragraph.setFont(teks1);
+                        
+//                        Font font = new Font(Font.COURIER);
+//			font.setStyle(Font.BOLD);
+			document.add(paragraph);
+                
+                //------------------------
                     //table.setWidthPercentage(100);
                 //document.add(table);
                 document.close();
