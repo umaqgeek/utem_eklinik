@@ -46,10 +46,9 @@ import java.awt.Desktop;
  * @author Hadi Akmal
  */
 public class NewJFrame extends javax.swing.JFrame {
-	
-    String faculty = null; //public var
-    String unikID = null;
     
+    String faculty = null; //public var
+
     /**
      * Creates new form NewJFrame
      */
@@ -70,7 +69,6 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,13 +85,6 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jButton1.setText("Generate Report");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -105,21 +96,18 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(145, 145, 145)
-                        .addComponent(jButton1)))
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(13, 13, 13)
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
                 .addGap(22, 22, 22))
         );
 
@@ -128,7 +116,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-    	
+        
     	Document document = new Document();
         
         //document.setMargins(30, 14, 50, 14);
@@ -140,19 +128,13 @@ public class NewJFrame extends javax.swing.JFrame {
         {
 		try {       
 					long startTime = System.nanoTime(); 
-                    unikID = UUID.randomUUID().toString().replaceAll("[\\s-]+", "3"); //generate unique ID : http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html Replace white space and dash with number 3
-			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(faculty + "-" + unikID + ".pdf"));
+			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ECSS_RPT_001.pdf"));
 	            
 		            document.open(); 
 
 
 		            //buat column plg banyak dulu untuk mudahkan design
-		            
-		            PdfPTable table = new PdfPTable(6);
-		            table.getDefaultCell().setBorder(0);
-		            table.setTotalWidth(520);
-		            //table.setLockedWidth(true);
-		            table.setWidths(new float[]{ 1.5f, 3, 3.5f, 3, 30, 3}); //guna float untuk precisekan column width
+
 		            PdfPCell cell;
 	                
                     //jTextArea1.append(faculty);
@@ -246,13 +228,13 @@ public class NewJFrame extends javax.swing.JFrame {
                         header_table.addCell(cell5);
                         header_table.addCell(cell6);
                         
-                        PdfPCell cell7 = new PdfPCell(new Paragraph("Total Diagnosis: " + tot_by_fac));
-                        cell7.setBorder(Rectangle.NO_BORDER);
-                        
-                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : " + faculty + "-" + unikID)); //remove with space and dash
+                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : ECSS_RPT_001")); //remove with space and dash
                         cell8.setBorder(Rectangle.NO_BORDER);
-                        header_table.addCell(cell7);
                         header_table.addCell(cell8);
+                        
+                        PdfPCell cell7 = new PdfPCell(new Paragraph());
+                        cell7.setBorder(Rectangle.NO_BORDER);
+                        header_table.addCell(cell7);
 
                         document.add(header_table);
                         
@@ -267,15 +249,41 @@ public class NewJFrame extends javax.swing.JFrame {
                               while (rs.next()) {
                             	  invalid_record_list.add(rs.getString("DiagnosisCd")); //assign mysql result to list
                               }
-                         
-                         
-                        
-                        
+                              
                         //document.add(new Phrase("\n\n\n\n\n\n\n\n\n"));
                         Paragraph paragraph1 = new Paragraph();
                         paragraph1.add("");
                         paragraph1.setSpacingAfter(12);
-                        document.add(paragraph1);
+                        document.add(paragraph1);                              
+                         
+                        //Table header title 
+                        PdfPTable table = new PdfPTable(5);
+                        table.setWidths(new float[]{ 0.57f, 4f, 0.57f, 0.57f, 0.63f});
+                        table.setLockedWidth(true);
+                        table.setTotalWidth(document.right() - document.left());
+                        cell = new PdfPCell(new Phrase("Chapter"));
+                        cell.setRowspan(2);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase("Description"));
+                        cell.setRowspan(2);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase("Gender"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cell.setColspan(2);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase("Total"));
+                        cell.setRowspan(2);
+                        table.addCell(cell);
+                        
+                        table.addCell("M");
+                        table.addCell("F");
+
+
+                        document.add(table); 
+                        //Table header title end 
+                        
+                        
+
                         
                         int i = 0;
                         int n = 0;
@@ -306,22 +314,35 @@ public class NewJFrame extends javax.swing.JFrame {
                               }
                           	
                               //chapter row
-                              reportObj.put("chapter", new PdfPTable(6)); //declare new object. this object will be overwrite by new similar object name during the next loop
+                              reportObj.put("chapter", new PdfPTable(5)); //declare new object. this object will be overwrite by new similar object name during the next loop
                               reportObj.get("chapter").getDefaultCell().setBorder(0);
-                              reportObj.get("chapter").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f}); //guna float untuk precisekan column width
+                              reportObj.get("chapter").setWidths(new float[]{ 0.57f, 4f, 0.57f, 0.57f, 0.63f}); //guna float untuk precisekan column width
                               reportObj.get("chapter").setLockedWidth(true);
                               reportObj.get("chapter").setTotalWidth(document.right() - document.left());
                           	
                               //chapter row
                               cell = new PdfPCell(new Phrase(String.format("%02d", i)));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setColspan(1);
                               cell.setBackgroundColor(orange);
                               reportObj.get("chapter").addCell(cell);
                               cell = new PdfPCell(new Phrase(chapter_map.get(String.format("%02d", i))));
                               cell.setBackgroundColor(orange);
-                              cell.setColspan(4);
+                              cell.setColspan(3);
                               reportObj.get("chapter").addCell(cell);
+                              
+                              cell = new PdfPCell(new Phrase("3412"));
+                              cell.setBackgroundColor(orange);
+                              cell.setColspan(1);
+                              reportObj.get("chapter").addCell(cell);
+                              
+                              cell = new PdfPCell(new Phrase("7987"));
+                              cell.setBackgroundColor(orange);
+                              cell.setColspan(1);
+                              reportObj.get("chapter").addCell(cell);                             
+                              
                               cell = new PdfPCell(new Phrase(chapter_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);
@@ -335,13 +356,13 @@ public class NewJFrame extends javax.swing.JFrame {
                                   //block row     
                                   reportObj.put("block_title", new PdfPTable(6));
                                   reportObj.get("block_title").getDefaultCell().setBorder(0);
-                                  reportObj.get("block_title").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
+                                  reportObj.get("block_title").setWidths(new float[]{ 4.46f, 3, 3.5f, 3, 30, 5.9f});
                                   reportObj.get("block_title").setLockedWidth(true);
                                   reportObj.get("block_title").setTotalWidth(document.right() - document.left());
             	                  
                                   //block row
                                   cell = new PdfPCell(new Phrase(""));
-                                  //cell.setColspan(5);
+                                  cell.setColspan(1);
                                   cell.setBorder(Rectangle.NO_BORDER); 
                                   reportObj.get("block_title").addCell(cell);
                                   cell = new PdfPCell(new Phrase("Total Patient by Block :"));
@@ -369,7 +390,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                       reportObj.put("block", new PdfPTable(6));
                                       
                                       reportObj.get("block").getDefaultCell().setBorder(0);
-                                      reportObj.get("block").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
+                                      reportObj.get("block").setWidths(new float[]{ 5.3f, 3f, 3.5f, 3, 38.5f, 5.9f});
                                       reportObj.get("block").setLockedWidth(true);
                                       reportObj.get("block").setTotalWidth(document.right() - document.left());	
                                       //System.out.println("loop block nombor :" + i);
@@ -411,7 +432,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           // code row
                                           reportObj.put("code_title", new PdfPTable(6));
                                           reportObj.get("code_title").getDefaultCell().setBorder(0);
-                                          reportObj.get("code_title").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
+                                          reportObj.get("code_title").setWidths(new float[]{ 3.95f, 3, 3.5f, 3, 30, 5.9f});
                                           reportObj.get("code_title").setLockedWidth(true);
                                           reportObj.get("code_title").setTotalWidth(document.right() - document.left());	
                                           
@@ -448,7 +469,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           reportObj.put("code", new PdfPTable(6));
                                           //System.out.println("loop nombor :" + i);
                                           reportObj.get("code").getDefaultCell().setBorder(0);
-                                          reportObj.get("code").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
+                                          reportObj.get("code").setWidths(new float[]{ 4.45f, 3.9f, 4.5f, 3, 37.5f, 5.9f});
                                           reportObj.get("code").setLockedWidth(true);
                                           reportObj.get("code").setTotalWidth(document.right() - document.left());	
                                       
@@ -487,6 +508,7 @@ public class NewJFrame extends javax.swing.JFrame {
                               jTextArea1.append("\n\n");
                         } // for loop end       
 
+                        document.add(new Phrase("\nTotal Diagnosis: " + tot_by_fac));
                         if (invalid_record_list.size() != 0){
                         	document.add(new Phrase("\n"));
                         	document.add(new Phrase(invalid_record_list.size() + " invalid records founded in table `lhr_diagnosis`.`DiagnosisCd` : " + invalid_record_list));
@@ -494,7 +516,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
                         long estimatedTime = System.nanoTime() - startTime;   
                         double seconds = (double)estimatedTime / 1000000000.0;
-                        //document.add(new Phrase("\nTime taken to generate this report : " + seconds + " seconds."));
+                        document.add(new Phrase("\nTime taken to generate this report : " + seconds + " seconds."));
                     }
                     catch (Exception e) {
                         System.err.println("Got an exception! ");
@@ -505,6 +527,16 @@ public class NewJFrame extends javax.swing.JFrame {
                     document.close();
                     
                     conn.close();
+                    
+                    // open pdf file platform independent
+                    if (Desktop.isDesktopSupported()) {
+                        try {
+                            File myFile = new File("ECSS_RPT_001.pdf"); 
+                            Desktop.getDesktop().open(myFile);
+                        } catch (IOException ex) {
+                            // no application registered for PDFs
+                        }
+                    }
                     
                 }// if for select box end
                 
@@ -521,66 +553,12 @@ public class NewJFrame extends javax.swing.JFrame {
          }
              
         }
-        
-            
     }                                          
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    	
-
-
-            
-            // open pdf file platform independent
-            if (Desktop.isDesktopSupported()) {
-                try {
-                    File myFile = new File(faculty + "-" + unikID + ".pdf"); 
-                    Desktop.getDesktop().open(myFile);
-                } catch (IOException ex) {
-                    // no application registered for PDFs
-                }
-            }
-
-
-
-    } 
-    
-
-   
-    
-    
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    	
-        int i = 0;
-        int x = 0;
-        
-
-        
-
-        
-
-        for (i = 01; i <= 22; i++){
-              String.format("%02d", i);
-              //System.out.println(String.format("%02d", i)); // 0 to pad with zeros. 2 to set width to two
-      
-                  
-                  int chapter = x;
-                  //System.out.print(chapter);
-                  //System.out.print(" ");
-                  int description =x + 1;
-                  //System.out.print(description);
-                  x = x+2;
-                  //x++;
-                  //System.out.print("\n");
-        
-              
-        }       
-    	
-    	
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -613,7 +591,6 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
