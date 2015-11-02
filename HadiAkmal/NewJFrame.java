@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 //import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
@@ -45,10 +46,9 @@ import java.awt.Desktop;
  * @author Hadi Akmal
  */
 public class NewJFrame extends javax.swing.JFrame {
-	
-    String faculty = null; //public var
-    String unikID = null;
     
+    String faculty = null; //public var
+
     /**
      * Creates new form NewJFrame
      */
@@ -69,7 +69,6 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,13 +85,6 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jButton1.setText("Generate Report");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -104,21 +96,18 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(145, 145, 145)
-                        .addComponent(jButton1)))
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(13, 13, 13)
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
                 .addGap(22, 22, 22))
         );
 
@@ -127,7 +116,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
-    	
+        
     	Document document = new Document();
         
         //document.setMargins(30, 14, 50, 14);
@@ -138,20 +127,14 @@ public class NewJFrame extends javax.swing.JFrame {
         if (selectedItem != null)
         {
 		try {       
-		       
-                    unikID = UUID.randomUUID().toString().replaceAll("[\\s-]+", "3"); //generate unique ID : http://docs.oracle.com/javase/6/docs/api/java/util/UUID.html Replace white space and dash with number 3
-			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(faculty + "-" + unikID + ".pdf"));
+					long startTime = System.nanoTime(); 
+			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ECSS_RPT_001.pdf"));
 	            
 		            document.open(); 
 
 
 		            //buat column plg banyak dulu untuk mudahkan design
-		            
-		            PdfPTable table = new PdfPTable(6);
-		            table.getDefaultCell().setBorder(0);
-		            table.setTotalWidth(520);
-		            //table.setLockedWidth(true);
-		            table.setWidths(new float[]{ 1.5f, 3, 3.5f, 3, 30, 3}); //guna float untuk precisekan column width
+
 		            PdfPCell cell;
 	                
                     //jTextArea1.append(faculty);
@@ -208,32 +191,33 @@ public class NewJFrame extends javax.swing.JFrame {
                         jTextArea1.append("Total patient by faculty : " + tot_by_fac);
                         jTextArea1.append("\nTotal patient by chapter : \n\n");
                         
-                        PdfPTable table2 = new PdfPTable(2);
+                        PdfPTable header_table = new PdfPTable(2);
                         float[] columnWidths = {2f, 1.19f};
-                        table2.setWidths(columnWidths);
+                        header_table.setWidths(columnWidths);
                         // 2 columns.
                         Image logo = Image.getInstance("logoUTeMPNG.png");
                         logo.scaleAbsolute(230, 100); 
-                        //logo.scalePercent(5f);
+                        //logo.scalePercent(7.3f);
                         
                         PdfPCell cell1 = new PdfPCell(logo);
                         cell1.setBorder(Rectangle.NO_BORDER);
-                        cell1.setLeading(15f, 0.3f);
+                        //cell1.setLeading(15f, 0.3f);
+                        header_table.addCell(cell1);
                         
                         PdfPCell cell2 = new PdfPCell(new Paragraph("Universiti Teknikal Malaysia Melaka\nHang Tuah Jaya, \n76100 Durian Tunggal, \nMelaka, Malaysia."));
                         cell2.setBorder(Rectangle.NO_BORDER);
                         //cell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         cell2.setLeading(15f, 0.3f);
+                        header_table.addCell(cell2);
                         
-                        table2.addCell(cell1);
-                        table2.addCell(cell2);
+                        
                         
                         PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty", teks));
                         cell3.setBorder(Rectangle.NO_BORDER);
                         PdfPCell cell4 = new PdfPCell(new Paragraph("\n\n\n"));
                         cell4.setBorder(Rectangle.NO_BORDER);
-                        table2.addCell(cell3);
-                        table2.addCell(cell4);
+                        header_table.addCell(cell3);
+                        header_table.addCell(cell4);
                         
                         PdfPCell cell5 = new PdfPCell(new Paragraph("Faculty : " + faculty));
                         cell5.setBorder(Rectangle.NO_BORDER);
@@ -241,18 +225,18 @@ public class NewJFrame extends javax.swing.JFrame {
                         String timeStamp = new SimpleDateFormat("dd-MM-yyyy h:mm a").format(Calendar.getInstance().getTime()); 
                         PdfPCell cell6 = new PdfPCell(new Paragraph("Date : " + timeStamp));
                         cell6.setBorder(Rectangle.NO_BORDER);
-                        table2.addCell(cell5);
-                        table2.addCell(cell6);
+                        header_table.addCell(cell5);
+                        header_table.addCell(cell6);
                         
-                        PdfPCell cell7 = new PdfPCell(new Paragraph("Total Diagnosis: " + tot_by_fac));
-                        cell7.setBorder(Rectangle.NO_BORDER);
-                        
-                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : " + faculty + "-" + unikID)); //remove with space and dash
+                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : ECSS_RPT_001")); //remove with space and dash
                         cell8.setBorder(Rectangle.NO_BORDER);
-                        table2.addCell(cell7);
-                        table2.addCell(cell8);
+                        header_table.addCell(cell8);
+                        
+                        PdfPCell cell7 = new PdfPCell(new Paragraph());
+                        cell7.setBorder(Rectangle.NO_BORDER);
+                        header_table.addCell(cell7);
 
-                        document.add(table2);
+                        document.add(header_table);
                         
                         //temp validation         
                               //Check for invalid data in DiagnosisCd column
@@ -265,23 +249,48 @@ public class NewJFrame extends javax.swing.JFrame {
                               while (rs.next()) {
                             	  invalid_record_list.add(rs.getString("DiagnosisCd")); //assign mysql result to list
                               }
-                         
-                         
-                        
-                        
-                        //document.add(new Phrase(""));
+                              
+                        //document.add(new Phrase("\n\n\n\n\n\n\n\n\n"));
                         Paragraph paragraph1 = new Paragraph();
                         paragraph1.add("");
                         paragraph1.setSpacingAfter(12);
-                        document.add(paragraph1);
+                        document.add(paragraph1);                              
+                         
+                        //Table header title 
+                        PdfPTable table = new PdfPTable(5);
+                        table.setWidths(new float[]{ 0.57f, 4f, 0.57f, 0.57f, 0.63f});
+                        table.setLockedWidth(true);
+                        table.setTotalWidth(document.right() - document.left());
+                        cell = new PdfPCell(new Phrase("Chapter"));
+                        cell.setRowspan(2);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase("Description"));
+                        cell.setRowspan(2);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase("Gender"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cell.setColspan(2);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase("Total"));
+                        cell.setRowspan(2);
+                        table.addCell(cell);
+                        
+                        table.addCell("M");
+                        table.addCell("F");
+
+
+                        document.add(table); 
+                        //Table header title end 
+                        
+                        
+
                         
                         int i = 0;
                         int n = 0;
                         
-                        Map<String, PdfPTable> testObjs = new HashMap<String, PdfPTable>();
+                        Map<String, PdfPTable> reportObj = new HashMap<String, PdfPTable>();
 
-                        for (i = 1; i <= chapter_map.size(); i++){ // chapter_map.size() is total of keys during .put
-                                
+                        for (i = 1; i <= chapter_map.size(); i++){ // chapter_map.size() is total of keys during .put                               
 
 
                               jTextArea1.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
@@ -300,54 +309,67 @@ public class NewJFrame extends javax.swing.JFrame {
                               jTextArea1.append(String.format("%02d", i) + "   " + chapter_map.get(String.format("%02d", i)) + "   " + chapter_total_result);
                               
                               //System.out.format("Current cursor " +i + ": %f%n", writer.getVerticalPosition(true));
-                              if (writer.getVerticalPosition(true) <= 90.000000 || writer.getVerticalPosition(true) <= 112.000000) { //if chapter title is at the bottom then push it to new page. 112.000000 is title cursor for first page & 90.000000 is chapter title cursor other than 1st page.
-                            	  //document.newPage();
+                              if (writer.getVerticalPosition(true) <= 90.000000) { //if chapter title is at the bottom then push it to new page. 112.000000 is title cursor for first page & 90.000000 is chapter title cursor other than 1st page.
+                            	  document.newPage();
                               }
                           	
                               //chapter row
-                              testObjs.put("chapter", new PdfPTable(6)); //declare new object. this object will be overwrite by new similar object name during the next loop
-                              testObjs.get("chapter").getDefaultCell().setBorder(0);
-                              testObjs.get("chapter").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f}); //guna float untuk precisekan column width
-                              testObjs.get("chapter").setLockedWidth(true);
-                              testObjs.get("chapter").setTotalWidth(document.right() - document.left());
+                              reportObj.put("chapter", new PdfPTable(5)); //declare new object. this object will be overwrite by new similar object name during the next loop
+                              reportObj.get("chapter").getDefaultCell().setBorder(0);
+                              reportObj.get("chapter").setWidths(new float[]{ 0.57f, 4f, 0.57f, 0.57f, 0.63f}); //guna float untuk precisekan column width
+                              reportObj.get("chapter").setLockedWidth(true);
+                              reportObj.get("chapter").setTotalWidth(document.right() - document.left());
                           	
                               //chapter row
                               cell = new PdfPCell(new Phrase(String.format("%02d", i)));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setColspan(1);
                               cell.setBackgroundColor(orange);
-                              testObjs.get("chapter").addCell(cell);
+                              reportObj.get("chapter").addCell(cell);
                               cell = new PdfPCell(new Phrase(chapter_map.get(String.format("%02d", i))));
                               cell.setBackgroundColor(orange);
-                              cell.setColspan(4);
-                              testObjs.get("chapter").addCell(cell);
-                              cell = new PdfPCell(new Phrase(chapter_total_result));
+                              cell.setColspan(3);
+                              reportObj.get("chapter").addCell(cell);
+                              
+                              cell = new PdfPCell(new Phrase("3412"));
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
-                              testObjs.get("chapter").addCell(cell);
+                              reportObj.get("chapter").addCell(cell);
                               
-                              document.add(testObjs.get("chapter"));
+                              cell = new PdfPCell(new Phrase("7987"));
+                              cell.setBackgroundColor(orange);
+                              cell.setColspan(1);
+                              reportObj.get("chapter").addCell(cell);                             
+                              
+                              cell = new PdfPCell(new Phrase(chapter_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                              cell.setBackgroundColor(orange);
+                              cell.setColspan(1);
+                              reportObj.get("chapter").addCell(cell);
+                              
+                              document.add(reportObj.get("chapter"));
                               
                               if (!"0".equals(chapter_total_result)){	// check chapter_total_result. if != 0 enter loop
                               
                                   jTextArea1.append("\n\n\tTotal Patient by Block :");
                                   
                                   //block row     
-                                  testObjs.put("block_title", new PdfPTable(6));
-                                  testObjs.get("block_title").getDefaultCell().setBorder(0);
-                                  testObjs.get("block_title").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
-                                  testObjs.get("block_title").setLockedWidth(true);
-                                  testObjs.get("block_title").setTotalWidth(document.right() - document.left());
+                                  reportObj.put("block_title", new PdfPTable(6));
+                                  reportObj.get("block_title").getDefaultCell().setBorder(0);
+                                  reportObj.get("block_title").setWidths(new float[]{ 4.46f, 3, 3.5f, 3, 30, 5.9f});
+                                  reportObj.get("block_title").setLockedWidth(true);
+                                  reportObj.get("block_title").setTotalWidth(document.right() - document.left());
             	                  
                                   //block row
                                   cell = new PdfPCell(new Phrase(""));
-                                  //cell.setColspan(5);
+                                  cell.setColspan(1);
                                   cell.setBorder(Rectangle.NO_BORDER); 
-                                  testObjs.get("block_title").addCell(cell);
+                                  reportObj.get("block_title").addCell(cell);
                                   cell = new PdfPCell(new Phrase("Total Patient by Block :"));
                                   cell.setColspan(6);
                                   cell.setBackgroundColor(magenta);
-                                  testObjs.get("block_title").addCell(cell);                                 
-                                  document.add(testObjs.get("block_title"));
+                                  reportObj.get("block_title").addCell(cell);                                 
+                                  document.add(reportObj.get("block_title"));
                                   
                                   query = "SELECT DiagnosisCd, idc, id, name, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
                                   
@@ -359,38 +381,36 @@ public class NewJFrame extends javax.swing.JFrame {
                                   
                                   while (rs_block.next()) {
 
-                                	  
-                                	  //System.out.println(block_counter++);
                                       String block_id_result = rs_block.getString("id");
                                       String block_name_result = rs_block.getString("name");
                                       String block_total_result = rs_block.getString("total");
                                       //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                       jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                                                 
-                                      testObjs.put("block", new PdfPTable(6));
+                                      reportObj.put("block", new PdfPTable(6));
                                       
-                                      testObjs.get("block").getDefaultCell().setBorder(0);
-                                      testObjs.get("block").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
-                                      testObjs.get("block").setLockedWidth(true);
-                                      testObjs.get("block").setTotalWidth(document.right() - document.left());	
+                                      reportObj.get("block").getDefaultCell().setBorder(0);
+                                      reportObj.get("block").setWidths(new float[]{ 5.3f, 3f, 3.5f, 3, 38.5f, 5.9f});
+                                      reportObj.get("block").setLockedWidth(true);
+                                      reportObj.get("block").setTotalWidth(document.right() - document.left());	
                                       //System.out.println("loop block nombor :" + i);
                                       cell = new PdfPCell(new Phrase(""));
                                       cell.setColspan(1);
                                       cell.setBorder(Rectangle.NO_BORDER);
-                                      testObjs.get("block").addCell(cell);
+                                      reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_id_result));
                                       cell.setColspan(1);
                                       cell.setBackgroundColor(magenta);
-                                      testObjs.get("block").addCell(cell);
+                                      reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_name_result));
                                       cell.setColspan(3);
                                       cell.setBackgroundColor(magenta);
-                                      testObjs.get("block").addCell(cell);
+                                      reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_total_result));
                                       cell.setColspan(1);
                                       cell.setBackgroundColor(magenta);
-                                      testObjs.get("block").addCell(cell);                                      
-                                      document.add(testObjs.get("block"));
+                                      reportObj.get("block").addCell(cell);                                      
+                                      document.add(reportObj.get("block"));
 
                                       remove_last_char = block_id_result.substring(0, block_id_result.length()-1); //remove last character in 'id' resultset retrieve from icd10_blocks table. A00 = A0
 
@@ -410,31 +430,27 @@ public class NewJFrame extends javax.swing.JFrame {
                                           }
                                     	  
                                           // code row
-                                          testObjs.put("code_title", new PdfPTable(6));
-                                          testObjs.get("code_title").getDefaultCell().setBorder(0);
-                                          testObjs.get("code_title").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
-                                          testObjs.get("code_title").setLockedWidth(true);
-                                          testObjs.get("code_title").setTotalWidth(document.right() - document.left());	
+                                          reportObj.put("code_title", new PdfPTable(6));
+                                          reportObj.get("code_title").getDefaultCell().setBorder(0);
+                                          reportObj.get("code_title").setWidths(new float[]{ 3.95f, 3, 3.5f, 3, 30, 5.9f});
+                                          reportObj.get("code_title").setLockedWidth(true);
+                                          reportObj.get("code_title").setTotalWidth(document.right() - document.left());	
                                           
                                           cell = new PdfPCell(new Phrase(""));
                                           cell.setColspan(2);
                                           cell.setBorder(Rectangle.NO_BORDER); 
-                                          testObjs.get("code_title").addCell(cell);
+                                          reportObj.get("code_title").addCell(cell);
                                           cell = new PdfPCell(new Phrase("Total Patient by Code :"));
                                           cell.setColspan(4);
                                           cell.setBackgroundColor(cyan);
-                                          testObjs.get("code_title").addCell(cell);                                      
-                                          document.add(testObjs.get("code_title"));
+                                          reportObj.get("code_title").addCell(cell);                                      
+                                          document.add(reportObj.get("code_title"));
                                           n = i;
                                     	  
                                       }
 
-
-                                      
-                                      
+ 
                                       query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by DiagnosisCd";
-                                      //query = "SELECT ld.DiagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ld.DiagnosisCd = ic.icd10_code AND LOCATION_CODE = ? group by DiagnosisCd;";
-                                      //String query_01_code = "SELECT substring(DiagnosisCd,6,5) as diag, COUNT(DiagnosisCd) as total from lhr_diagnosis WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,6,2) ='"+ remove_last_char +"'  group by DiagnosisCd";
                                       
                                       st1 = conn.prepareStatement(query); //recreate statement
                                       st1.setString(1, faculty); // set input parameter
@@ -450,31 +466,31 @@ public class NewJFrame extends javax.swing.JFrame {
                                           //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
                                           
 
-                                          testObjs.put("code", new PdfPTable(6));
+                                          reportObj.put("code", new PdfPTable(6));
                                           //System.out.println("loop nombor :" + i);
-                                          testObjs.get("code").getDefaultCell().setBorder(0);
-                                          testObjs.get("code").setWidths(new float[]{ 2, 3, 3.5f, 3, 30, 5.9f});
-                                          testObjs.get("code").setLockedWidth(true);
-                                          testObjs.get("code").setTotalWidth(document.right() - document.left());	
+                                          reportObj.get("code").getDefaultCell().setBorder(0);
+                                          reportObj.get("code").setWidths(new float[]{ 4.45f, 3.9f, 4.5f, 3, 37.5f, 5.9f});
+                                          reportObj.get("code").setLockedWidth(true);
+                                          reportObj.get("code").setTotalWidth(document.right() - document.left());	
                                       
 
                                           cell = new PdfPCell(new Phrase(""));
                                           cell.setColspan(2);
                                           cell.setBorder(Rectangle.NO_BORDER); 
-                                          testObjs.get("code").addCell(cell);
+                                          reportObj.get("code").addCell(cell);
                                           cell = new PdfPCell(new Phrase(code_strip_result));
                                           cell.setColspan(1);
                                           cell.setBackgroundColor(cyan);
-                                          testObjs.get("code").addCell(cell);
+                                          reportObj.get("code").addCell(cell);
                                           cell = new PdfPCell(new Phrase(code_desc_result));
                                           cell.setColspan(2);
                                           cell.setBackgroundColor(cyan);
-                                          testObjs.get("code").addCell(cell);
+                                          reportObj.get("code").addCell(cell);
                                           cell = new PdfPCell(new Phrase(code_total_result));
                                           cell.setColspan(1);
                                           cell.setBackgroundColor(cyan);
-                                          testObjs.get("code").addCell(cell);
-                                          document.add(testObjs.get("code"));  
+                                          reportObj.get("code").addCell(cell);
+                                          document.add(reportObj.get("code"));  
                                           
                                       }// code loop end
                                       
@@ -492,51 +508,35 @@ public class NewJFrame extends javax.swing.JFrame {
                               jTextArea1.append("\n\n");
                         } // for loop end       
 
+                        document.add(new Phrase("\nTotal Diagnosis: " + tot_by_fac));
                         if (invalid_record_list.size() != 0){
                         	document.add(new Phrase("\n"));
                         	document.add(new Phrase(invalid_record_list.size() + " invalid records founded in table `lhr_diagnosis`.`DiagnosisCd` : " + invalid_record_list));
                         }
-                 /*       
-                        Iterator<String> iterator = testObjs.keySet().iterator();
 
-            		    while (iterator.hasNext()) {
-            		       String key = iterator.next().toString();
-            		       PdfPTable value = testObjs.get(key);
-
-            		       System.out.println(key + " " + value);
-            		    }
-                        
-                        System.out.println(chapter_list);
-                        System.out.println(chapter_list.get(1));
-                        System.out.println(invalid_record_list);
-                        System.out.println(invalid_record_list.size());
-                        
-                    	Set<String> keys = testObjs.keySet();
-
-                    	// Loop over String keys.
-                    	for (String key : keys) {
-                    	    System.out.println(key);
-                    	}
-                    	Collection<PdfPTable> values = testObjs.values();
-                    	for (PdfPTable value : values) {
-                    	    System.out.println(value);
-                    	}
-                        */
-
-                        
+                        long estimatedTime = System.nanoTime() - startTime;   
+                        double seconds = (double)estimatedTime / 1000000000.0;
+                        document.add(new Phrase("\nTime taken to generate this report : " + seconds + " seconds."));
                     }
                     catch (Exception e) {
                         System.err.println("Got an exception! ");
                         System.err.println(e.getMessage());
                     }
                     
-
-                    //table.setWidthPercentage(100);
-                    //document.add(table);
                     
                     document.close();
                     
                     conn.close();
+                    
+                    // open pdf file platform independent
+                    if (Desktop.isDesktopSupported()) {
+                        try {
+                            File myFile = new File("ECSS_RPT_001.pdf"); 
+                            Desktop.getDesktop().open(myFile);
+                        } catch (IOException ex) {
+                            // no application registered for PDFs
+                        }
+                    }
                     
                 }// if for select box end
                 
@@ -553,66 +553,12 @@ public class NewJFrame extends javax.swing.JFrame {
          }
              
         }
-        
-            
     }                                          
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    	
-
-
-            
-            // open pdf file platform independent
-            if (Desktop.isDesktopSupported()) {
-                try {
-                    File myFile = new File(faculty + "-" + unikID + ".pdf"); 
-                    Desktop.getDesktop().open(myFile);
-                } catch (IOException ex) {
-                    // no application registered for PDFs
-                }
-            }
-
-
-
-    } 
-    
-
-   
-    
-    
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    	
-        int i = 0;
-        int x = 0;
-        
-
-        
-
-        
-
-        for (i = 01; i <= 22; i++){
-              String.format("%02d", i);
-              //System.out.println(String.format("%02d", i)); // 0 to pad with zeros. 2 to set width to two
-      
-                  
-                  int chapter = x;
-                  //System.out.print(chapter);
-                  //System.out.print(" ");
-                  int description =x + 1;
-                  //System.out.print(description);
-                  x = x+2;
-                  //x++;
-                  //System.out.print("\n");
-        
-              
-        }       
-    	
-    	
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -645,7 +591,6 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
