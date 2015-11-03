@@ -395,7 +395,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                   //block row     
                                   reportObj.put("block_title", new PdfPTable(6));
                                   reportObj.get("block_title").getDefaultCell().setBorder(0);
-                                  reportObj.get("block_title").setWidths(new float[]{ 4.46f, 3, 3.5f, 3, 30, 5.9f});
+                                  reportObj.get("block_title").setWidths(new float[]{ 4.45f, 3, 3.5f, 3, 30, 5.9f});
                                   reportObj.get("block_title").setLockedWidth(true);
                                   reportObj.get("block_title").setTotalWidth(document.right() - document.left());
             	                  
@@ -440,7 +440,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                       reportObj.put("block", new PdfPTable(6));
                                       
                                       reportObj.get("block").getDefaultCell().setBorder(0);
-                                      reportObj.get("block").setWidths(new float[]{ 5.3f, 3f, 3.5f, 3, 38.5f, 5.9f});
+                                      reportObj.get("block").setWidths(new float[]{ 5.3f, 3.1f, 3.5f, 3, 38.5f, 5.9f});
                                       reportObj.get("block").setLockedWidth(true);
                                       reportObj.get("block").setTotalWidth(document.right() - document.left());	
                                       //System.out.println("loop block nombor :" + i);
@@ -482,7 +482,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           // code row
                                           reportObj.put("code_title", new PdfPTable(6));
                                           reportObj.get("code_title").getDefaultCell().setBorder(0);
-                                          reportObj.get("code_title").setWidths(new float[]{ 3.95f, 3, 3.5f, 3, 30, 5.9f});
+                                          reportObj.get("code_title").setWidths(new float[]{ 4.05f, 3, 3.5f, 3, 30, 5.9f});
                                           reportObj.get("code_title").setLockedWidth(true);
                                           reportObj.get("code_title").setTotalWidth(document.right() - document.left());	
                                           
@@ -529,7 +529,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           reportObj.put("code", new PdfPTable(6));
                                           //System.out.println("loop nombor :" + i);
                                           reportObj.get("code").getDefaultCell().setBorder(0);
-                                          reportObj.get("code").setWidths(new float[]{ 4.45f, 3.9f, 4.5f, 3, 37.5f, 5.9f});
+                                          reportObj.get("code").setWidths(new float[]{ 4.55f, 3.9f, 4.5f, 3, 37.5f, 5.9f});
                                           reportObj.get("code").setLockedWidth(true);
                                           reportObj.get("code").setTotalWidth(document.right() - document.left());	
                                       
