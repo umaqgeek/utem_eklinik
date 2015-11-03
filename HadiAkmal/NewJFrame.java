@@ -148,6 +148,8 @@ public class NewJFrame extends javax.swing.JFrame {
                     String remove_last_char;
                     String connectionURL;
                     String chapter_total_result = null;
+                    String male_total_result = null;
+                    String female_total_result = null;
                     
                     //initialize pdf
                     Font teks = new Font(Font.HELVETICA, 18, Font.BOLD);
@@ -351,12 +353,29 @@ public class NewJFrame extends javax.swing.JFrame {
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);
                               
-                              cell = new PdfPCell(new Phrase("3412"));
+                              if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
+                            	  query = "SELECT COUNT(DiagnosisCd) AS COUNT, SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "'";
+                                  rs = st.executeQuery(query);
+                              
+                              }else{ // prepared statement goes here for particular faculty
+                            	  query = "SELECT SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = ? GROUP BY LOCATION_CODE";
+                                  st1 = conn.prepareStatement(query); //recreate statement
+                                  st1.setString(1, faculty); // set input parameter
+                                  rs = st1.executeQuery();
+                              }
+                              
+                              while (rs.next()) {
+                                  male_total_result = rs.getString("M");
+                                  female_total_result = rs.getString("F");
+                                  System.out.println(male_total_result);
+                              }
+                              
+                              cell = new PdfPCell(new Phrase(male_total_result));
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);
                               
-                              cell = new PdfPCell(new Phrase("7987"));
+                              cell = new PdfPCell(new Phrase(female_total_result));
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);                             
@@ -505,7 +524,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           String code_total_result = rs_code.getString("total");
                                           jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
                                           //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
-                                          System.out.println(code_strip_result);
+                                          
 
                                           reportObj.put("code", new PdfPTable(6));
                                           //System.out.println("loop nombor :" + i);
