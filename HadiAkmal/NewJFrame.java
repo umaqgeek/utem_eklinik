@@ -72,7 +72,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "FTMK", "FKP", "FKM", "FKEKK", "FKE", "FPTT", "FTK" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "FTMK", "FKP", "FKM", "FKEKK", "FKE", "FPTT", "FTK", "ALL" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -159,6 +159,8 @@ public class NewJFrame extends javax.swing.JFrame {
                     connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
                     Connection conn = DriverManager.getConnection(connectionURL);
                     PreparedStatement st1 = conn.prepareStatement(connectionURL);
+                    Statement st = conn.createStatement();
+                    Statement st2 = conn.createStatement();
                     
                     
                     try {
@@ -179,10 +181,19 @@ public class NewJFrame extends javax.swing.JFrame {
 
                         }
                         
-                        query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` WHERE `lhr_diagnosis`.`LOCATION_CODE` = ?";
-                        st1 = conn.prepareStatement(query);
-                        st1.setString(1, faculty);
-                        rs = st1.executeQuery();
+                        if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
+                        	query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE ic.icd10_code = ld.DiagnosisCd";
+                            rs = st.executeQuery(query);
+                        
+                        }else{ // prepared statement goes here for particular faculty
+                            query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE `ld`.`LOCATION_CODE` = ? AND ic.icd10_code = ld.DiagnosisCd";
+                            st1 = conn.prepareStatement(query);
+                            st1.setString(1, faculty);
+                            rs = st1.executeQuery();
+                        	
+                        }
+                        
+
                         
                         while (rs.next()) {
                             tot_by_fac = rs.getInt("tot_by_fac");
@@ -240,7 +251,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         
                         //temp validation         
                               //Check for invalid data in DiagnosisCd column
-                              query = "select DiagnosisCd from lhr_diagnosis LEFT JOIN icd10_codes ON lhr_diagnosis.DiagnosisCd = icd10_codes.icd10_code WHERE icd10_code IS NULL AND LOCATION_CODE = ?";
+                              query = "SELECT DiagnosisCd from lhr_diagnosis LEFT JOIN icd10_codes ON lhr_diagnosis.DiagnosisCd = icd10_codes.icd10_code WHERE icd10_code IS NULL AND LOCATION_CODE = ?";
                               
                               st1 = conn.prepareStatement(query); //recreate statement
                               st1.setString(1, faculty); // set input parameter
@@ -289,18 +300,27 @@ public class NewJFrame extends javax.swing.JFrame {
                         int n = 0;
                         
                         Map<String, PdfPTable> reportObj = new HashMap<String, PdfPTable>();
-
+                        
+                        // only 1 chapter is needed with for loop
                         for (i = 1; i <= chapter_map.size(); i++){ // chapter_map.size() is total of keys during .put                               
 
 
                               jTextArea1.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                               
-                              // only 1 chapter is needed                 
-                              query = "select COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) =  '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ?";
                               
-                              st1 = conn.prepareStatement(query); //recreate statement
-                              st1.setString(1, faculty); // set input parameter
-                              rs = st1.executeQuery();
+                              if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
+                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND ic.icd10_code = ld.DiagnosisCd";
+                                  rs = st.executeQuery(query);
+                              
+                              }else{ // prepared statement goes here for particular faculty
+                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ?";
+                                  st1 = conn.prepareStatement(query); //recreate statement
+                                  st1.setString(1, faculty); // set input parameter
+                                  rs = st1.executeQuery();
+                              }
+                              
+                              
+
                               
                               while (rs.next()) {
                                   chapter_total_result = rs.getString("count");
@@ -328,7 +348,7 @@ public class NewJFrame extends javax.swing.JFrame {
                               reportObj.get("chapter").addCell(cell);
                               cell = new PdfPCell(new Phrase(chapter_map.get(String.format("%02d", i))));
                               cell.setBackgroundColor(orange);
-                              cell.setColspan(3);
+                              cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);
                               
                               cell = new PdfPCell(new Phrase("3412"));
@@ -371,11 +391,22 @@ public class NewJFrame extends javax.swing.JFrame {
                                   reportObj.get("block_title").addCell(cell);                                 
                                   document.add(reportObj.get("block_title"));
                                   
-                                  query = "SELECT DiagnosisCd, idc, id, name, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
+                                  if ("ALL".equals(faculty)){
+                                	  System.out.println(faculty);
+                                	  query = "SELECT DiagnosisCd, idc, id, name, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"' ";
+                                	  rs_block = st.executeQuery(query);
+
                                   
-                                  st1 = conn.prepareStatement(query); //recreate statement
-                                  st1.setString(1, faculty); // set input parameter
-                                  rs_block = st1.executeQuery();
+                                  }else{
+                                      query = "SELECT DiagnosisCd, idc, id, name, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
+                                      
+                                      st1 = conn.prepareStatement(query); //recreate statement
+                                      st1.setString(1, faculty); // set input parameter
+                                      rs_block = st1.executeQuery();
+                                	  
+                                  }
+                                  
+
                                   
                                                                
                                   
@@ -449,13 +480,23 @@ public class NewJFrame extends javax.swing.JFrame {
                                     	  
                                       }
 
- 
-                                      query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by DiagnosisCd";
+                                      if ("ALL".equals(faculty)){
+                                    	  query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd  group by DiagnosisCd";
+                                          rs_code = st1.executeQuery(query);
                                       
-                                      st1 = conn.prepareStatement(query); //recreate statement
-                                      st1.setString(1, faculty); // set input parameter
-                                      rs_code = st1.executeQuery();
-                                      //rs_code = st2.executeQuery(query);
+                                      }else{
+                                          query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by DiagnosisCd";
+                                          
+                                          st1 = conn.prepareStatement(query);
+                                          st1.setString(1, faculty); // set input parameter
+                                          rs_code = st1.executeQuery();
+                                          //rs_code = st2.executeQuery(query);  
+                                      }
+
+                                      
+
+
+
                                       
                                       while (rs_code.next()) {
                                           
@@ -464,7 +505,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           String code_total_result = rs_code.getString("total");
                                           jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
                                           //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
-                                          
+                                          System.out.println(code_strip_result);
 
                                           reportObj.put("code", new PdfPTable(6));
                                           //System.out.println("loop nombor :" + i);
