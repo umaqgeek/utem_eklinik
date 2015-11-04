@@ -66,6 +66,7 @@ public class NewJFrame extends javax.swing.JFrame {
     
     String faculty = null; //public var
 
+
     /**
      * Creates new form NewJFrame
      */
@@ -82,14 +83,65 @@ public class NewJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jPanel2 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Select date"));
+        jPanel1.setName("Select date"); // NOI18N
+
+        jDateChooser1.setDateFormatString("d MMMM yyyy");
+        jDateChooser1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser1PropertyChange(evt);
+            }
+        });
+
+        jLabel2.setText("Between");
+
+        jLabel1.setText("To");
+
+        jDateChooser2.setDateFormatString("d MMMM yyyy");
+        jDateChooser2.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser2PropertyChange(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Select a faculty"));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "FTMK", "FKP", "FKM", "FKEKK", "FKE", "FPTT", "FTK", "ALL" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -98,52 +150,42 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Select a faculty : ");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jLabel2.setText("jLabel2");
-
-        jDateChooser1.setDateFormatString("d MMMM, yyyy");
-        jDateChooser1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jDateChooser1PropertyChange(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 931, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(233, 233, 233)
-                        .addComponent(jLabel2)
-                        .addGap(44, 44, 44)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2))
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
-                .addGap(22, 22, 22))
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -156,7 +198,7 @@ public class NewJFrame extends javax.swing.JFrame {
         
         //document.setMargins(30, 14, 50, 14);
         //String faculty = null;
-        jTextArea1.setText(""); //clear textarea
+        //jTextArea1.setText(""); //clear textarea
         Object selectedItem = jComboBox1.getSelectedItem();
 		faculty = selectedItem.toString();
         if (selectedItem != null)
@@ -217,15 +259,48 @@ public class NewJFrame extends javax.swing.JFrame {
                             //String icd10_name_result = rs.getString("name");
 
                         }
+
+                                                String month = null;
+                        String year = null;
+                        String delimiter = " ";
+                        String[] tarikh;
+                        String date1 = null;
+                        String date2 = null;
+                        
+                        java.util.Date d1 = jDateChooser1.getDate();
+                        if (d1 == null) {
+                            //System.out.println("No date specified!");
+                        } else {
+
+                            DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+                            date1 = fmt.format(d1); //jdatechooser
+   
+                        }
+                        
+                        java.util.Date d2 = jDateChooser2.getDate();
+                        if (d2 == null) {
+                            //System.out.println("No date specified!");
+                        } else {
+
+                            DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+                            date2 = fmt.format(d2); //jdatechooser
+   
+                        }
+
                         
                         if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
-                        	query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE ic.icd10_code = ld.DiagnosisCd";
+                            
+
+                            query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                             rs = st.executeQuery(query);
                         
                         }else{ // prepared statement goes here for particular faculty
-                            query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE `ld`.`LOCATION_CODE` = ? AND ic.icd10_code = ld.DiagnosisCd";
+                            
+                            query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE `ld`.`LOCATION_CODE` = ? AND ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN ? AND ?)";
                             st1 = conn.prepareStatement(query);
                             st1.setString(1, faculty);
+                            st1.setString(2, date1);
+                            st1.setString(3, date2);
                             rs = st1.executeQuery();
                         	
                         }
@@ -236,8 +311,8 @@ public class NewJFrame extends javax.swing.JFrame {
                             tot_by_fac = rs.getInt("tot_by_fac");
                         }
 
-                        jTextArea1.append("Total patient by faculty : " + tot_by_fac);
-                        jTextArea1.append("\nTotal patient by chapter : \n\n");
+                        //jTextArea1.append("Total patient by faculty : " + tot_by_fac);
+                        //jTextArea1.append("\nTotal patient by chapter : \n\n");
                         
                         PdfPTable header_table = new PdfPTable(2);
                         float[] columnWidths = {2f, 1.19f};
@@ -288,10 +363,12 @@ public class NewJFrame extends javax.swing.JFrame {
                         
                         //temp validation         
                               //Check for invalid data in DiagnosisCd column
-                              query = "SELECT DiagnosisCd from lhr_diagnosis LEFT JOIN icd10_codes ON lhr_diagnosis.DiagnosisCd = icd10_codes.icd10_code WHERE icd10_code IS NULL AND LOCATION_CODE = ?";
+                              query = "SELECT DiagnosisCd from lhr_diagnosis LEFT JOIN icd10_codes ON lhr_diagnosis.DiagnosisCd = icd10_codes.icd10_code WHERE icd10_code IS NULL AND LOCATION_CODE = ? AND (Episode_date BETWEEN ? AND ?)";
                               
                               st1 = conn.prepareStatement(query); //recreate statement
                               st1.setString(1, faculty); // set input parameter
+                              st1.setString(2, date1);
+                              st1.setString(3, date2);
                               rs = st1.executeQuery();
                               
                               while (rs.next()) {
@@ -342,17 +419,19 @@ public class NewJFrame extends javax.swing.JFrame {
                         for (i = 1; i <= chapter_map.size(); i++){ // chapter_map.size() is total of keys during .put                               
 
 
-                              jTextArea1.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                              //jTextArea1.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                               
                               
                               if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
-                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND ic.icd10_code = ld.DiagnosisCd";
+                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                                   rs = st.executeQuery(query);
                               
                               }else{ // prepared statement goes here for particular faculty
-                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ?";
+                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ? AND (Episode_date BETWEEN ? AND ?)";
                                   st1 = conn.prepareStatement(query); //recreate statement
-                                  st1.setString(1, faculty); // set input parameter
+                                  st1.setString(1, faculty);
+                                  st1.setString(2, date1);
+                                  st1.setString(3, date2);
                                   rs = st1.executeQuery();
                               }
                               
@@ -363,7 +442,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                   chapter_total_result = rs.getString("count");
                               }
       
-                              jTextArea1.append(String.format("%02d", i) + "   " + chapter_map.get(String.format("%02d", i)) + "   " + chapter_total_result);
+                              //jTextArea1.append(String.format("%02d", i) + "   " + chapter_map.get(String.format("%02d", i)) + "   " + chapter_total_result);
                               
                               //System.out.format("Current cursor " +i + ": %f%n", writer.getVerticalPosition(true));
                               if (writer.getVerticalPosition(true) <= 90.000000) { //if chapter title is at the bottom then push it to new page. 112.000000 is title cursor for first page & 90.000000 is chapter title cursor other than 1st page.
@@ -389,13 +468,15 @@ public class NewJFrame extends javax.swing.JFrame {
                               reportObj.get("chapter").addCell(cell);
                               
                               if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
-                            	  query = "SELECT COUNT(DiagnosisCd) AS COUNT, SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "'";
+                            	  query = "SELECT COUNT(DiagnosisCd) AS COUNT, SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND (Episode_date BETWEEN '\"+ date1 +\"' AND '\"+ date2 +\"')";
                                   rs = st.executeQuery(query);
                               
                               }else{ // prepared statement goes here for particular faculty
-                            	  query = "SELECT SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = ? GROUP BY LOCATION_CODE";
+                            	  query = "SELECT SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = ? GROUP BY LOCATION_CODE AND (Episode_date BETWEEN ? AND ?)";
                                   st1 = conn.prepareStatement(query); //recreate statement
-                                  st1.setString(1, faculty); // set input parameter
+                                  st1.setString(1, faculty);
+                                  st1.setString(2, date1);
+                                  st1.setString(3, date2);
                                   rs = st1.executeQuery();
                               }
                               
@@ -425,7 +506,7 @@ public class NewJFrame extends javax.swing.JFrame {
                               
                               if (!"0".equals(chapter_total_result)){	// check chapter_total_result. if != 0 enter loop
                               
-                                  jTextArea1.append("\n\n\tTotal Patient by Block :");
+                                  //jTextArea1.append("\n\n\tTotal Patient by Block :");
                                   
                                   //block row     
                                   reportObj.put("block_title", new PdfPTable(6));
@@ -470,7 +551,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                       String block_name_result = rs_block.getString("name");
                                       String block_total_result = rs_block.getString("total");
                                       //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
-                                      jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
+                                     //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                                                 
                                       reportObj.put("block", new PdfPTable(6));
                                       
@@ -499,7 +580,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
                                       remove_last_char = block_id_result.substring(0, block_id_result.length()-1); //remove last character in 'id' resultset retrieve from icd10_blocks table. A00 = A0
 
-                                      jTextArea1.append("\n\t\tTotal Patient by Code :"); 
+                                      //jTextArea1.append("\n\t\tTotal Patient by Code :"); 
                                       
                                       if(n != i){ //To make sure code title will be display only one time for every chapter. Check whether n == previous record of i. If not similar then display Code Title
                                     	  
@@ -557,7 +638,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           String code_strip_result = rs_code.getString("icd10_code_strip");
                                           String code_desc_result = rs_code.getString("icd10_desc");
                                           String code_total_result = rs_code.getString("total");
-                                          jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
+                                          //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
                                           //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
                                           
 
@@ -600,10 +681,11 @@ public class NewJFrame extends javax.swing.JFrame {
                               
                               
                               //jTextArea1.append("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-                              jTextArea1.append("\n\n");
+                              //jTextArea1.append("\n\n");
                         } // for loop end       
 
                         document.add(new Phrase("\nTotal Diagnosis: " + tot_by_fac));
+
                         if (invalid_record_list.size() != 0){
                         	document.add(new Phrase("\n"));
                         	document.add(new Phrase(invalid_record_list.size() + " invalid records founded in table `lhr_diagnosis`.`DiagnosisCd` : " + invalid_record_list));
@@ -650,30 +732,52 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
+
     private void jDateChooser1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser1PropertyChange
         // TODO add your handling code here:
 
-        JDateChooser wybieraczDat = (JDateChooser) evt.getSource();
+        JDateChooser tarikh1 = (JDateChooser) evt.getSource();
 
         if ("date".equals(evt.getPropertyName())) {
 
-            wybieraczDat.getDate();
+            tarikh1.getDate();
 
-            DateFormat fmt = new SimpleDateFormat("d MMMM yyyy");
-            String date = fmt.format(wybieraczDat.getDate()); //jdatechooser
+            DateFormat fmt = new SimpleDateFormat("MM yyyy");
+            String date = fmt.format(tarikh1.getDate()); //jdatechooser
 
-            jLabel2.setText(date);
+            //jLabel2.setText(date);
 
-            JTextFieldDateEditor editor = (JTextFieldDateEditor) wybieraczDat.getDateEditor();
+            JTextFieldDateEditor editor = (JTextFieldDateEditor) tarikh1.getDateEditor();
             editor.setEditable(false);
-            //((JTextField)wybieraczDat.getDateEditor().getUiComponent()).setEditable(false);
 
         }
 
-        JTextFieldDateEditor editor = (JTextFieldDateEditor) wybieraczDat.getDateEditor();
+        JTextFieldDateEditor editor = (JTextFieldDateEditor) tarikh1.getDateEditor();
         editor.setEditable(false);
 
     }//GEN-LAST:event_jDateChooser1PropertyChange
+
+    private void jDateChooser2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser2PropertyChange
+        // TODO add your handling code here:
+        JDateChooser tarikh2 = (JDateChooser) evt.getSource();
+        
+        if ("date".equals(evt.getPropertyName())) {
+
+            tarikh2.getDate();
+
+            DateFormat fmt = new SimpleDateFormat("MM yyyy");
+            String date = fmt.format(tarikh2.getDate()); //jdatechooser
+
+            //jLabel2.setText(date);
+
+            JTextFieldDateEditor editor = (JTextFieldDateEditor) tarikh2.getDateEditor();
+            editor.setEditable(false);
+
+        }
+
+        JTextFieldDateEditor editor = (JTextFieldDateEditor) tarikh2.getDateEditor();
+        editor.setEditable(false);
+    }//GEN-LAST:event_jDateChooser2PropertyChange
 
 
     
@@ -691,7 +795,7 @@ public class NewJFrame extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -718,10 +822,11 @@ public class NewJFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 
     private static class grd {
