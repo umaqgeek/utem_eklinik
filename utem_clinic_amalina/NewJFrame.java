@@ -404,20 +404,21 @@ public class NewJFrame extends javax.swing.JFrame {
                         
                         
                         
-                        PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty", teks));
+                        PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty\n", teks));
                         cell3.setBorder(Rectangle.NO_BORDER);
-//                        PdfPCell cell4 = new PdfPCell(new Paragraph("\n\n\n"));
-//                        cell4.setBorder(Rectangle.NO_BORDER);
-//                        header_table.addCell(cell3);
-//                        header_table.addCell(cell4);
                         cell3.setColspan(2);
                         cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                        PdfPCell cell4 = new PdfPCell(new Paragraph("\n\n\n"));
+//                        cell4.setBorder(Rectangle.NO_BORDER);
+                        header_table.addCell(cell3);
+//                        header_table.addCell(cell4);
                         
-                        PdfPCell cell5 = new PdfPCell(new Paragraph("Faculty : " + faculty));
+                        
+                        PdfPCell cell5 = new PdfPCell(new Paragraph("\nFaculty : " + faculty));
                         cell5.setBorder(Rectangle.NO_BORDER);
                         
                         String timeStamp = new SimpleDateFormat("dd-MM-yyyy h:mm a").format(Calendar.getInstance().getTime()); 
-                        PdfPCell cell6 = new PdfPCell(new Paragraph("Date : " + timeStamp));
+                        PdfPCell cell6 = new PdfPCell(new Paragraph("\nDate : " + timeStamp));
                         cell6.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell5);
                         header_table.addCell(cell6);
