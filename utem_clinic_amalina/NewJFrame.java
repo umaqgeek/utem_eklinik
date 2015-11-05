@@ -406,10 +406,12 @@ public class NewJFrame extends javax.swing.JFrame {
                         
                         PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty", teks));
                         cell3.setBorder(Rectangle.NO_BORDER);
-                        PdfPCell cell4 = new PdfPCell(new Paragraph("\n\n\n"));
-                        cell4.setBorder(Rectangle.NO_BORDER);
-                        header_table.addCell(cell3);
-                        header_table.addCell(cell4);
+//                        PdfPCell cell4 = new PdfPCell(new Paragraph("\n\n\n"));
+//                        cell4.setBorder(Rectangle.NO_BORDER);
+//                        header_table.addCell(cell3);
+//                        header_table.addCell(cell4);
+                        cell3.setColspan(2);
+                        cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
                         
                         PdfPCell cell5 = new PdfPCell(new Paragraph("Faculty : " + faculty));
                         cell5.setBorder(Rectangle.NO_BORDER);
@@ -456,9 +458,11 @@ public class NewJFrame extends javax.swing.JFrame {
                         table.setLockedWidth(true);
                         table.setTotalWidth(document.right() - document.left());
                         cell = new PdfPCell(new Phrase("Chapter"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                         cell.setRowspan(2);
                         table.addCell(cell);
                         cell = new PdfPCell(new Phrase("Description"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                         cell.setRowspan(2);
                         table.addCell(cell);
                         cell = new PdfPCell(new Phrase("Gender"));
@@ -466,11 +470,16 @@ public class NewJFrame extends javax.swing.JFrame {
                         cell.setColspan(2);
                         table.addCell(cell);
                         cell = new PdfPCell(new Phrase("Total"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                         cell.setRowspan(2);
                         table.addCell(cell);
                         
-                        table.addCell("M");
-                        table.addCell("F");
+                        cell = new PdfPCell(new Phrase("M"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase("F"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(cell);
 
 
                         document.add(table); 
@@ -532,6 +541,7 @@ public class NewJFrame extends javax.swing.JFrame {
                               cell.setBackgroundColor(orange);
                               reportObj.get("chapter").addCell(cell);
                               cell = new PdfPCell(new Phrase(chapter_map.get(String.format("%02d", i))));
+                              //cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);
@@ -556,11 +566,13 @@ public class NewJFrame extends javax.swing.JFrame {
                               }
                               
                               cell = new PdfPCell(new Phrase(male_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);
                               
                               cell = new PdfPCell(new Phrase(female_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);                             
@@ -634,6 +646,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                       cell.setBorder(Rectangle.NO_BORDER);
                                       reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_id_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                       cell.setColspan(1);
                                       cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
@@ -642,6 +655,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                       cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                       cell.setColspan(1);
                                       cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);                                      
@@ -724,6 +738,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           cell.setBorder(Rectangle.NO_BORDER); 
                                           reportObj.get("code").addCell(cell);
                                           cell = new PdfPCell(new Phrase(code_strip_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                           cell.setColspan(1);
                                           cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
@@ -732,6 +747,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
                                           cell = new PdfPCell(new Phrase(code_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                           cell.setColspan(1);
                                           cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
@@ -768,7 +784,19 @@ public class NewJFrame extends javax.swing.JFrame {
                         System.err.println("Got an exception! ");
                         System.err.println(e.getMessage());
                     }
-                    
+                    //-----------------------start
+               //document.add(new Paragraph("\n\n\n-End of Report-"));
+               Font teks1 = new Font(Font.BOLD);
+                Paragraph paragraph = new Paragraph();
+			paragraph.add("\n\n\n-End of Report-");
+			paragraph.setAlignment(Element.ALIGN_CENTER);
+                        paragraph.setFont(teks1);
+                       
+//                        Font font = new Font(Font.COURIER);
+//			font.setStyle(Font.BOLD);
+			document.add(paragraph);
+               
+                //------------------------
                     
                     document.close();
                     
