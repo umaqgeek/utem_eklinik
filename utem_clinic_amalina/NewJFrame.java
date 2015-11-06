@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 //import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
@@ -34,6 +35,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.html.WebColors;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -93,6 +95,7 @@ public class NewJFrame extends javax.swing.JFrame {
         public void setHeader(String header) {
             this.header = header;
         }
+        
  
         /**
          * Creates the PdfTemplate that will hold the total number of pages.
@@ -116,18 +119,42 @@ public class NewJFrame extends javax.swing.JFrame {
                 table.setLockedWidth(true);
                 table.getDefaultCell().setFixedHeight(20);
                 table.getDefaultCell().setBorder(Rectangle.BOTTOM);
-                table.addCell(header);
-                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
-                table.addCell(String.format("Page %d of", writer.getPageNumber()));
-                PdfPCell cell = new PdfPCell(Image.getInstance(total));
-                cell.setBorder(Rectangle.BOTTOM);
-                table.addCell(cell);
-                table.writeSelectedRows(0, -1, 34, 803, writer.getDirectContent());
+//                table.addCell(header);
+//                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+//                table.addCell(String.format("Page %d of", writer.getPageNumber()));
+//                PdfPCell cell = new PdfPCell(Image.getInstance(total));
+//                cell.setBorder(Rectangle.BOTTOM);
+//                table.addCell(cell);
+//                table.writeSelectedRows(0, -1, 34, 803, writer.getDirectContent());
+                
+                
+                //-----------------------
+                 PdfContentByte cb = writer.getDirectContent();
+
+                //header content
+                String headerContent = " ";
+
+                //header content
+                String footerContent = headerContent;
+
+                /*
+                 * Foooter
+                 */
+                ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, new Phrase(String.format("%d", writer.getPageNumber())), 
+                        document.right() - 12 , document.bottom() - 20, 0);
+//                ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, new Phrase(String.format("Page %d of", writer.getPageNumber())), 
+//                        document.right() - 12 , document.bottom() - 20, 0);
+//                ColumnText.showTextAligned(total, Element.ALIGN_RIGHT, new Phrase(String.valueOf(writer.getPageSize())), 
+//                        document.right() - 2 , document.bottom() - 20, 0);
+
+            
+                //-----------------------
             }
             catch(DocumentException de) {
                 throw new ExceptionConverter(de);
             }
         }
+        
  
         /**
          * Fills out the total number of pages before the document is closed.
