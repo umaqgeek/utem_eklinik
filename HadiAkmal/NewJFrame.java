@@ -524,7 +524,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                   //block row     
                                   reportObj.put("block_title", new PdfPTable(6));
                                   reportObj.get("block_title").getDefaultCell().setBorder(0);
-                                  reportObj.get("block_title").setWidths(new float[]{ 4.45f, 3, 3.5f, 3, 30, 5.9f});
+                                  reportObj.get("block_title").setWidths(new float[]{4.47f, 3, 3.5f, 3, 30, 5.9f});
                                   reportObj.get("block_title").setLockedWidth(true);
                                   reportObj.get("block_title").setTotalWidth(document.right() - document.left());
             	                  
@@ -566,10 +566,10 @@ public class NewJFrame extends javax.swing.JFrame {
                                       //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                      //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                                                 
-                                      reportObj.put("block", new PdfPTable(6));
+                                      reportObj.put("block", new PdfPTable(7));
                                       
                                       reportObj.get("block").getDefaultCell().setBorder(0);
-                                      reportObj.get("block").setWidths(new float[]{ 5.3f, 3.1f, 3.5f, 3, 38.5f, 5.9f});
+                                      reportObj.get("block").setWidths(new float[]{ 0.530f, 0.31f, 1.55f, 1.87f,  0.53f, 0.53f, 0.59f});
                                       reportObj.get("block").setLockedWidth(true);
                                       reportObj.get("block").setTotalWidth(document.right() - document.left());	
                                       //System.out.println("loop block nombor :" + i);
@@ -583,9 +583,19 @@ public class NewJFrame extends javax.swing.JFrame {
                                       cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_name_result));
-                                      cell.setColspan(3);
+                                      cell.setColspan(2);
                                       cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
+                                      
+                                      cell = new PdfPCell(new Phrase("7777"));
+                                      cell.setColspan(1);
+                                      reportObj.get("block").addCell(cell);
+                      
+                                      cell = new PdfPCell(new Phrase("7895"));
+                                      cell.setColspan(1);
+                                      reportObj.get("block").addCell(cell);
+                                      
+                                      
                                       cell = new PdfPCell(new Phrase(block_total_result));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                       cell.setColspan(1);
@@ -613,7 +623,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           // code row
                                           reportObj.put("code_title", new PdfPTable(6));
                                           reportObj.get("code_title").getDefaultCell().setBorder(0);
-                                          reportObj.get("code_title").setWidths(new float[]{ 4.05f, 3, 3.5f, 3, 30, 5.9f});
+                                          reportObj.get("code_title").setWidths(new float[]{ 4.0f, 3, 3.5f, 3, 30, 5.9f});
                                           reportObj.get("code_title").setLockedWidth(true);
                                           reportObj.get("code_title").setTotalWidth(document.right() - document.left());	
                                           
@@ -657,10 +667,10 @@ public class NewJFrame extends javax.swing.JFrame {
                                           //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
                                           
 
-                                          reportObj.put("code", new PdfPTable(6));
+                                          reportObj.put("code", new PdfPTable(8));
                                           //System.out.println("loop nombor :" + i);
                                           reportObj.get("code").getDefaultCell().setBorder(0);
-                                          reportObj.get("code").setWidths(new float[]{ 4.55f, 3.9f, 4.5f, 3, 37.5f, 5.9f});
+                                          reportObj.get("code").setWidths(new float[]{ 0.49f, 0.48f, 0.54f, 1.70f, 1.70f, 0.61f, 0.61f, 0.68f});
                                           reportObj.get("code").setLockedWidth(true);
                                           reportObj.get("code").setTotalWidth(document.right() - document.left());	
                                       
@@ -674,10 +684,19 @@ public class NewJFrame extends javax.swing.JFrame {
                                           cell.setColspan(1);
                                           cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
-                                          cell = new PdfPCell(new Phrase(code_desc_result));
+                                          cell = new PdfPCell(new Phrase(code_desc_result));        
                                           cell.setColspan(2);
                                           cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
+                                          
+                                          cell = new PdfPCell(new Phrase("9890"));
+                                          cell.setColspan(1);
+                                          reportObj.get("code").addCell(cell);
+
+                                          cell = new PdfPCell(new Phrase("5789"));
+                                          cell.setColspan(1);
+                                          reportObj.get("code").addCell(cell);   
+                                          
                                           cell = new PdfPCell(new Phrase(code_total_result));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                           cell.setColspan(1);
