@@ -103,7 +103,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Between");
+        jLabel2.setText("From");
 
         jLabel1.setText("To");
 
@@ -119,6 +119,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -137,7 +138,7 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -176,7 +177,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,7 +195,9 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
         
-    	Document document = new Document();
+        // TODO add your handling code here:
+        
+    	Document document = new Document(PageSize.A4, 36, 36, 64, 36);
         
         //document.setMargins(30, 14, 50, 14);
         //String faculty = null;
@@ -204,10 +207,12 @@ public class NewJFrame extends javax.swing.JFrame {
         if (selectedItem != null)
         {
 		try {       
-					long startTime = System.nanoTime(); 
+				long startTime = System.nanoTime(); 
+                                        //Document document = new Document(PageSize.A4, 36, 36, 54, 36);
 			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ECSS_RPT_001.pdf"));
-	            
-		            document.open(); 
+                                //TableHeader event = new TableHeader();
+                                //writer.setPageEvent(event);
+                                document.open(); 
 
 
 		            //buat column plg banyak dulu untuk mudahkan design
@@ -252,7 +257,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         rs = st1.executeQuery(query);
                         
                         while (rs.next()) {
-                        	chapter_map.put(rs.getString("id"), rs.getString("name"));
+                            chapter_map.put(rs.getString("id"), rs.getString("name"));
                             chapter_list.add(rs.getString("id")); //assign mysql result to list
                             chapter_list.add(rs.getString("name")); //assign mysql result to list
                             // Integer icd10_id_result = rs.getInt("Id");
@@ -260,7 +265,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
                         }
 
-                                                String month = null;
+                        String month = null;
                         String year = null;
                         String delimiter = " ";
                         String[] tarikh;
@@ -314,48 +319,50 @@ public class NewJFrame extends javax.swing.JFrame {
                         //jTextArea1.append("Total patient by faculty : " + tot_by_fac);
                         //jTextArea1.append("\nTotal patient by chapter : \n\n");
                         
-                        PdfPTable header_table = new PdfPTable(2);
-                        float[] columnWidths = {2f, 1.19f};
-                        header_table.setWidths(columnWidths);
-                        // 2 columns.
+                        PdfPTable header_table1 = new PdfPTable(1);
+                        float[] columnWidths = {3f};
+                        header_table1.setWidths(columnWidths);
+                        // 1 columns.
                         Image logo = Image.getInstance("logoUTeMPNG.png");
                         logo.scaleAbsolute(230, 100); 
                         //logo.scalePercent(7.3f);
                         
                         PdfPCell cell1 = new PdfPCell(logo);
+                        cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
                         cell1.setBorder(Rectangle.NO_BORDER);
                         //cell1.setLeading(15f, 0.3f);
-                        header_table.addCell(cell1);
+                        header_table1.addCell(cell1);
                         
-                        PdfPCell cell2 = new PdfPCell(new Paragraph("Universiti Teknikal Malaysia Melaka\nHang Tuah Jaya, \n76100 Durian Tunggal, \nMelaka, Malaysia."));
-                        cell2.setBorder(Rectangle.NO_BORDER);
-                        //cell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        cell2.setLeading(15f, 0.3f);
-                        header_table.addCell(cell2);
+
                         
-                        
-                        
-                        PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty", teks));
+                        DateFormat header_fmt = new SimpleDateFormat("dd-MM-yyyy");
+
+                        PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty From " +header_fmt.format(d1)+ " To " +header_fmt.format(d2)+" \n", teks));
                         cell3.setBorder(Rectangle.NO_BORDER);
-                        PdfPCell cell4 = new PdfPCell(new Paragraph("\n\n\n"));
-                        cell4.setBorder(Rectangle.NO_BORDER);
-                        header_table.addCell(cell3);
-                        header_table.addCell(cell4);
+                        cell3.setColspan(2);
+                        cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                        PdfPCell cell4 = new PdfPCell(new Paragraph("\n\n\n"));
+//                        cell4.setBorder(Rectangle.NO_BORDER);
+                        header_table1.addCell(cell3);
+//                        header_table.addCell(cell4);
+                        document.add(header_table1);
                         
-                        PdfPCell cell5 = new PdfPCell(new Paragraph("Faculty : " + faculty));
+                        PdfPTable header_table = new PdfPTable(2);
+                        header_table.setWidths(new float[]{1f, 1f});
+                        PdfPCell cell5 = new PdfPCell(new Paragraph("\nFaculty : " + faculty));
                         cell5.setBorder(Rectangle.NO_BORDER);
-                        
-                        String timeStamp = new SimpleDateFormat("dd-MM-yyyy h:mm a").format(Calendar.getInstance().getTime()); 
-                        PdfPCell cell6 = new PdfPCell(new Paragraph("Date : " + timeStamp));
-                        cell6.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell5);
+                        
+                        PdfPCell cell6 = new PdfPCell(new Paragraph("\nReport ID : ECSS_RPT_001"));
+                        cell6.setBorder(Rectangle.NO_BORDER);      
                         header_table.addCell(cell6);
                         
-                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : ECSS_RPT_001")); //remove with space and dash
+                        PdfPCell cell8 = new PdfPCell(new Paragraph("")); //remove with space and dash
                         cell8.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell8);
                         
-                        PdfPCell cell7 = new PdfPCell(new Paragraph());
+                        String timeStamp = new SimpleDateFormat("dd-MM-yyyy h:mm a").format(Calendar.getInstance().getTime()); 
+                        PdfPCell cell7 = new PdfPCell(new Paragraph("Date : " + timeStamp));
                         cell7.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell7);
 
@@ -387,9 +394,11 @@ public class NewJFrame extends javax.swing.JFrame {
                         table.setLockedWidth(true);
                         table.setTotalWidth(document.right() - document.left());
                         cell = new PdfPCell(new Phrase("Chapter"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                         cell.setRowspan(2);
                         table.addCell(cell);
                         cell = new PdfPCell(new Phrase("Description"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                         cell.setRowspan(2);
                         table.addCell(cell);
                         cell = new PdfPCell(new Phrase("Gender"));
@@ -397,11 +406,16 @@ public class NewJFrame extends javax.swing.JFrame {
                         cell.setColspan(2);
                         table.addCell(cell);
                         cell = new PdfPCell(new Phrase("Total"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                         cell.setRowspan(2);
                         table.addCell(cell);
                         
-                        table.addCell("M");
-                        table.addCell("F");
+                        cell = new PdfPCell(new Phrase("M"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(cell);
+                        cell = new PdfPCell(new Phrase("F"));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table.addCell(cell);
 
 
                         document.add(table); 
@@ -427,11 +441,9 @@ public class NewJFrame extends javax.swing.JFrame {
                                   rs = st.executeQuery(query);
                               
                               }else{ // prepared statement goes here for particular faculty
-                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ? AND (Episode_date BETWEEN ? AND ?)";
+                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ? AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                                   st1 = conn.prepareStatement(query); //recreate statement
                                   st1.setString(1, faculty);
-                                  st1.setString(2, date1);
-                                  st1.setString(3, date2);
                                   rs = st1.executeQuery();
                               }
                               
@@ -463,20 +475,19 @@ public class NewJFrame extends javax.swing.JFrame {
                               cell.setBackgroundColor(orange);
                               reportObj.get("chapter").addCell(cell);
                               cell = new PdfPCell(new Phrase(chapter_map.get(String.format("%02d", i))));
+                              //cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);
                               
                               if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
-                            	  query = "SELECT COUNT(DiagnosisCd) AS COUNT, SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND (Episode_date BETWEEN '\"+ date1 +\"' AND '\"+ date2 +\"')";
+                            	  query = "SELECT COUNT(DiagnosisCd) AS COUNT, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                                   rs = st.executeQuery(query);
                               
-                              }else{ // prepared statement goes here for particular faculty
-                            	  query = "SELECT SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = ? GROUP BY LOCATION_CODE AND (Episode_date BETWEEN ? AND ?)";
+                              }else{ // use coalese otherwise column will return null, Refer : http://stackoverflow.com/questions/7602271/how-do-i-get-sum-function-in-mysql-to-return-0-if-no-values-are-found
+                            	  query = "SELECT COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = ? AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                                   st1 = conn.prepareStatement(query); //recreate statement
                                   st1.setString(1, faculty);
-                                  st1.setString(2, date1);
-                                  st1.setString(3, date2);
                                   rs = st1.executeQuery();
                               }
                               
@@ -487,11 +498,13 @@ public class NewJFrame extends javax.swing.JFrame {
                               }
                               
                               cell = new PdfPCell(new Phrase(male_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);
                               
                               cell = new PdfPCell(new Phrase(female_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setBackgroundColor(orange);
                               cell.setColspan(1);
                               reportObj.get("chapter").addCell(cell);                             
@@ -565,6 +578,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                       cell.setBorder(Rectangle.NO_BORDER);
                                       reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_id_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                       cell.setColspan(1);
                                       cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
@@ -573,6 +587,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                       cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                       cell.setColspan(1);
                                       cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);                                      
@@ -655,6 +670,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           cell.setBorder(Rectangle.NO_BORDER); 
                                           reportObj.get("code").addCell(cell);
                                           cell = new PdfPCell(new Phrase(code_strip_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                           cell.setColspan(1);
                                           cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
@@ -663,6 +679,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                           cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
                                           cell = new PdfPCell(new Phrase(code_total_result));
+                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                           cell.setColspan(1);
                                           cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
@@ -699,7 +716,19 @@ public class NewJFrame extends javax.swing.JFrame {
                         System.err.println("Got an exception! ");
                         System.err.println(e.getMessage());
                     }
-                    
+                    //-----------------------start
+               //document.add(new Paragraph("\n\n\n-End of Report-"));
+               Font teks1 = new Font(Font.BOLD);
+                Paragraph paragraph = new Paragraph();
+			paragraph.add("\n\n\n-End of Report-");
+			paragraph.setAlignment(Element.ALIGN_CENTER);
+                        paragraph.setFont(teks1);
+                       
+//                        Font font = new Font(Font.COURIER);
+//			font.setStyle(Font.BOLD);
+			document.add(paragraph);
+               
+                //------------------------
                     
                     document.close();
                     
