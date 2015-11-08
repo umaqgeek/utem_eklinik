@@ -27,44 +27,26 @@ import java.util.logging.Logger;
 //import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.html.WebColors;
+import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.pdf.ColumnText;
-import com.itextpdf.text.ExceptionConverter;
-import com.toedter.calendar.JCalendar;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
-
-import java.awt.Desktop;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
-import java.util.Locale;
-import java.util.Properties;
-import javax.swing.JLabel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-import org.jdesktop.swingx.plaf.basic.CalendarHeaderHandler;
-import org.jdesktop.swingx.plaf.basic.SpinningCalendarHeaderHandler;
+//import org.jdesktop.swingx.plaf.basic.CalendarHeaderHandler;
+//import org.jdesktop.swingx.plaf.basic.SpinningCalendarHeaderHandler;
 
 /**
  *
@@ -81,10 +63,10 @@ public class NewJFrame extends javax.swing.JFrame {
     public NewJFrame() {
         initComponents();
     }
-    
         class TableHeader extends PdfPageEventHelper {
         /** The header text. */
         String header;
+        String footer;
         /** The template with the total number of pages. */
         PdfTemplate total;
  
@@ -95,8 +77,14 @@ public class NewJFrame extends javax.swing.JFrame {
         public void setHeader(String header) {
             this.header = header;
         }
+
         
- 
+        
+        public void setFooter(String footer) {
+            this.footer = footer;
+        }
+        
+        
         /**
          * Creates the PdfTemplate that will hold the total number of pages.
          * @see com.itextpdf.text.pdf.PdfPageEventHelper#onOpenDocument(
@@ -118,37 +106,15 @@ public class NewJFrame extends javax.swing.JFrame {
                 table.setTotalWidth(527);
                 table.setLockedWidth(true);
                 table.getDefaultCell().setFixedHeight(20);
-                table.getDefaultCell().setBorder(Rectangle.BOTTOM);
-//                table.addCell(header);
-//                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
-//                table.addCell(String.format("Page %d of", writer.getPageNumber()));
-//                PdfPCell cell = new PdfPCell(Image.getInstance(total));
-//                cell.setBorder(Rectangle.BOTTOM);
-//                table.addCell(cell);
-//                table.writeSelectedRows(0, -1, 34, 803, writer.getDirectContent());
-                
-                
-                //-----------------------
-                 PdfContentByte cb = writer.getDirectContent();
+                table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+                table.addCell(footer);
+                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(String.format("Page %d of", writer.getPageNumber()));
+                PdfPCell cell = new PdfPCell(Image.getInstance(total));
+                cell.setBorder(Rectangle.NO_BORDER);
+                table.addCell(cell);
+                table.writeSelectedRows(0, -1, 36, 55, writer.getDirectContent());
 
-                //header content
-                String headerContent = " ";
-
-                //header content
-                String footerContent = headerContent;
-
-                /*
-                 * Foooter
-                 */
-                ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, new Phrase(String.format("%d", writer.getPageNumber())), 
-                        document.right() - 12 , document.bottom() - 20, 0);
-//                ColumnText.showTextAligned(cb, Element.ALIGN_RIGHT, new Phrase(String.format("Page %d of", writer.getPageNumber())), 
-//                        document.right() - 12 , document.bottom() - 20, 0);
-//                ColumnText.showTextAligned(total, Element.ALIGN_RIGHT, new Phrase(String.valueOf(writer.getPageSize())), 
-//                        document.right() - 2 , document.bottom() - 20, 0);
-
-            
-                //-----------------------
             }
             catch(DocumentException de) {
                 throw new ExceptionConverter(de);
@@ -165,16 +131,16 @@ public class NewJFrame extends javax.swing.JFrame {
             ColumnText.showTextAligned(total, Element.ALIGN_LEFT,
                     new Phrase(String.valueOf(writer.getPageNumber() - 1)),
                     2, 2, 0);
+
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -197,7 +163,7 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Between");
+        jLabel2.setText("From");
 
         jLabel1.setText("To");
 
@@ -213,6 +179,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -231,7 +198,7 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -270,7 +237,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,9 +250,11 @@ public class NewJFrame extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // TODO add your handling code here:
+        
         // TODO add your handling code here:
         
     	Document document = new Document(PageSize.A4, 36, 36, 64, 36);
@@ -298,7 +267,7 @@ public class NewJFrame extends javax.swing.JFrame {
         if (selectedItem != null)
         {
 		try {       
-					long startTime = System.nanoTime(); 
+				long startTime = System.nanoTime(); 
                                         //Document document = new Document(PageSize.A4, 36, 36, 54, 36);
 			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ECSS_RPT_001.pdf"));
                                 TableHeader event = new TableHeader();
@@ -348,7 +317,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         rs = st1.executeQuery(query);
                         
                         while (rs.next()) {
-                        	chapter_map.put(rs.getString("id"), rs.getString("name"));
+                            chapter_map.put(rs.getString("id"), rs.getString("name"));
                             chapter_list.add(rs.getString("id")); //assign mysql result to list
                             chapter_list.add(rs.getString("name")); //assign mysql result to list
                             // Integer icd10_id_result = rs.getInt("Id");
@@ -356,7 +325,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
                         }
 
-                                                String month = null;
+                        String month = null;
                         String year = null;
                         String delimiter = " ";
                         String[] tarikh;
@@ -410,51 +379,50 @@ public class NewJFrame extends javax.swing.JFrame {
                         //jTextArea1.append("Total patient by faculty : " + tot_by_fac);
                         //jTextArea1.append("\nTotal patient by chapter : \n\n");
                         
-                        PdfPTable header_table = new PdfPTable(2);
-                        float[] columnWidths = {2f, 1.19f};
-                        header_table.setWidths(columnWidths);
-                        // 2 columns.
+                        PdfPTable header_table1 = new PdfPTable(1);
+                        float[] columnWidths = {3f};
+                        header_table1.setWidths(columnWidths);
+                        // 1 columns.
                         Image logo = Image.getInstance("logoUTeMPNG.png");
                         logo.scaleAbsolute(230, 100); 
                         //logo.scalePercent(7.3f);
                         
                         PdfPCell cell1 = new PdfPCell(logo);
+                        cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
                         cell1.setBorder(Rectangle.NO_BORDER);
                         //cell1.setLeading(15f, 0.3f);
-                        header_table.addCell(cell1);
+                        header_table1.addCell(cell1);
                         
-                        PdfPCell cell2 = new PdfPCell(new Paragraph("Universiti Teknikal Malaysia Melaka\nHang Tuah Jaya, \n76100 Durian Tunggal, \nMelaka, Malaysia."));
-                        cell2.setBorder(Rectangle.NO_BORDER);
-                        //cell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        cell2.setLeading(15f, 0.3f);
-                        header_table.addCell(cell2);
+
                         
-                        
-                        
-                        PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty\n", teks));
+                        DateFormat header_fmt = new SimpleDateFormat("dd-MM-yyyy");
+
+                        PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty From " +header_fmt.format(d1)+ " To " +header_fmt.format(d2)+" \n", teks));
                         cell3.setBorder(Rectangle.NO_BORDER);
                         cell3.setColspan(2);
                         cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
 //                        PdfPCell cell4 = new PdfPCell(new Paragraph("\n\n\n"));
 //                        cell4.setBorder(Rectangle.NO_BORDER);
-                        header_table.addCell(cell3);
+                        header_table1.addCell(cell3);
 //                        header_table.addCell(cell4);
+                        document.add(header_table1);
                         
-                        
+                        PdfPTable header_table = new PdfPTable(2);
+                        header_table.setWidths(new float[]{1f, 1f});
                         PdfPCell cell5 = new PdfPCell(new Paragraph("\nFaculty : " + faculty));
                         cell5.setBorder(Rectangle.NO_BORDER);
-                        
-                        String timeStamp = new SimpleDateFormat("dd-MM-yyyy h:mm a").format(Calendar.getInstance().getTime()); 
-                        PdfPCell cell6 = new PdfPCell(new Paragraph("\nDate : " + timeStamp));
-                        cell6.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell5);
+                        
+                        PdfPCell cell6 = new PdfPCell(new Paragraph("\nReport ID : ECSS_RPT_001"));
+                        cell6.setBorder(Rectangle.NO_BORDER);      
                         header_table.addCell(cell6);
                         
-                        PdfPCell cell8 = new PdfPCell(new Paragraph("Report ID : ECSS_RPT_001")); //remove with space and dash
+                        PdfPCell cell8 = new PdfPCell(new Paragraph("")); //remove with space and dash
                         cell8.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell8);
                         
-                        PdfPCell cell7 = new PdfPCell(new Paragraph());
+                        String timeStamp = new SimpleDateFormat("dd-MM-yyyy h:mm a").format(Calendar.getInstance().getTime()); 
+                        PdfPCell cell7 = new PdfPCell(new Paragraph("Date : " + timeStamp));
                         cell7.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell7);
 
@@ -533,11 +501,9 @@ public class NewJFrame extends javax.swing.JFrame {
                                   rs = st.executeQuery(query);
                               
                               }else{ // prepared statement goes here for particular faculty
-                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ? AND (Episode_date BETWEEN ? AND ?)";
+                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ? AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                                   st1 = conn.prepareStatement(query); //recreate statement
                                   st1.setString(1, faculty);
-                                  st1.setString(2, date1);
-                                  st1.setString(3, date2);
                                   rs = st1.executeQuery();
                               }
                               
@@ -566,49 +532,52 @@ public class NewJFrame extends javax.swing.JFrame {
                               cell = new PdfPCell(new Phrase(String.format("%02d", i)));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setColspan(1);
-                              cell.setBackgroundColor(orange);
+                              cell.setBorder(Rectangle.NO_BORDER);
+                              //cell.setBackgroundColor(orange);
                               reportObj.get("chapter").addCell(cell);
                               cell = new PdfPCell(new Phrase(chapter_map.get(String.format("%02d", i))));
                               //cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
-                              cell.setBackgroundColor(orange);
+                              //cell.setBackgroundColor(orange);
                               cell.setColspan(1);
+                              cell.setBorder(Rectangle.NO_BORDER);
                               reportObj.get("chapter").addCell(cell);
                               
                               if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
-                            	  query = "SELECT COUNT(DiagnosisCd) AS COUNT, SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND (Episode_date BETWEEN '\"+ date1 +\"' AND '\"+ date2 +\"')";
+                            	  query = "SELECT COUNT(DiagnosisCd) AS COUNT, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                                   rs = st.executeQuery(query);
                               
-                              }else{ // prepared statement goes here for particular faculty
-                            	  query = "SELECT SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END) AS M, SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = ? GROUP BY LOCATION_CODE AND (Episode_date BETWEEN ? AND ?)";
+                              }else{ // use coalese otherwise column will return null, Refer : http://stackoverflow.com/questions/7602271/how-do-i-get-sum-function-in-mysql-to-return-0-if-no-values-are-found
+                            	  query = "SELECT COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = ? AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                                   st1 = conn.prepareStatement(query); //recreate statement
                                   st1.setString(1, faculty);
-                                  st1.setString(2, date1);
-                                  st1.setString(3, date2);
                                   rs = st1.executeQuery();
                               }
                               
                               while (rs.next()) {
                                   male_total_result = rs.getString("M");
                                   female_total_result = rs.getString("F");
-                                  System.out.println(male_total_result);
+                                  //System.out.println(male_total_result);
                               }
                               
                               cell = new PdfPCell(new Phrase(male_total_result));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
-                              cell.setBackgroundColor(orange);
+                              //cell.setBackgroundColor(orange);
                               cell.setColspan(1);
+                              cell.setBorder(Rectangle.NO_BORDER);
                               reportObj.get("chapter").addCell(cell);
                               
                               cell = new PdfPCell(new Phrase(female_total_result));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
-                              cell.setBackgroundColor(orange);
+                              //cell.setBackgroundColor(orange);
                               cell.setColspan(1);
+                              cell.setBorder(Rectangle.NO_BORDER);
                               reportObj.get("chapter").addCell(cell);                             
                               
                               cell = new PdfPCell(new Phrase(chapter_total_result));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
-                              cell.setBackgroundColor(orange);
+                              //cell.setBackgroundColor(orange);
                               cell.setColspan(1);
+                              cell.setBorder(Rectangle.NO_BORDER);
                               reportObj.get("chapter").addCell(cell);
                               
                               document.add(reportObj.get("chapter"));
@@ -618,31 +587,33 @@ public class NewJFrame extends javax.swing.JFrame {
                                   //jTextArea1.append("\n\n\tTotal Patient by Block :");
                                   
                                   //block row     
+                            	  /*
                                   reportObj.put("block_title", new PdfPTable(6));
                                   reportObj.get("block_title").getDefaultCell().setBorder(0);
-                                  reportObj.get("block_title").setWidths(new float[]{ 4.45f, 3, 3.5f, 3, 30, 5.9f});
+                                  reportObj.get("block_title").setWidths(new float[]{4.47f, 3, 3.5f, 3, 30, 5.9f});
                                   reportObj.get("block_title").setLockedWidth(true);
                                   reportObj.get("block_title").setTotalWidth(document.right() - document.left());
             	                  
                                   //block row
+                                  
                                   cell = new PdfPCell(new Phrase(""));
                                   cell.setColspan(1);
                                   cell.setBorder(Rectangle.NO_BORDER); 
                                   reportObj.get("block_title").addCell(cell);
                                   cell = new PdfPCell(new Phrase("Total Patient by Block :"));
                                   cell.setColspan(6);
-                                  cell.setBackgroundColor(magenta);
+                                  //cell.setBackgroundColor(magenta);
                                   reportObj.get("block_title").addCell(cell);                                 
                                   document.add(reportObj.get("block_title"));
+                                  */
                                   
                                   if ("ALL".equals(faculty)){
-                                	  System.out.println(faculty);
-                                	  query = "SELECT DiagnosisCd, idc, id, name, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"' ";
+                                	  //System.out.println(faculty);           
+                                	  query = "SELECT DiagnosisCd, idc, id, name, total, M, F FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND (ld.Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"') group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
                                 	  rs_block = st.executeQuery(query);
-
                                   
                                   }else{
-                                      query = "SELECT DiagnosisCd, idc, id, name, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
+                                      query = "SELECT DiagnosisCd, idc, id, name, total, M, F FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? AND (ld.Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"') group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
                                       
                                       st1 = conn.prepareStatement(query); //recreate statement
                                       st1.setString(1, faculty); // set input parameter
@@ -658,14 +629,16 @@ public class NewJFrame extends javax.swing.JFrame {
 
                                       String block_id_result = rs_block.getString("id");
                                       String block_name_result = rs_block.getString("name");
+                                      String block_male_total_result = rs_block.getString("M");
+                                      String block_female_total_result = rs_block.getString("F");
                                       String block_total_result = rs_block.getString("total");
                                       //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                      //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                                                 
-                                      reportObj.put("block", new PdfPTable(6));
+                                      reportObj.put("block", new PdfPTable(7));
                                       
                                       reportObj.get("block").getDefaultCell().setBorder(0);
-                                      reportObj.get("block").setWidths(new float[]{ 5.3f, 3.1f, 3.5f, 3, 38.5f, 5.9f});
+                                      reportObj.get("block").setWidths(new float[]{ 0.530f, 0.31f, 1.55f, 1.87f,  0.53f, 0.53f, 0.59f});
                                       reportObj.get("block").setLockedWidth(true);
                                       reportObj.get("block").setTotalWidth(document.right() - document.left());	
                                       //System.out.println("loop block nombor :" + i);
@@ -674,18 +647,35 @@ public class NewJFrame extends javax.swing.JFrame {
                                       cell.setBorder(Rectangle.NO_BORDER);
                                       reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_id_result));
-                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                      cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                       cell.setColspan(1);
-                                      cell.setBackgroundColor(magenta);
+                                      cell.setBorder(Rectangle.NO_BORDER);
+                                      //cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_name_result));
-                                      cell.setColspan(3);
-                                      cell.setBackgroundColor(magenta);
+                                      cell.setColspan(2);
+                                      cell.setBorder(Rectangle.NO_BORDER);
+                                      //cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
-                                      cell = new PdfPCell(new Phrase(block_total_result));
-                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                      
+                                      cell = new PdfPCell(new Phrase(block_male_total_result));
                                       cell.setColspan(1);
-                                      cell.setBackgroundColor(magenta);
+                                      cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                      cell.setBorder(Rectangle.NO_BORDER);
+                                      reportObj.get("block").addCell(cell);
+                      
+                                      cell = new PdfPCell(new Phrase(block_female_total_result));
+                                      cell.setColspan(1);
+                                      cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                      cell.setBorder(Rectangle.NO_BORDER);
+                                      reportObj.get("block").addCell(cell);
+                                      
+                                      
+                                      cell = new PdfPCell(new Phrase(block_total_result));
+                                      cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                      cell.setColspan(1);
+                                      //cell.setBackgroundColor(magenta);
+                                      cell.setBorder(Rectangle.NO_BORDER);
                                       reportObj.get("block").addCell(cell);                                      
                                       document.add(reportObj.get("block"));
 
@@ -707,11 +697,13 @@ public class NewJFrame extends javax.swing.JFrame {
                                           }
                                     	  
                                           // code row
+                                          /*
                                           reportObj.put("code_title", new PdfPTable(6));
                                           reportObj.get("code_title").getDefaultCell().setBorder(0);
-                                          reportObj.get("code_title").setWidths(new float[]{ 4.05f, 3, 3.5f, 3, 30, 5.9f});
+                                          reportObj.get("code_title").setWidths(new float[]{ 4.0f, 3, 3.5f, 3, 30, 5.9f});
                                           reportObj.get("code_title").setLockedWidth(true);
                                           reportObj.get("code_title").setTotalWidth(document.right() - document.left());	
+                                          
                                           
                                           cell = new PdfPCell(new Phrase(""));
                                           cell.setColspan(2);
@@ -719,24 +711,25 @@ public class NewJFrame extends javax.swing.JFrame {
                                           reportObj.get("code_title").addCell(cell);
                                           cell = new PdfPCell(new Phrase("Total Patient by Code :"));
                                           cell.setColspan(4);
-                                          cell.setBackgroundColor(cyan);
+                                          //cell.setBackgroundColor(cyan);
                                           reportObj.get("code_title").addCell(cell);                                      
                                           document.add(reportObj.get("code_title"));
                                           n = i;
+                                          */
                                     	  
                                       }
 
                                       if ("ALL".equals(faculty)){
-                                    	  query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd  group by DiagnosisCd";
+                                    	  query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND (ld.Episode_date BETWEEN '"+date1+"' AND '"+date2+"') group by DiagnosisCd";
                                           rs_code = st1.executeQuery(query);
                                       
                                       }else{
-                                          query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? group by DiagnosisCd";
+                                          query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id ='"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? AND (ld.Episode_date BETWEEN '"+date1+"' AND '"+date2+"') group by DiagnosisCd";
                                           
                                           st1 = conn.prepareStatement(query);
                                           st1.setString(1, faculty); // set input parameter
                                           rs_code = st1.executeQuery();
-                                          //rs_code = st2.executeQuery(query);  
+                                          System.out.println(block_id_result);
                                       }
 
                                       
@@ -748,15 +741,17 @@ public class NewJFrame extends javax.swing.JFrame {
                                           
                                           String code_strip_result = rs_code.getString("icd10_code_strip");
                                           String code_desc_result = rs_code.getString("icd10_desc");
+                                          String code_male_total_result = rs_code.getString("M");
+                                          String code_female_total_result = rs_code.getString("F");
                                           String code_total_result = rs_code.getString("total");
                                           //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
                                           //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
-                                          
+      
 
-                                          reportObj.put("code", new PdfPTable(6));
+                                          reportObj.put("code", new PdfPTable(8));
                                           //System.out.println("loop nombor :" + i);
                                           reportObj.get("code").getDefaultCell().setBorder(0);
-                                          reportObj.get("code").setWidths(new float[]{ 4.55f, 3.9f, 4.5f, 3, 37.5f, 5.9f});
+                                          reportObj.get("code").setWidths(new float[]{ 0.49f, 0.48f, 0.54f, 1.70f, 1.69f, 0.61f, 0.61f, 0.68f});
                                           reportObj.get("code").setLockedWidth(true);
                                           reportObj.get("code").setTotalWidth(document.right() - document.left());	
                                       
@@ -766,18 +761,34 @@ public class NewJFrame extends javax.swing.JFrame {
                                           cell.setBorder(Rectangle.NO_BORDER); 
                                           reportObj.get("code").addCell(cell);
                                           cell = new PdfPCell(new Phrase(code_strip_result));
-                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                          cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                           cell.setColspan(1);
-                                          cell.setBackgroundColor(cyan);
+                                          cell.setBorder(Rectangle.NO_BORDER);
+                                          //cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
-                                          cell = new PdfPCell(new Phrase(code_desc_result));
+                                          cell = new PdfPCell(new Phrase(code_desc_result));        
                                           cell.setColspan(2);
-                                          cell.setBackgroundColor(cyan);
+                                          //cell.setBackgroundColor(cyan);
+                                          cell.setBorder(Rectangle.NO_BORDER);
                                           reportObj.get("code").addCell(cell);
-                                          cell = new PdfPCell(new Phrase(code_total_result));
-                              cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                          
+                                          cell = new PdfPCell(new Phrase(code_male_total_result));
                                           cell.setColspan(1);
-                                          cell.setBackgroundColor(cyan);
+                                          cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                          cell.setBorder(Rectangle.NO_BORDER);
+                                          reportObj.get("code").addCell(cell);
+
+                                          cell = new PdfPCell(new Phrase(code_female_total_result));
+                                          cell.setColspan(1);
+                                          cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                          cell.setBorder(Rectangle.NO_BORDER);
+                                          reportObj.get("code").addCell(cell);   
+                                          
+                                          cell = new PdfPCell(new Phrase(code_total_result));
+                                          cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
+                                          cell.setColspan(1);
+                                          //cell.setBackgroundColor(cyan);
+                                          cell.setBorder(Rectangle.NO_BORDER);
                                           reportObj.get("code").addCell(cell);
                                           document.add(reportObj.get("code"));  
                                           
@@ -855,10 +866,10 @@ public class NewJFrame extends javax.swing.JFrame {
          }
              
         }
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }                                          
 
 
-    private void jDateChooser1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser1PropertyChange
+    private void jDateChooser1PropertyChange(java.beans.PropertyChangeEvent evt) {                                             
         // TODO add your handling code here:
 
         JDateChooser tarikh1 = (JDateChooser) evt.getSource();
@@ -880,9 +891,9 @@ public class NewJFrame extends javax.swing.JFrame {
         JTextFieldDateEditor editor = (JTextFieldDateEditor) tarikh1.getDateEditor();
         editor.setEditable(false);
 
-    }//GEN-LAST:event_jDateChooser1PropertyChange
+    }                                            
 
-    private void jDateChooser2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser2PropertyChange
+    private void jDateChooser2PropertyChange(java.beans.PropertyChangeEvent evt) {                                             
         // TODO add your handling code here:
         JDateChooser tarikh2 = (JDateChooser) evt.getSource();
         
@@ -902,7 +913,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         JTextFieldDateEditor editor = (JTextFieldDateEditor) tarikh2.getDateEditor();
         editor.setEditable(false);
-    }//GEN-LAST:event_jDateChooser2PropertyChange
+    }                                            
 
 
     
@@ -944,7 +955,7 @@ public class NewJFrame extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JComboBox jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
@@ -952,7 +963,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 
     private static class grd {
 
