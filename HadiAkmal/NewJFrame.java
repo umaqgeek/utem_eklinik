@@ -61,11 +61,14 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import main.RMIConnector;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 import org.jdesktop.swingx.plaf.basic.CalendarHeaderHandler;
 import org.jdesktop.swingx.plaf.basic.SpinningCalendarHeaderHandler;
+import main.RMIConnector;
+
 
 /**
  *
@@ -192,10 +195,6 @@ public class NewJFrame extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton1 = new javax.swing.JRadioButton();
-        jPanel6 = new javax.swing.JPanel();
-        jRadioButton9 = new javax.swing.JRadioButton();
-        jRadioButton11 = new javax.swing.JRadioButton();
-        jRadioButton10 = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -408,51 +407,6 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Clinic Location"));
-
-        buttonGroup4.add(jRadioButton9);
-        jRadioButton9.setText("Klinik Induk");
-        jRadioButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton9ActionPerformed(evt);
-            }
-        });
-
-        buttonGroup4.add(jRadioButton11);
-        jRadioButton11.setText("Klinik Industri");
-
-        buttonGroup4.add(jRadioButton10);
-        jRadioButton10.setText("Klinik Bandar");
-        jRadioButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton10ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jRadioButton9)
-                .addGap(18, 18, 18)
-                .addComponent(jRadioButton10)
-                .addGap(18, 18, 18)
-                .addComponent(jRadioButton11)
-                .addContainerGap())
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton9)
-                    .addComponent(jRadioButton10)
-                    .addComponent(jRadioButton11))
-                .addContainerGap())
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -462,14 +416,15 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                        .addGap(1, 1, 1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -481,12 +436,10 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -519,10 +472,17 @@ public class NewJFrame extends javax.swing.JFrame {
 		            PdfPCell cell;
 	                
                     //jTextArea1.append(faculty);
+                            
+                    // call library
+                    RMIConnector rc = new RMIConnector();
+                    
+                    // declaration host and port
+                    String host = "biocore-stag.utem.edu.my";
+                    int port = 1099; // for now, stick to this port
                     
                     //initialize mysql con and var data type
-                    Integer tot_by_fac = null;
-                    ResultSet rs;
+                    String tot_by_fac = null;
+                    ResultSet rs = null;
                     ResultSet rs_block;
                     ResultSet rs_code;
                     String query = null;
@@ -551,10 +511,18 @@ public class NewJFrame extends javax.swing.JFrame {
 
                     	HashMap<String, String> chapter_map = new HashMap<>();
                         ArrayList<String> chapter_list = new ArrayList<String>();
-                        ArrayList<String> invalid_record_list = new ArrayList<String>();
-                        query = "SELECT * FROM `icd10_chapters` ORDER  BY `icd10_chapters`.`Id` ASC";
-                        rs = st1.executeQuery(query);
+                        ArrayList<String> invalid_record_output_list = new ArrayList<String>();
+                        String sql = "SELECT * FROM `icd10_chapters` ORDER  BY `icd10_chapters`.`Id` ASC";
+                        ArrayList<ArrayList<String>> data = rc.getQuerySQL(host, port, sql);
                         
+                        //rs = st1.executeQuery(query);
+                        
+                        // view all data and results
+                        for (int i = 0; i < data.size(); i++) {
+                            chapter_map.put(data.get(i).get(0), data.get(i).get(1)); // data.get(i).get(0) = Id column. get(i).get(1) = name column
+                        }
+                        
+                        /*
                         while (rs.next()) {
                             chapter_map.put(rs.getString("id"), rs.getString("name"));
                             chapter_list.add(rs.getString("id")); //assign mysql result to list
@@ -563,6 +531,7 @@ public class NewJFrame extends javax.swing.JFrame {
                             //String icd10_name_result = rs.getString("name");
 
                         }
+                        */
 
                         String month = null;
                         String year = null;
@@ -572,48 +541,53 @@ public class NewJFrame extends javax.swing.JFrame {
                         String date2 = null;
                         
                         java.util.Date d1 = jDateChooser1.getDate();
-                        if (d1 == null) {
-                            JOptionPane.showMessageDialog(null, "From date is required!");
+                        java.util.Date d2 = jDateChooser2.getDate();
+                        if (d1 == null || d2 == null) {
+                            JOptionPane.showMessageDialog(null, "Date is required!");
                         } else {
-
                             DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
                             date1 = fmt.format(d1); //jdatechooser
-   
-                        }
-                        
-                        java.util.Date d2 = jDateChooser2.getDate();
-                        if (d2 == null) {
-                            JOptionPane.showMessageDialog(null, "To date is required!");
-                        } else {
-
-                            DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
                             date2 = fmt.format(d2); //jdatechooser
-   
                         }
-
+   
+                        
+                        ArrayList<ArrayList<String>> tot_by_fac_list = null ;
                         
                         if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
                             
-
+                            sql = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+/*
                             query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                             rs = st.executeQuery(query);
+                            */
                         
                         }else{ // prepared statement goes here for particular faculty
                             
-                            query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE `ld`.`LOCATION_CODE` = ? AND ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN ? AND ?)";
-                            st1 = conn.prepareStatement(query);
+                            sql = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE `ld`.`LOCATION_CODE` = '"+ faculty +"' AND ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+                            //query = "SELECT COUNT(*) AS tot_by_fac FROM `lhr_diagnosis` ld, icd10_codes ic WHERE `ld`.`LOCATION_CODE` = ? AND ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN ? AND ?)";
+                            /*
+                            st1 = conn.prepareStatement(sql);
                             st1.setString(1, faculty);
                             st1.setString(2, date1);
                             st1.setString(3, date2);
                             rs = st1.executeQuery();
+                            */
                         	
+                        }
+                        tot_by_fac_list = rc.getQuerySQL(host, port, sql);
+                        //System.out.println("tot_by_fac_list "+ tot_by_fac_list);
+                        
+                        for (int i = 0; i < tot_by_fac_list.size(); i++) {
+                            tot_by_fac = tot_by_fac_list.get(i).get(0); // get data from tot_by_fac column
+                            //System.out.println(tot_by_fac);
                         }
                         
 
-                        
+                        /*
                         while (rs.next()) {
                             tot_by_fac = rs.getInt("tot_by_fac");
                         }
+                        */
 
                         //jTextArea1.append("Total patient by faculty : " + tot_by_fac);
                         //jTextArea1.append("\nTotal patient by chapter : \n\n");
@@ -667,19 +641,35 @@ public class NewJFrame extends javax.swing.JFrame {
 
                         document.add(header_table);
                         
-                        //temp validation         
-                              //Check for invalid data in DiagnosisCd column
-                              query = "SELECT DiagnosisCd from lhr_diagnosis LEFT JOIN icd10_codes ON lhr_diagnosis.DiagnosisCd = icd10_codes.icd10_code WHERE icd10_code IS NULL AND LOCATION_CODE = ? AND (Episode_date BETWEEN ? AND ?)";
-                              
+                        
+                        ArrayList<ArrayList<String>> invalid_record_list = null ;
+                        //ArrayList<String> invalid_record_list = new ArrayList<String>();
+                        
+                        //Check for invalid data in DiagnosisCd column
+                        //query = "SELECT DiagnosisCd from lhr_diagnosis LEFT JOIN icd10_codes ON lhr_diagnosis.DiagnosisCd = icd10_codes.icd10_code WHERE icd10_code IS NULL AND LOCATION_CODE = ? AND (Episode_date BETWEEN ? AND ?)";
+                        sql = "SELECT DiagnosisCd from lhr_diagnosis LEFT JOIN icd10_codes ON lhr_diagnosis.DiagnosisCd = icd10_codes.icd10_code WHERE icd10_code IS NULL AND LOCATION_CODE = '"+ faculty +"' AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";                            
+                            
+                        invalid_record_list = rc.getQuerySQL(host, port, sql);      
+                             
+                        /*
                               st1 = conn.prepareStatement(query); //recreate statement
                               st1.setString(1, faculty); // set input parameter
                               st1.setString(2, date1);
                               st1.setString(3, date2);
                               rs = st1.executeQuery();
-                              
-                              while (rs.next()) {
+                        */      
+                        
+                        /*
+                        while (rs.next()) {
                             	  invalid_record_list.add(rs.getString("DiagnosisCd")); //assign mysql result to list
-                              }
+                        }
+                        */
+                        //System.out.println("invalid_record_list "+ invalid_record_list);
+                        
+                        for (int i = 0; i < invalid_record_list.size(); i++) {
+                            invalid_record_list.get(i); // get data from tot_by_fac column
+                        }
+                        
                               
                         //document.add(new Phrase("\n\n\n\n\n\n\n\n\n"));
                         Paragraph paragraph1 = new Paragraph();
@@ -734,24 +724,47 @@ public class NewJFrame extends javax.swing.JFrame {
 
                               //jTextArea1.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                               
-                              
+                              ArrayList<ArrayList<String>> chapter_total_result_list = null ;  
+                            
                               if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
-                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
-                                  rs = st.executeQuery(query);
+                                  
+                                  sql = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"') LIMIT 1";
+
+                                  
+                            	  //query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND ic.icd10_code = ld.DiagnosisCd AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+                                  //rs = st.executeQuery(query);
                               
                               }else{ // prepared statement goes here for particular faculty
-                            	  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ? AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+                                  sql = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = '"+ faculty +"' AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+                            	  /*
+                                  query = "SELECT COUNT(DiagnosisCd) AS count from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '"+ String.format("%02d", i) +"' AND LOCATION_CODE = ? AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+                                  
                                   st1 = conn.prepareStatement(query); //recreate statement
                                   st1.setString(1, faculty);
                                   rs = st1.executeQuery();
+                                  */
                               }
                               
-                              
+                              chapter_total_result_list = rc.getQuerySQL(host, port, sql); 
+                              //System.out.println("chapter_total_result_list : " + chapter_total_result_list);
 
-                              
+                              /*
                               while (rs.next()) {
                                   chapter_total_result = rs.getString("count");
+                                   System.out.print(chapter_total_result);
                               }
+                              */
+                              
+                              int num_i;
+
+                              for (num_i = 0; num_i < chapter_total_result_list.size(); num_i++) {
+                                //chapter_total_result_list.get(num_i); // get data from tot_by_fac column
+                                //System.out.print(chapter_total_result_list.get(num_i));
+                                chapter_total_result_list.get(num_i);
+
+                                chapter_total_result = String.join(",", chapter_total_result_list.get(num_i)); // http://stackoverflow.com/a/23183963/894470
+                              }
+
       
                               //jTextArea1.append(String.format("%02d", i) + "   " + chapter_map.get(String.format("%02d", i)) + "   " + chapter_total_result);
                               
@@ -782,21 +795,38 @@ public class NewJFrame extends javax.swing.JFrame {
                               reportObj.get("chapter").addCell(cell);
                               
                               if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
-                            	  query = "SELECT COUNT(DiagnosisCd) AS COUNT, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
-                                  rs = st.executeQuery(query);
+                                  sql = "SELECT COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+                            	  //query = "SELECT COUNT(DiagnosisCd) AS COUNT, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$'  AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+                                  //rs = st.executeQuery(query);
                               
                               }else{ // use coalese otherwise column will return null, Refer : http://stackoverflow.com/questions/7602271/how-do-i-get-sum-function-in-mysql-to-return-0-if-no-values-are-found
-                            	  query = "SELECT COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = ? AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+                            	  
+                                  sql = "SELECT COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = '"+ faculty +"' AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
+                                  /*
+                                  query = "SELECT COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F FROM lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND substring(DiagnosisCd,1,2) = '" + String.format("%02d", i) + "' AND LOCATION_CODE = ? AND (Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"')";
                                   st1 = conn.prepareStatement(query); //recreate statement
                                   st1.setString(1, faculty);
                                   rs = st1.executeQuery();
+                                  */
                               }
                               
+                              ArrayList<ArrayList<String>> gender_total_result_list = null ;  
+                              gender_total_result_list = rc.getQuerySQL(host, port, sql); 
+                              //System.out.println("gender_total_result_list "+ gender_total_result_list);
+                              
+                              for (int gender_i = 0; gender_i < chapter_total_result_list.size(); gender_i++) {
+
+                                male_total_result = gender_total_result_list.get(gender_i).get(0);
+                                female_total_result = gender_total_result_list.get(gender_i).get(1);
+                              }
+                              
+                              /*
                               while (rs.next()) {
                                   male_total_result = rs.getString("M");
                                   female_total_result = rs.getString("F");
                                   //System.out.println(male_total_result);
                               }
+                              */
                               
                               cell = new PdfPCell(new Phrase(male_total_result));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
@@ -847,27 +877,48 @@ public class NewJFrame extends javax.swing.JFrame {
                                   */
                                   
                                   if ("ALL".equals(faculty)){
-                                	  //System.out.println(faculty);           
-                                	  query = "SELECT DiagnosisCd, idc, id, name, total, M, F FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND (ld.Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"') group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
-                                	  rs_block = st.executeQuery(query);
+                                	  //System.out.println(faculty); 
+                                      
+                                      sql = "SELECT DiagnosisCd, idc, id, name, M, F, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND (ld.Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"') group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
+                                      /*
+                                        query = "SELECT DiagnosisCd, idc, id, name, total, M, F FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND (ld.Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"') group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
+                                        rs_block = st.executeQuery(query);
+                                      */
                                   
                                   }else{
+                                      
+                                      sql = "SELECT DiagnosisCd, idc, id, name, M, F, total FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = '"+ faculty +"' AND (ld.Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"') group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
+                                      /*
                                       query = "SELECT DiagnosisCd, idc, id, name, total, M, F FROM icd10_blocks, (SELECT DiagnosisCd, substring(DiagnosisCd,3,3) AS diag, count(*) as total, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F from lhr_diagnosis ld, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? AND (ld.Episode_date BETWEEN '"+ date1 +"' AND '"+ date2 +"') group by substring(DiagnosisCd,3,3)) AS lolcat WHERE id = diag AND idc = '"+ String.format("%02d", i) +"'";
                                       
                                       st1 = conn.prepareStatement(query); //recreate statement
                                       st1.setString(1, faculty); // set input parameter
                                       rs_block = st1.executeQuery();
-                                	  
+                                      */                               	  
                                   }
-
                                   
-                                  while (rs_block.next()) {
+                              ArrayList<ArrayList<String>> block_total_result_list = null ;  
+                              block_total_result_list = rc.getQuerySQL(host, port, sql); 
+                              //System.out.println("block_total_result_list" + block_total_result_list);
+                              
+                              for (int block_i = 0; block_i < block_total_result_list.size(); block_i++) {
+                              //while (rs_block.next()) {
 
+                                String block_id_result = block_total_result_list.get(block_i).get(2);
+                                String block_name_result = block_total_result_list.get(block_i).get(3);
+                                String block_male_total_result = block_total_result_list.get(block_i).get(4);
+                                String block_female_total_result = block_total_result_list.get(block_i).get(5);
+                                String block_total_result = block_total_result_list.get(block_i).get(6);
+                                  
+
+                             
+                                /*
                                       String block_id_result = rs_block.getString("id");
                                       String block_name_result = rs_block.getString("name");
                                       String block_male_total_result = rs_block.getString("M");
                                       String block_female_total_result = rs_block.getString("F");
                                       String block_total_result = rs_block.getString("total");
+                                */
                                       //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                      //jTextArea1.append("\n\t" + block_id_result + "   " + block_name_result + "   "+ block_total_result +"\n");
                                                                 
@@ -954,28 +1005,45 @@ public class NewJFrame extends javax.swing.JFrame {
                                           */
                                     	  
                                       }
+                                      
+                                      //System.out.println("block_id_result: " + block_id_result);
 
                                       if ("ALL".equals(faculty)){
-                                    	  query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND (ld.Episode_date BETWEEN '"+date1+"' AND '"+date2+"') group by DiagnosisCd";
-                                          rs_code = st1.executeQuery(query);
+                                          sql = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND (ld.Episode_date BETWEEN '"+date1+"' AND '"+date2+"') group by DiagnosisCd";
+
+                                    	  //query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id = '"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND (ld.Episode_date BETWEEN '"+date1+"' AND '"+date2+"') group by DiagnosisCd";
+                                          //rs_code = st1.executeQuery(query);
                                       
                                       }else{
+                                          sql = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id ='"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = '"+faculty+"' AND (ld.Episode_date BETWEEN '"+date1+"' AND '"+date2+"') group by DiagnosisCd";
+                                          /*
                                           query = "SELECT ld.diagnosisCd, substring(DiagnosisCd,6,5) as icd10_code_strip, ic.icd10_desc, ib.Id AS icd10_block, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'L' THEN 1 ELSE 0 END),0) AS M, COALESCE(SUM(CASE WHEN PERSON_STATUS = 'P' THEN 1 ELSE 0 END),0) AS F, COUNT(DiagnosisCd) as total from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic WHERE DiagnosisCd REGEXP '^[a-zA-Z0-9]+$' AND substring(DiagnosisCd,3,3) ='"+ block_id_result +"' AND ib.Id ='"+ block_id_result +"' AND ic.icd10_code = ld.DiagnosisCd AND LOCATION_CODE = ? AND (ld.Episode_date BETWEEN '"+date1+"' AND '"+date2+"') group by DiagnosisCd";
                                           
                                           st1 = conn.prepareStatement(query);
                                           st1.setString(1, faculty); // set input parameter
                                           rs_code = st1.executeQuery();
                                           System.out.println(block_id_result);
+                                          */
                                       }
+                                      
+                                      ArrayList<ArrayList<String>> code_total_result_list = null ;  
+                                      code_total_result_list = rc.getQuerySQL(host, port, sql); 
+                                      //System.out.println("code_total_result_list" + code_total_result_list);
 
-
-                                      while (rs_code.next()) {
+                                      for (int code_i = 0; code_i < code_total_result_list.size(); code_i++) {
+                                      //while (rs_code.next()) {
                                           
-                                          String code_strip_result = rs_code.getString("icd10_code_strip");
-                                          String code_desc_result = rs_code.getString("icd10_desc");
-                                          String code_male_total_result = rs_code.getString("M");
-                                          String code_female_total_result = rs_code.getString("F");
-                                          String code_total_result = rs_code.getString("total");
+                                          String code_strip_result = code_total_result_list.get(code_i).get(1);
+                                          String code_desc_result = code_total_result_list.get(code_i).get(2);
+                                          String code_male_total_result = code_total_result_list.get(code_i).get(4);
+                                          String code_female_total_result = code_total_result_list.get(code_i).get(5);
+                                          String code_total_result = code_total_result_list.get(code_i).get(6);
+                                          
+                                          //String code_strip_result = rs_code.getString("icd10_code_strip");
+                                          //String code_desc_result = rs_code.getString("icd10_desc");
+                                          //String code_male_total_result = rs_code.getString("M");
+                                          //String code_female_total_result = rs_code.getString("F");
+                                          //String code_total_result = rs_code.getString("total");
                                           //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
                                           //jTextArea1.append("\n\t\t" + code_strip_result + "\t" + code_desc_result + "\t"+ code_total_result);
       
@@ -1195,14 +1263,6 @@ public class NewJFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
-    private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton9ActionPerformed
-
-    private void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton10ActionPerformed
-
 
     
     
@@ -1258,10 +1318,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton10;
-    private javax.swing.JRadioButton jRadioButton11;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
@@ -1269,7 +1326,6 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JRadioButton jRadioButton7;
     private javax.swing.JRadioButton jRadioButton8;
-    private javax.swing.JRadioButton jRadioButton9;
     // End of variables declaration//GEN-END:variables
 
     private static class grd {
