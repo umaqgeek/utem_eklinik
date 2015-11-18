@@ -78,16 +78,11 @@ public class Report1 extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jComboBox4 = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox();
-        jLabel5 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -97,8 +92,6 @@ public class Report1 extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Report Type: ");
-
-        jLabel4.setText("Until:");
 
         jLabel3.setText("By:");
 
@@ -112,14 +105,10 @@ public class Report1 extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("From:");
-
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setText("Report and statistic of pharmacy");
 
         jLabel7.setText("Of:");
-
-        jLabel8.setText("OR");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-Please Select-", "Total & Drug Type", "Total Drug Expenses", "Stock Take & Stock Count" }));
         jComboBox1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
@@ -156,39 +145,30 @@ public class Report1 extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel3)
+                        .addGap(39, 39, 39)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(30, 30, 30)
-                                        .addComponent(jLabel3)
-                                        .addGap(39, 39, 39)
-                                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(40, 40, 40)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4)))
+                                .addGap(21, 21, 21)
+                                .addComponent(jLabel7))
                             .addComponent(jLabel9))
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel8))
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(161, 161, 161)
                         .addComponent(jLabel6))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 714, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -196,40 +176,28 @@ public class Report1 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4)))
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(15, 15, 15)
+                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -244,6 +212,7 @@ public class Report1 extends javax.swing.JFrame {
 
         if ("Total & Drug Type".equals(Sub)) {
             jComboBox2.removeAllItems();
+            jComboBox2.addItem("ALL");
             jComboBox2.addItem("That has been used");
             jComboBox2.addItem("That has been expired");
             jComboBox3.removeAllItems();
@@ -422,83 +391,122 @@ public class Report1 extends javax.swing.JFrame {
     private void generateDetailTextArea() throws SQLException {
 
         jTextArea1.setText("");
-        String tmp = (String) jComboBox5.getSelectedItem();
+        String comboB1 = (String) jComboBox1.getSelectedItem();
+        String comboB2 = (String) jComboBox2.getSelectedItem();
+        String comboB3 = (String) jComboBox3.getSelectedItem();
         String comboB4 = (String) jComboBox4.getSelectedItem();
+        String tmp = (String) jComboBox5.getSelectedItem();
         String sql = null;
         String sql2 = null;
+        String sql0 = null;
+        ArrayList<ArrayList<String>> data = null;
+        ArrayList<ArrayList<String>> data2 = null;
 
         RMIConnector rc = new RMIConnector();
         String host = "biocore-stag.utem.edu.my";// declaration host
         int port = 1099; //declaration port //for now, stick to this port
+        
 
-        if (tmp != null && tmp != "-Please Select-" && comboB4!=null && comboB4 != "-Please Select-") {
-            if ("ALL".equals(tmp)) {
-                sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
-                        + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
-                        + "Sum(case when PERSON_STATUS='P' then 1 else 0 end) AS Female,\n"
-                        + "COUNT(l.Medication_code) as PTotal, COUNT(LOCATION_CODE) as TTotal,\n"
-                        + "COUNT(DISTINCT(l.Medication_code)) as MTotal, MONTH(Episode_date),\n"
-                        + "p.D_SELL_PRICE as RM, \n"
-                        + "COUNT(l.Medication_code)*p.D_SELL_PRICE as total_RM\n"
-                        + "from servercis.lhr_medication AS l\n"
-                        + "inner join servercis.pis_mdc2 AS p \n"
-                        + "on l.Medication_code=p.UD_MDC_CODE\n"
-                        + "where l.Medication_code in\n"
-                        + "(\n"
-                        + "select UD_MDC_CODE from pis_mdc2\n"
-                        + ")\n"
-                        + "group by l.Medication_code";
-                sql2 = "SELECT count(distinct(medication_code)) as TotalMed, count(medication_code) as TotalPatient FROM servercis.lhr_medication ;";
+        if(comboB1!=null){//Report selection
+            if ("Total & Drug Type".equals(comboB1)){//report 1
+                if ("ALL".equals(comboB2)){//report 1.1
+                    sql0 = "SELECT * FROM servercis.pis_mdc2";
+                }else if ("That has been used".equals(comboB2)){//report 1.2
+                    sql0 = "SELECT * FROM servercis.pis_mdc2 where D_EXP_DATE = \"\"";
+                }else if ("That has been expired".equals(comboB2)){//report 1.3
+                    sql0 = "SELECT * FROM servercis.pis_mdc2 where D_EXP_DATE != \"\"";
+                }
+                
+            }else if("Total Drug Expenses".equals(comboB1)){//report 2
+                if ("All".equals(comboB2) && comboB4 != null && comboB4 != "-Please Select-" && tmp != null && tmp != "-Please Select-") {//report 2.1
+                    if ("ALL".equals(tmp)) {
+                        sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
+                                + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
+                                + "Sum(case when PERSON_STATUS='P' then 1 else 0 end) AS Female,\n"
+                                + "COUNT(l.Medication_code) as PTotal, COUNT(LOCATION_CODE) as TTotal,\n"
+                                + "COUNT(DISTINCT(l.Medication_code)) as MTotal, MONTH(Episode_date),\n"
+                                + "p.D_SELL_PRICE as RM, \n"
+                                + "COUNT(l.Medication_code)*p.D_SELL_PRICE as total_RM\n"
+                                + "from servercis.lhr_medication AS l\n"
+                                + "inner join servercis.pis_mdc2 AS p \n"
+                                + "on l.Medication_code=p.UD_MDC_CODE\n"
+                                + "where l.Medication_code in\n"
+                                + "(\n"
+                                + "select UD_MDC_CODE from pis_mdc2\n"
+                                + ")\n"
+                                + "group by l.Medication_code";
+                        sql2 = "SELECT count(distinct(medication_code)) as TotalMed, count(medication_code) as TotalPatient FROM servercis.lhr_medication ;";
 
-            } else {
-                sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
-                        + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
-                        + "Sum(case when PERSON_STATUS='P' then 1 else 0 end) AS Female,\n"
-                        + "COUNT(l.Medication_code) as PTotal, COUNT(LOCATION_CODE) as TTotal,\n"
-                        + "COUNT(DISTINCT(l.Medication_code)) as MTotal, MONTH(Episode_date),\n"
-                        + "p.D_SELL_PRICE as RM, \n"
-                        + "COUNT(l.Medication_code)*p.D_SELL_PRICE as total_RM\n"
-                        + "from servercis.lhr_medication AS l\n"
-                        + "inner join servercis.pis_mdc2 AS p \n"
-                        + "on l.Medication_code=p.UD_MDC_CODE\n"
-                        + "where l.LOCATION_CODE = '" + tmp + "' and year(Episode_date)='"+comboB4+"' and l.Medication_code in\n"
-                        + "(\n"
-                        + "select UD_MDC_CODE from pis_mdc2\n"
-                        + ")\n"
-                        + "group by l.Medication_code";
-                sql2 = "SELECT count(distinct(medication_code)) as TotalMed, count(medication_code) as TotalPatient FROM servercis.lhr_medication where location_code='" + tmp + "';";
+                        data = rc.getQuerySQL(host, port, sql);
+                        data2 = rc.getQuerySQL(host, port, sql2);
+                    } else {
+                        sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
+                                + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
+                                + "Sum(case when PERSON_STATUS='P' then 1 else 0 end) AS Female,\n"
+                                + "COUNT(l.Medication_code) as PTotal, COUNT(LOCATION_CODE) as TTotal,\n"
+                                + "COUNT(DISTINCT(l.Medication_code)) as MTotal, MONTH(Episode_date),\n"
+                                + "p.D_SELL_PRICE as RM, \n"
+                                + "COUNT(l.Medication_code)*p.D_SELL_PRICE as total_RM\n"
+                                + "from servercis.lhr_medication AS l\n"
+                                + "inner join servercis.pis_mdc2 AS p \n"
+                                + "on l.Medication_code=p.UD_MDC_CODE\n"
+                                + "where l.LOCATION_CODE = '" + tmp + "' and year(Episode_date)='" + comboB4 + "' and l.Medication_code in\n"
+                                + "(\n"
+                                + "select UD_MDC_CODE from pis_mdc2\n"
+                                + ")\n"
+                                + "group by l.Medication_code";
+                        sql2 = "SELECT count(distinct(medication_code)) as TotalMed, count(medication_code) as TotalPatient FROM servercis.lhr_medication where location_code='" + tmp + "';";
+                        data = rc.getQuerySQL(host, port, sql);
+                        data2 = rc.getQuerySQL(host, port, sql2);
+                    }
+                } else if ("Student".equals(comboB2)) {//report 2.2
+                    sql0 = " ";
+                }else if ("International Student".equals(comboB2)){//report 2.3
+                    sql0 = " ";
+                }else if ("Staff".equals(comboB2)){//report 2.4
+                    sql0 = " ";
+                }
+                
+            }else if("Stock Take & Stock Count".equals(comboB1)){//report 3
+                if ("Total Drug in Storage & Drug Usage".equals(comboB2)){//report 3.1
+                    sql0 = " ";
+                }else if ("Batch Number".equals(comboB2)){//report 3.2
+                    sql0 = " ";
+                }else if ("Drug Type".equals(comboB2)){//report 3.3
+                    sql0 = " ";
+                }
+            }else{
+                //null
             }
-
-            ArrayList<ArrayList<String>> data = rc.getQuerySQL(host, port, sql);// execute query
-
-//        String sql2 = "SELECT count(distinct(medication_code)) as TotalMed, count(medication_code) as TotalPatient FROM servercis.lhr_medication where location_code='" + tmp + "';";
-            ArrayList<ArrayList<String>> data2 = rc.getQuerySQL(host, port, sql2);// execute query
-            //------------------------- header--------------------
-
-            jTextArea1.append("\n==============");
-            jTextArea1.append("\nFaculty : " + tmp);
-            jTextArea1.append("\n==============");
-            jTextArea1.append("\n----------------------------------------------------------------------------------");
-            jTextArea1.append("\n|| CODE\t|| DESCRIPTION\t|| PRICE\t|| TOTAL PATIENT\t||TOTAL AMOUNT||");
-            jTextArea1.append("\n----------------------------------------------------------------------------------");
-            //------------------------- end header--------------------
-
-            for (int j = 0; j < data.size(); j++) {
-
-                jTextArea1.append("\n|| " + data.get(j).get(1) + "\t|| " + data.get(j).get(2) + " \t|| " + data.get(j).get(9) + "\t||" + data.get(j).get(5) + "\t||" + data.get(j).get(10) + "\t||");
-
-                jTextArea1.append("\n----------------------------------------------------------------------------------");
-
-            }
-            jTextArea1.append("\n----------------------------------------------------------------------------------");
-            jTextArea1.append("\nFaculty : " + data.get(0).get(0));
-            jTextArea1.append("\nTotal Medicines : " + data2.get(0).get(0));
-            jTextArea1.append("\nTotal Patients : " + data2.get(0).get(1));
-            jTextArea1.append("\n----------------------------------------------------------------------------------");
-            jTextArea1.append("\n----------------------------------------------------------------------------------");
         }else{
-            
+            //null
         }
+
+        //------------------------- header--------------------
+        jTextArea1.append("\n==============");
+        jTextArea1.append("\n==============");
+        jTextArea1.append("\nFaculty : " + tmp);
+        jTextArea1.append("\n==============");
+        jTextArea1.append("\n----------------------------------------------------------------------------------");
+        jTextArea1.append("\n|| CODE\t|| DESCRIPTION\t|| PRICE\t|| TOTAL PATIENT\t||TOTAL AMOUNT||");
+        jTextArea1.append("\n----------------------------------------------------------------------------------");
+        //------------------------- end header--------------------
+
+        for (int j = 0; j < data.size(); j++) {
+
+            jTextArea1.append("\n|| " + data.get(j).get(1) + "\t|| " + data.get(j).get(2) + " \t|| " + data.get(j).get(9) + "\t||" + data.get(j).get(5) + "\t||" + data.get(j).get(10) + "\t||");
+
+            jTextArea1.append("\n----------------------------------------------------------------------------------");
+
+        }
+        jTextArea1.append("\n----------------------------------------------------------------------------------");
+        jTextArea1.append("\nFaculty : " + data.get(0).get(0));
+        jTextArea1.append("\nTotal Medicines : " + data2.get(0).get(0));
+        jTextArea1.append("\nTotal Patients : " + data2.get(0).get(1));
+        jTextArea1.append("\n----------------------------------------------------------------------------------");
+        jTextArea1.append("\n----------------------------------------------------------------------------------");
+
+
     }//End TextArea Report///
 
     //Begin PDF report////
@@ -549,7 +557,7 @@ public class Report1 extends javax.swing.JFrame {
         String tmp = (String) jComboBox5.getSelectedItem();
         String comboB4 = (String) jComboBox4.getSelectedItem();
 
-        if (tmp != null&& tmp != "-Please Select-" && comboB4!=null && comboB4 != "-Please Select-") {
+        if (tmp != null && tmp != "-Please Select-" && comboB4 != null && comboB4 != "-Please Select-") {
             if ("ALL".equals(tmp)) {
                 sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
                         + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
@@ -578,7 +586,7 @@ public class Report1 extends javax.swing.JFrame {
                         + "from servercis.lhr_medication AS l\n"
                         + "inner join servercis.pis_mdc2 AS p \n"
                         + "on l.Medication_code=p.UD_MDC_CODE\n"
-                        + "where l.LOCATION_CODE = '" + tmp + "' and year(Episode_date)='"+comboB4+"' and l.Medication_code in\n"
+                        + "where l.LOCATION_CODE = '" + tmp + "' and year(Episode_date)='" + comboB4 + "' and l.Medication_code in\n"
                         + "(\n"
                         + "select UD_MDC_CODE from pis_mdc2\n"
                         + ")\n"
@@ -753,15 +761,10 @@ public class Report1 extends javax.swing.JFrame {
     private javax.swing.JComboBox jComboBox3;
     private javax.swing.JComboBox jComboBox4;
     private javax.swing.JComboBox jComboBox5;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
