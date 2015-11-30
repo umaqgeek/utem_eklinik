@@ -51,8 +51,10 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -192,6 +194,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jRadioButton8 = new javax.swing.JRadioButton();
         jRadioButton5 = new javax.swing.JRadioButton();
         jRadioButton6 = new javax.swing.JRadioButton();
+        jRadioButton9 = new javax.swing.JRadioButton();
         jPanel5 = new javax.swing.JPanel();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton1 = new javax.swing.JRadioButton();
@@ -341,6 +344,14 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup3.add(jRadioButton9);
+        jRadioButton9.setText("All");
+        jRadioButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -354,7 +365,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addComponent(jRadioButton7)
                 .addGap(18, 18, 18)
                 .addComponent(jRadioButton8)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addComponent(jRadioButton9)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -364,7 +377,8 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addComponent(jRadioButton5)
                     .addComponent(jRadioButton6)
                     .addComponent(jRadioButton7)
-                    .addComponent(jRadioButton8))
+                    .addComponent(jRadioButton8)
+                    .addComponent(jRadioButton9))
                 .addContainerGap())
         );
 
@@ -419,11 +433,11 @@ public class NewJFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -449,6 +463,48 @@ public class NewJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         
 
+                for (Enumeration<AbstractButton> buttons = buttonGroup1.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isSelected()) {
+                button.getText();
+                System.out.println(button.getText());
+            }
+        }
+                
+        jRadioButton1.setActionCommand("10");
+        jRadioButton2.setActionCommand("5");  
+        
+        if(jRadioButton1.isSelected() == false && jRadioButton2.isSelected() == false){
+            JOptionPane.showMessageDialog(null, "Patient type is required!");
+        }else{
+            System.out.println("Selected Radio Button: " + buttonGroup1.getSelection().getActionCommand());
+        }
+
+                
+
+        //System.out.println(jRadioButton1.isSelected());
+        
+        //System.out.println("Selected Radio Button: " + jRadioButton1.isSelected());
+        
+        String month = null;
+        String year = null;
+        String delimiter = " ";
+        String[] tarikh;
+        String date1 = null;
+        String date2 = null;
+                        
+        java.util.Date d1 = jDateChooser1.getDate();
+        java.util.Date d2 = jDateChooser2.getDate();
+        if (d1 == null || d2 == null) {
+            JOptionPane.showMessageDialog(null, "Date is required!");
+        } else {
+            DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+            date1 = fmt.format(d1); //jdatechooser
+            date2 = fmt.format(d2); //jdatechooser
+        }      
+        
+
         Document document = new Document(PageSize.A4, 36, 36, 64, 36);
         
         //document.setMargins(30, 14, 50, 14);
@@ -456,20 +512,19 @@ public class NewJFrame extends javax.swing.JFrame {
         //jTextArea1.setText(""); //clear textarea
         Object selectedItem = jComboBox1.getSelectedItem();
         faculty = selectedItem.toString();
-        if (selectedItem != null)
+        if (d1 != null && d2 != null && selectedItem != null )
         {
 		try {       
-				long startTime = System.nanoTime(); 
-                                        //Document document = new Document(PageSize.A4, 36, 36, 54, 36);
-			        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ECSS_RPT_001.pdf"));
-                                TableHeader event = new TableHeader();
-                                writer.setPageEvent(event);
-                                document.open(); 
+                    long startTime = System.nanoTime(); 
+
+                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ECSS_RPT_001.pdf"));
+                    TableHeader event = new TableHeader();
+                    writer.setPageEvent(event);
+                    document.open();    
 
 
-		            //buat column plg banyak dulu untuk mudahkan design
-
-		            PdfPCell cell;
+                    //buat column plg banyak dulu untuk mudahkan design
+                    PdfPCell cell;
 	                
                     //jTextArea1.append(faculty);
                             
@@ -499,11 +554,11 @@ public class NewJFrame extends javax.swing.JFrame {
                     Color cyan = WebColors.getRGBColor("#00FFFF");
 
 
-                    connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
-                    Connection conn = DriverManager.getConnection(connectionURL);
-                    PreparedStatement st1 = conn.prepareStatement(connectionURL);
-                    Statement st = conn.createStatement();
-                    Statement st2 = conn.createStatement();
+                    //connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=";
+                    //Connection conn = DriverManager.getConnection(connectionURL);
+                    //PreparedStatement st1 = conn.prepareStatement(connectionURL);
+                    //Statement st = conn.createStatement();
+                    //Statement st2 = conn.createStatement();
                     
                     
                     try {
@@ -533,22 +588,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         }
                         */
 
-                        String month = null;
-                        String year = null;
-                        String delimiter = " ";
-                        String[] tarikh;
-                        String date1 = null;
-                        String date2 = null;
-                        
-                        java.util.Date d1 = jDateChooser1.getDate();
-                        java.util.Date d2 = jDateChooser2.getDate();
-                        if (d1 == null || d2 == null) {
-                            JOptionPane.showMessageDialog(null, "Date is required!");
-                        } else {
-                            DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-                            date1 = fmt.format(d1); //jdatechooser
-                            date2 = fmt.format(d2); //jdatechooser
-                        }
+
    
                         
                         ArrayList<ArrayList<String>> tot_by_fac_list = null ;
@@ -595,6 +635,7 @@ public class NewJFrame extends javax.swing.JFrame {
                         PdfPTable header_table1 = new PdfPTable(1);
                         float[] columnWidths = {3f};
                         header_table1.setWidths(columnWidths);
+
                         // 1 columns.
                         Image logo = Image.getInstance("logoUTeMPNG.png");
                         logo.scaleAbsolute(230, 100); 
@@ -622,6 +663,8 @@ public class NewJFrame extends javax.swing.JFrame {
                         
                         PdfPTable header_table = new PdfPTable(2);
                         header_table.setWidths(new float[]{1f, 1f});
+                        header_table.setWidthPercentage(100);
+                        
                         PdfPCell cell5 = new PdfPCell(new Paragraph("\nFaculty : " + faculty));
                         cell5.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell5);
@@ -759,10 +802,11 @@ public class NewJFrame extends javax.swing.JFrame {
 
                               for (num_i = 0; num_i < chapter_total_result_list.size(); num_i++) {
                                 //chapter_total_result_list.get(num_i); // get data from tot_by_fac column
-                                //System.out.print(chapter_total_result_list.get(num_i));
-                                chapter_total_result_list.get(num_i);
+                                //System.out.print(chapter_total_result_list.get(num_i).get(0));
+                                //chapter_total_result_list.get(num_i);
 
-                                chapter_total_result = String.join(",", chapter_total_result_list.get(num_i)); // http://stackoverflow.com/a/23183963/894470
+                                //chapter_total_result = String.join(",", chapter_total_result_list.get(num_i)); // http://stackoverflow.com/a/23183963/894470 join() only works with Java 8
+                                chapter_total_result = chapter_total_result_list.get(num_i).get(0);
                               }
 
       
@@ -784,14 +828,14 @@ public class NewJFrame extends javax.swing.JFrame {
                               cell = new PdfPCell(new Phrase(String.format("%02d", i)));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               cell.setColspan(1);
-                              cell.setBorder(Rectangle.NO_BORDER);
+                              //cell.setBorder(Rectangle.NO_BORDER);
                               //cell.setBackgroundColor(orange);
                               reportObj.get("chapter").addCell(cell);
                               cell = new PdfPCell(new Phrase(chapter_map.get(String.format("%02d", i))));
                               //cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               //cell.setBackgroundColor(orange);
                               cell.setColspan(1);
-                              cell.setBorder(Rectangle.NO_BORDER);
+                              //cell.setBorder(Rectangle.NO_BORDER);
                               reportObj.get("chapter").addCell(cell);
                               
                               if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
@@ -832,21 +876,21 @@ public class NewJFrame extends javax.swing.JFrame {
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               //cell.setBackgroundColor(orange);
                               cell.setColspan(1);
-                              cell.setBorder(Rectangle.NO_BORDER);
+                              //cell.setBorder(Rectangle.NO_BORDER);
                               reportObj.get("chapter").addCell(cell);
                               
                               cell = new PdfPCell(new Phrase(female_total_result));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               //cell.setBackgroundColor(orange);
                               cell.setColspan(1);
-                              cell.setBorder(Rectangle.NO_BORDER);
+                              //cell.setBorder(Rectangle.NO_BORDER);
                               reportObj.get("chapter").addCell(cell);                             
                               
                               cell = new PdfPCell(new Phrase(chapter_total_result));
                               cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                               //cell.setBackgroundColor(orange);
                               cell.setColspan(1);
-                              cell.setBorder(Rectangle.NO_BORDER);
+                              //cell.setBorder(Rectangle.NO_BORDER);
                               reportObj.get("chapter").addCell(cell);
                               
                               document.add(reportObj.get("chapter"));
@@ -936,25 +980,25 @@ public class NewJFrame extends javax.swing.JFrame {
                                       cell = new PdfPCell(new Phrase(block_id_result));
                                       cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                       cell.setColspan(1);
-                                      cell.setBorder(Rectangle.NO_BORDER);
+                                      //cell.setBorder(Rectangle.NO_BORDER);
                                       //cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
                                       cell = new PdfPCell(new Phrase(block_name_result));
                                       cell.setColspan(2);
-                                      cell.setBorder(Rectangle.NO_BORDER);
+                                      //cell.setBorder(Rectangle.NO_BORDER);
                                       //cell.setBackgroundColor(magenta);
                                       reportObj.get("block").addCell(cell);
                                       
                                       cell = new PdfPCell(new Phrase(block_male_total_result));
                                       cell.setColspan(1);
                                       cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
-                                      cell.setBorder(Rectangle.NO_BORDER);
+                                      //cell.setBorder(Rectangle.NO_BORDER);
                                       reportObj.get("block").addCell(cell);
                       
                                       cell = new PdfPCell(new Phrase(block_female_total_result));
                                       cell.setColspan(1);
                                       cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
-                                      cell.setBorder(Rectangle.NO_BORDER);
+                                      //cell.setBorder(Rectangle.NO_BORDER);
                                       reportObj.get("block").addCell(cell);
                                       
                                       
@@ -962,7 +1006,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                       cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                       cell.setColspan(1);
                                       //cell.setBackgroundColor(magenta);
-                                      cell.setBorder(Rectangle.NO_BORDER);
+                                      //cell.setBorder(Rectangle.NO_BORDER);
                                       reportObj.get("block").addCell(cell);                                      
                                       document.add(reportObj.get("block"));
 
@@ -1063,32 +1107,32 @@ public class NewJFrame extends javax.swing.JFrame {
                                           cell = new PdfPCell(new Phrase(code_strip_result));
                                           cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                           cell.setColspan(1);
-                                          cell.setBorder(Rectangle.NO_BORDER);
+                                          //cell.setBorder(Rectangle.NO_BORDER);
                                           //cell.setBackgroundColor(cyan);
                                           reportObj.get("code").addCell(cell);
                                           cell = new PdfPCell(new Phrase(code_desc_result));        
                                           cell.setColspan(2);
                                           //cell.setBackgroundColor(cyan);
-                                          cell.setBorder(Rectangle.NO_BORDER);
+                                          //cell.setBorder(Rectangle.NO_BORDER);
                                           reportObj.get("code").addCell(cell);
                                           
                                           cell = new PdfPCell(new Phrase(code_male_total_result));
                                           cell.setColspan(1);
                                           cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
-                                          cell.setBorder(Rectangle.NO_BORDER);
+                                          //cell.setBorder(Rectangle.NO_BORDER);
                                           reportObj.get("code").addCell(cell);
 
                                           cell = new PdfPCell(new Phrase(code_female_total_result));
                                           cell.setColspan(1);
                                           cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
-                                          cell.setBorder(Rectangle.NO_BORDER);
+                                          //cell.setBorder(Rectangle.NO_BORDER);
                                           reportObj.get("code").addCell(cell);   
                                           
                                           cell = new PdfPCell(new Phrase(code_total_result));
                                           cell.setHorizontalAlignment(Element.ALIGN_CENTER); 
                                           cell.setColspan(1);
                                           //cell.setBackgroundColor(cyan);
-                                          cell.setBorder(Rectangle.NO_BORDER);
+                                          //cell.setBorder(Rectangle.NO_BORDER);
                                           reportObj.get("code").addCell(cell);
                                           document.add(reportObj.get("code"));  
                                           
@@ -1117,7 +1161,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
                         long estimatedTime = System.nanoTime() - startTime;   
                         double seconds = (double)estimatedTime / 1000000000.0;
-                        document.add(new Phrase("\nTime taken to generate this report : " + seconds + " seconds."));
+                        //document.add(new Phrase("\nTime taken to generate this report : " + seconds + " seconds."));
                     }
                     catch (Exception e) {
                         System.err.println("Got an exception! ");
@@ -1139,7 +1183,7 @@ public class NewJFrame extends javax.swing.JFrame {
                     
                     document.close();
                     
-                    conn.close();
+                    //conn.close();
                     
                     // open pdf file platform independent
                     if (Desktop.isDesktopSupported()) {
@@ -1157,10 +1201,11 @@ public class NewJFrame extends javax.swing.JFrame {
                 
                 
                 // jComboBox1ActionPerformed end bracket   
-
+         /*
          catch (SQLException ex) {
                 Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
          }
+         */
 		 catch (Exception e) {// catch itextpdf exception
             e.printStackTrace();
          }
@@ -1220,8 +1265,8 @@ public class NewJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         jPanel3.setVisible(true);
         
-        Dimension windowSize = getContentPane().getSize();
-        System.out.println(windowSize);
+        //Dimension windowSize = getContentPane().getSize();
+        //System.out.println(windowSize);
         pack();
 
 //setPreferredSize(new Dimension(84,49)) ;
@@ -1262,6 +1307,10 @@ public class NewJFrame extends javax.swing.JFrame {
         pack();
         
     }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton9ActionPerformed
 
 
     
@@ -1326,6 +1375,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JRadioButton jRadioButton7;
     private javax.swing.JRadioButton jRadioButton8;
+    private javax.swing.JRadioButton jRadioButton9;
     // End of variables declaration//GEN-END:variables
 
     private static class grd {
