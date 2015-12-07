@@ -78,16 +78,14 @@ public class Report1 extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox();
-        jComboBox4 = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jLabel9 = new javax.swing.JLabel();
         jComboBox5 = new javax.swing.JComboBox();
+        jComboBox4 = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,8 +106,6 @@ public class Report1 extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setText("Report and statistic of pharmacy");
 
-        jLabel7.setText("Of:");
-
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-Please Select-", "Total & Drug Type", "Total Drug Expenses", "Stock Take & Stock Count" }));
         jComboBox1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
@@ -120,10 +116,6 @@ public class Report1 extends javax.swing.JFrame {
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
 
         jLabel9.setText("Facuty:");
 
@@ -137,68 +129,70 @@ public class Report1 extends javax.swing.JFrame {
             }
         });
 
+        jComboBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox4ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Of:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel3)
-                        .addGap(39, 39, 39)
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
+                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(jLabel7))
-                            .addComponent(jLabel9))
-                        .addGap(13, 13, 13)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel3))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
-                        .addComponent(jLabel6))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 714, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                        .addGap(34, 34, 34)
+                        .addComponent(jLabel6)))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28))
         );
 
         pack();
@@ -210,45 +204,49 @@ public class Report1 extends javax.swing.JFrame {
 //        //ArrayList<String> list = new ArrayList<String>();
         Sub = jcombox;
 
-        if ("Total & Drug Type".equals(Sub)) {
+        // Combo box data -> automatically change data content according to the 
+        //choose
+        if ("Total & Drug Type".equals(Sub)) {//report of total & drug type 
+            //consist of 2 type :
             jComboBox2.removeAllItems();
-            jComboBox2.addItem("ALL");
-            jComboBox2.addItem("That has been used");
-            jComboBox2.addItem("That has been expired");
+            jComboBox2.addItem("That has been used");//1 type
+            jComboBox2.addItem("That has been expired");//2 type
             jComboBox3.removeAllItems();
-            jComboBox3.addItem("Weeks");
-            jComboBox3.addItem("Months");
-            jComboBox3.addItem("Years");
-            week();
+            jComboBox3.addItem("Weeks"); //report can be choose based on week or
+            jComboBox3.addItem("Months");//month
+            jComboBox3.addItem("Years");//year
+            //week();
             fillcombo();
 
-        } else if ("Total Drug Expenses".equals(Sub)) {
+        } else if ("Total Drug Expenses".equals(Sub)) {//report of Total Drug 
+            //Expenses consist of 4 type :
             jComboBox2.removeAllItems();
-            jComboBox2.addItem("All");
-            jComboBox2.addItem("Student");
-            jComboBox2.addItem("International Student");
-            jComboBox2.addItem("Staff");
+            jComboBox2.addItem("All");//1 type
+            jComboBox2.addItem("Student");//2 type
+            jComboBox2.addItem("International Student");//3 type
+            jComboBox2.addItem("Staff");//4 type
             jComboBox3.removeAllItems();
-            jComboBox3.addItem("Months");
-            jComboBox3.addItem("Years");
-            month();
+            jComboBox3.addItem("Months");//report can be choose based on month or
+            jComboBox3.addItem("Years");//year
+            
             fillcombo();
 
-        } else if ("Stock Take & Stock Count".equals(Sub)) {
+        } else if ("Stock Take & Stock Count".equals(Sub)) {//report of Stock 
+            //Take & Stock Count consist of 3 type :
             jComboBox2.removeAllItems();
-            jComboBox2.addItem("Total Drug in Storage & Drug Usage");
-            jComboBox2.addItem("Batch Number");
-            jComboBox2.addItem("Drug Type");
+            jComboBox2.addItem("Total Drug in Storage & Drug Usage");//1 type
+            jComboBox2.addItem("Batch Number");//2 type
+            jComboBox2.addItem("Drug Type");//3 type
             jComboBox3.removeAllItems();
-            jComboBox3.addItem("Months");
-            jComboBox3.addItem("Years");
-            month();
+            jComboBox3.addItem("Months");//1 type
+            jComboBox3.addItem("Years");//2 type
+            
             fillcombo();
 
         } else {
             jComboBox2.removeAllItems();
             jComboBox3.removeAllItems();
-            jComboBox4.removeAllItems();
+//            jComboBox4.removeAllItems();
             jComboBox5.removeAllItems();
 
         }
@@ -256,8 +254,8 @@ public class Report1 extends javax.swing.JFrame {
 
     private void jComboBox3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBox3PopupMenuWillBecomeInvisible
         // TODO add your handling code here:
-        String tmp2 = (String) jComboBox3.getSelectedItem();
-        Sub2 = tmp2;
+        /*String comboB52 = (String) jComboBox3.getSelectedItem();
+        Sub2 = comboB52;
 
         if ("Weeks".equals(Sub2)) {
             week();
@@ -267,28 +265,33 @@ public class Report1 extends javax.swing.JFrame {
 
         } else if ("Years".equals(Sub2)) {
             year();
-        }
+        }*/
     }//GEN-LAST:event_jComboBox3PopupMenuWillBecomeInvisible
 
     private void jComboBox5PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBox5PopupMenuWillBecomeInvisible
         // TODO add your handling code here:
 //        java.sql.Date sqldate = new java.sql.Date(jDateChooser1.getDate().getTime());
-        String tmp = (String) jComboBox5.getSelectedItem();
+        String comboB5 = (String) jComboBox5.getSelectedItem();
         String pdfFilename = "Report1";
 
         try {
-            generateDetailTextArea();
+
             generateReportPDF(pdfFilename);
         } catch (SQLException ex) {
-            Logger.getLogger(Report3.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Report1.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
-            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + "C:\\Users\\adam\\Desktop\\Report1\\" + pdfFilename + "(" + tmp + ").pdf");
+            //Report file will be open from this folder path
+            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + "D:\\Report\\" + pdfFilename + "(" + comboB5 + ").pdf");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error");
         }
     }//GEN-LAST:event_jComboBox5PopupMenuWillBecomeInvisible
+
+    private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -325,7 +328,7 @@ public class Report1 extends javax.swing.JFrame {
         });
     }
 
-    private void week() {
+    /*private void week() {
         jComboBox4.removeAllItems();
         jComboBox4.addItem("-Please Select-");
         jComboBox4.addItem("ALL");
@@ -369,12 +372,13 @@ public class Report1 extends javax.swing.JFrame {
         for (int i = 0; i < data3.size(); i++) {
             jComboBox4.addItem(data3.get(i).get(0));
         }
-    }
+    }*/
 
     private void fillcombo() {
         jComboBox5.removeAllItems();
         jComboBox5.addItem("-Please Select-");
-        jComboBox5.addItem("ALL");
+        jComboBox5.addItem("Total");
+        jComboBox5.addItem("ALL Division");
         RMIConnector rc = new RMIConnector();
         String host = "biocore-stag.utem.edu.my";// declaration host
         int port = 1099; //declaration port //for now, stick to this port
@@ -387,138 +391,17 @@ public class Report1 extends javax.swing.JFrame {
         }
     }
 
-    ////Begin create TextArea Report///
-    private void generateDetailTextArea() throws SQLException {
-
-        jTextArea1.setText("");
-        String comboB1 = (String) jComboBox1.getSelectedItem();
-        String comboB2 = (String) jComboBox2.getSelectedItem();
-        String comboB3 = (String) jComboBox3.getSelectedItem();
-        String comboB4 = (String) jComboBox4.getSelectedItem();
-        String tmp = (String) jComboBox5.getSelectedItem();
-        String sql = null;
-        String sql2 = null;
-        String sql0 = null;
-        ArrayList<ArrayList<String>> data = null;
-        ArrayList<ArrayList<String>> data2 = null;
-
-        RMIConnector rc = new RMIConnector();
-        String host = "biocore-stag.utem.edu.my";// declaration host
-        int port = 1099; //declaration port //for now, stick to this port
-        
-
-        if(comboB1!=null){//Report selection
-            if ("Total & Drug Type".equals(comboB1)){//report 1
-                if ("ALL".equals(comboB2)){//report 1.1
-                    sql0 = "SELECT * FROM servercis.pis_mdc2";
-                }else if ("That has been used".equals(comboB2)){//report 1.2
-                    sql0 = "SELECT * FROM servercis.pis_mdc2 where D_EXP_DATE = \"\"";
-                }else if ("That has been expired".equals(comboB2)){//report 1.3
-                    sql0 = "SELECT * FROM servercis.pis_mdc2 where D_EXP_DATE != \"\"";
-                }
-                
-            }else if("Total Drug Expenses".equals(comboB1)){//report 2
-                if ("All".equals(comboB2) && comboB4 != null && comboB4 != "-Please Select-" && tmp != null && tmp != "-Please Select-") {//report 2.1
-                    if ("ALL".equals(tmp)) {
-                        sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
-                                + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
-                                + "Sum(case when PERSON_STATUS='P' then 1 else 0 end) AS Female,\n"
-                                + "COUNT(l.Medication_code) as PTotal, COUNT(LOCATION_CODE) as TTotal,\n"
-                                + "COUNT(DISTINCT(l.Medication_code)) as MTotal, MONTH(Episode_date),\n"
-                                + "p.D_SELL_PRICE as RM, \n"
-                                + "COUNT(l.Medication_code)*p.D_SELL_PRICE as total_RM\n"
-                                + "from servercis.lhr_medication AS l\n"
-                                + "inner join servercis.pis_mdc2 AS p \n"
-                                + "on l.Medication_code=p.UD_MDC_CODE\n"
-                                + "where l.Medication_code in\n"
-                                + "(\n"
-                                + "select UD_MDC_CODE from pis_mdc2\n"
-                                + ")\n"
-                                + "group by l.Medication_code";
-                        sql2 = "SELECT count(distinct(medication_code)) as TotalMed, count(medication_code) as TotalPatient FROM servercis.lhr_medication ;";
-
-                        data = rc.getQuerySQL(host, port, sql);
-                        data2 = rc.getQuerySQL(host, port, sql2);
-                    } else {
-                        sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
-                                + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
-                                + "Sum(case when PERSON_STATUS='P' then 1 else 0 end) AS Female,\n"
-                                + "COUNT(l.Medication_code) as PTotal, COUNT(LOCATION_CODE) as TTotal,\n"
-                                + "COUNT(DISTINCT(l.Medication_code)) as MTotal, MONTH(Episode_date),\n"
-                                + "p.D_SELL_PRICE as RM, \n"
-                                + "COUNT(l.Medication_code)*p.D_SELL_PRICE as total_RM\n"
-                                + "from servercis.lhr_medication AS l\n"
-                                + "inner join servercis.pis_mdc2 AS p \n"
-                                + "on l.Medication_code=p.UD_MDC_CODE\n"
-                                + "where l.LOCATION_CODE = '" + tmp + "' and year(Episode_date)='" + comboB4 + "' and l.Medication_code in\n"
-                                + "(\n"
-                                + "select UD_MDC_CODE from pis_mdc2\n"
-                                + ")\n"
-                                + "group by l.Medication_code";
-                        sql2 = "SELECT count(distinct(medication_code)) as TotalMed, count(medication_code) as TotalPatient FROM servercis.lhr_medication where location_code='" + tmp + "';";
-                        data = rc.getQuerySQL(host, port, sql);
-                        data2 = rc.getQuerySQL(host, port, sql2);
-                    }
-                } else if ("Student".equals(comboB2)) {//report 2.2
-                    sql0 = " ";
-                }else if ("International Student".equals(comboB2)){//report 2.3
-                    sql0 = " ";
-                }else if ("Staff".equals(comboB2)){//report 2.4
-                    sql0 = " ";
-                }
-                
-            }else if("Stock Take & Stock Count".equals(comboB1)){//report 3
-                if ("Total Drug in Storage & Drug Usage".equals(comboB2)){//report 3.1
-                    sql0 = " ";
-                }else if ("Batch Number".equals(comboB2)){//report 3.2
-                    sql0 = " ";
-                }else if ("Drug Type".equals(comboB2)){//report 3.3
-                    sql0 = " ";
-                }
-            }else{
-                //null
-            }
-        }else{
-            //null
-        }
-
-        //------------------------- header--------------------
-        jTextArea1.append("\n==============");
-        jTextArea1.append("\n==============");
-        jTextArea1.append("\nFaculty : " + tmp);
-        jTextArea1.append("\n==============");
-        jTextArea1.append("\n----------------------------------------------------------------------------------");
-        jTextArea1.append("\n|| CODE\t|| DESCRIPTION\t|| PRICE\t|| TOTAL PATIENT\t||TOTAL AMOUNT||");
-        jTextArea1.append("\n----------------------------------------------------------------------------------");
-        //------------------------- end header--------------------
-
-        for (int j = 0; j < data.size(); j++) {
-
-            jTextArea1.append("\n|| " + data.get(j).get(1) + "\t|| " + data.get(j).get(2) + " \t|| " + data.get(j).get(9) + "\t||" + data.get(j).get(5) + "\t||" + data.get(j).get(10) + "\t||");
-
-            jTextArea1.append("\n----------------------------------------------------------------------------------");
-
-        }
-        jTextArea1.append("\n----------------------------------------------------------------------------------");
-        jTextArea1.append("\nFaculty : " + data.get(0).get(0));
-        jTextArea1.append("\nTotal Medicines : " + data2.get(0).get(0));
-        jTextArea1.append("\nTotal Patients : " + data2.get(0).get(1));
-        jTextArea1.append("\n----------------------------------------------------------------------------------");
-        jTextArea1.append("\n----------------------------------------------------------------------------------");
-
-
-    }//End TextArea Report///
-
     //Begin PDF report////
     private void generateReportPDF(String pdfFilename) throws SQLException {
         Document doc = new Document(PageSize.A4, 36, 36, 64, 36);
         PdfWriter docWriter = null;
         initializeFonts();
 
-        String tmp = (String) jComboBox5.getSelectedItem();
+        String comboB5 = (String) jComboBox5.getSelectedItem();
 
         try {
-            String path = "C:\\Users\\adam\\Desktop\\Report1\\" + pdfFilename + "(" + tmp + ").pdf";
+            //Report file will be save to this folder path
+            String path = "D:\\Report\\" + pdfFilename + "(" + comboB5 + ").pdf";
             docWriter = PdfWriter.getInstance(doc, new FileOutputStream(path));
             doc.addAuthor("Adam");
             doc.addCreationDate();
@@ -547,18 +430,23 @@ public class Report1 extends javax.swing.JFrame {
 
     }
 
-    private void generateDetail(Document doc, PdfContentByte cb) {
+    private void generateDetail(Document doc, PdfContentByte cb) {//write detail
+        //of report in pdf
 
         String sql = null;
         RMIConnector rc = new RMIConnector();
         String host = "biocore-stag.utem.edu.my";// declaration host
         int port = 1099; //declaration port //for now, stick to this port
+        ArrayList<ArrayList<String>> data = null;
 
-        String tmp = (String) jComboBox5.getSelectedItem();
-        String comboB4 = (String) jComboBox4.getSelectedItem();
+        String comboB1 = (String) jComboBox1.getSelectedItem();
+        String comboB2 = (String) jComboBox2.getSelectedItem();
+        String comboB3 = (String) jComboBox3.getSelectedItem();
+        String comboB5 = (String) jComboBox5.getSelectedItem();
+        
 
-        if (tmp != null && tmp != "-Please Select-" && comboB4 != null && comboB4 != "-Please Select-") {
-            if ("ALL".equals(tmp)) {
+        if (comboB5 != null && comboB5 != "-Please Select-" ) {
+            if ("Total".equals(comboB5)) {
                 sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
                         + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
                         + "Sum(case when PERSON_STATUS='P' then 1 else 0 end) AS Female,\n"
@@ -586,84 +474,86 @@ public class Report1 extends javax.swing.JFrame {
                         + "from servercis.lhr_medication AS l\n"
                         + "inner join servercis.pis_mdc2 AS p \n"
                         + "on l.Medication_code=p.UD_MDC_CODE\n"
-                        + "where l.LOCATION_CODE = '" + tmp + "' and year(Episode_date)='" + comboB4 + "' and l.Medication_code in\n"
+                        //+ "where l.LOCATION_CODE = '" + comboB5 + "' and year(Episode_date)='" + comboB4 + "' and l.Medication_code in\n"
+                        + "where l.LOCATION_CODE = '" + comboB5 + "' and l.Medication_code in\n"
                         + "(\n"
                         + "select UD_MDC_CODE from pis_mdc2\n"
                         + ")\n"
                         + "group by l.Medication_code";
             }
 
-            ArrayList<ArrayList<String>> data = rc.getQuerySQL(host, port, sql);
+            data = rc.getQuerySQL(host, port, sql);
 
             boolean beginPage = true;
             int y = 0;
 
+            //the layout and contain of pdf report
             for (int i = 0; i < data.size(); i++) {
                 if (beginPage) {
                     beginPage = false;
-                    generateLayout(doc, cb);
-                    generateHeader(doc, cb);
+                    generateLayout(doc, cb);//the layout of pdf report
+                    generateHeader(doc, cb);//the header of pdf report
                     y = 615;
                 }
 
                 if (y < 50) {
-                    printPageNumber(cb);
+                    printPageNumber(cb);//the page number of pdf report
                     doc.newPage();
                     beginPage = true;
                 }
             }
-            printPageNumber(cb);
+            printPageNumber(cb);//the page number of pdf report
 
             int i = 0;
             for (int j = 0; j < data.size(); j++) {
 
-                if (i < data.size()) {
+                if (i < data.size()) {//data contain in the table
                     DecimalFormat df = new DecimalFormat("0.00");
                     df.setMaximumFractionDigits(2);
-                    createContent(cb, 63, y, String.valueOf(i + 1), PdfContentByte.ALIGN_RIGHT);
-                    createContent(cb, 72, y, data.get(j).get(1), PdfContentByte.ALIGN_LEFT);
-                    createContent(cb, 145, y, data.get(j).get(2), PdfContentByte.ALIGN_LEFT);
+                    createContent(cb, 63, y, String.valueOf(i + 1), PdfContentByte.ALIGN_RIGHT);//first column data
+                    createContent(cb, 72, y, data.get(j).get(1), PdfContentByte.ALIGN_LEFT);//2nd column data
+                    createContent(cb, 145, y, data.get(j).get(2), PdfContentByte.ALIGN_LEFT);//3rd column data
 
                     String RM = df.format(Double.parseDouble(data.get(j).get(9)));
-                    createContent(cb, 448, y, RM, PdfContentByte.ALIGN_RIGHT);
+                    createContent(cb, 448, y, RM, PdfContentByte.ALIGN_RIGHT);//4th column data
 
-                    createContent(cb, 518, y, data.get(j).get(5), PdfContentByte.ALIGN_RIGHT);
+                    createContent(cb, 518, y, data.get(j).get(5), PdfContentByte.ALIGN_RIGHT);//5th column data
 
                     String RMTotal = df.format(Double.parseDouble(data.get(j).get(10)));
-                    createContent(cb, 588, y, RMTotal, PdfContentByte.ALIGN_RIGHT);
+                    createContent(cb, 588, y, RMTotal, PdfContentByte.ALIGN_RIGHT);//6th column data
                     y = y - 15;
                     if (y < 50) {
-                        printPageNumber(cb);
+                        printPageNumber(cb);//the page number of pdf report
                         doc.newPage();
                         beginPage = true;
                     }
                 }
                 i++;
             }
-        }else{
-            
+        } else {
+
         }
     }
 
-    private void generateLayout(Document doc, PdfContentByte cb) {
+    private void generateLayout(Document doc, PdfContentByte cb) {//layout of table
 
         try {
 
             cb.setLineWidth(1f);
 
-            cb.rectangle(40, 50, 550, 600);
-            cb.moveTo(40, 630);//horizontal line
-            cb.lineTo(590, 630);//horizontal line
+            cb.rectangle(40, 50, 550, 600);//table line
+            cb.moveTo(40, 630);//horizontal line of table
+            cb.lineTo(590, 630);//horizontal line of table
 
-            cb.moveTo(70, 50);//No
+            cb.moveTo(70, 50);//No line
             cb.lineTo(70, 650);
-            cb.moveTo(143, 50);//Drug Code
+            cb.moveTo(143, 50);//Drug Code line
             cb.lineTo(143, 650);
-            cb.moveTo(405, 50);//Desc
+            cb.moveTo(405, 50);//Desc line
             cb.lineTo(405, 650);
-            cb.moveTo(450, 50);//Price
+            cb.moveTo(450, 50);//Price line
             cb.lineTo(450, 650);
-            cb.moveTo(520, 50);//Total Amount
+            cb.moveTo(520, 50);//Total Amount line
             cb.lineTo(520, 650);
             cb.stroke();
 
@@ -676,7 +566,7 @@ public class Report1 extends javax.swing.JFrame {
             createHeadings(cb, 522, 633, "Total Amount");
 
             //add the images
-            Image Logo = Image.getInstance("C:\\Users\\adam\\Desktop\\LI_tuffah\\klinikal system\\gui\\Report\\LogoUTeM2.gif");
+            Image Logo = Image.getInstance("LogoUTeM2.gif");
             Logo.setAbsolutePosition(45, 700);
             Logo.scalePercent(9);
             doc.add(Logo);
@@ -689,18 +579,18 @@ public class Report1 extends javax.swing.JFrame {
 
     }
 
-    private void generateHeader(Document doc, PdfContentByte cb) {
+    private void generateHeader(Document doc, PdfContentByte cb) {//pdf report header
 
-        String tmp = (String) jComboBox5.getSelectedItem();
-        String comboB4 = (String) jComboBox4.getSelectedItem();
+        String comboB5 = (String) jComboBox5.getSelectedItem();
+        String comboB3 = (String) jComboBox3.getSelectedItem();
 
         createHeadings(cb, 215, 762, "Pusat Kesihatan");
         createHeadings(cb, 215, 742, "Universiti Teknikal Malaysia, Melaka");
         createHeadings(cb, 215, 722, "54500 Durian Tunggal");
         createHeadings(cb, 215, 702, "Melaka");
 
-        createHeadings(cb, 45, 684, "Report of Drug Sales by " + comboB4);
-        createHeadings(cb, 45, 672, "Faculty: " + tmp);
+        createHeadings(cb, 45, 684, "Report of Drug Sales by " + comboB3);
+        createHeadings(cb, 45, 672, "Faculty: " + comboB5);
         createHeadings(cb, 45, 660, "Report ID: ECSS RPT 002");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -709,7 +599,7 @@ public class Report1 extends javax.swing.JFrame {
 
     }
 
-    private void createHeadings(PdfContentByte cb, float x, float y, String text) {
+    private void createHeadings(PdfContentByte cb, float x, float y, String text) {//header font & etc
 
         cb.beginText();
         cb.setFontAndSize(bfBold, 10);
@@ -719,7 +609,7 @@ public class Report1 extends javax.swing.JFrame {
 
     }
 
-    private void printPageNumber(PdfContentByte cb) {
+    private void printPageNumber(PdfContentByte cb) {//page number font & etc
 
         cb.beginText();
         cb.setFontAndSize(bfBold, 9);
@@ -730,7 +620,7 @@ public class Report1 extends javax.swing.JFrame {
 
     }
 
-    private void createContent(PdfContentByte cb, float x, float y, String text, int align) {
+    private void createContent(PdfContentByte cb, float x, float y, String text, int align) {//data content font & etc
 
         cb.beginText();
         cb.setFontAndSize(bf, 10);
@@ -739,7 +629,8 @@ public class Report1 extends javax.swing.JFrame {
 
     }
 
-    private void initializeFonts() {
+    //initialize font type
+    private void initializeFonts() {//general font & etc
 
         try {
             bfBold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
@@ -762,11 +653,9 @@ public class Report1 extends javax.swing.JFrame {
     private javax.swing.JComboBox jComboBox4;
     private javax.swing.JComboBox jComboBox5;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
