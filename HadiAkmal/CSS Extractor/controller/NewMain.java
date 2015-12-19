@@ -11,6 +11,7 @@ import Bean.DTO;
 import Bean.FMH;
 import Bean.PMH;
 import Bean.VTS;
+import Bean.MEC;
 import Process.MainRetrieval;
 import java.util.ArrayList;
 import main.RMIConnector;
@@ -48,10 +49,14 @@ public class NewMain {
             String sql10 = "TRUNCATE lhr_family_history";
             boolean fmh = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, sql10);   
             String sql11 = "TRUNCATE lhr_past_medical_history";
-            boolean pmh = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, sql11);                      
+            boolean pmh = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, sql11); 
+            String sql12 = "TRUNCATE lhr_med_leave";
+            boolean mec = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, sql12);     
+           // String sql11 = "TRUNCATE lhr_past_medical_history";
+           // boolean pmh = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, sql11);                 
             
  
-            if (ccn && dgs && dto && vts1 && vts2 && vts3 && vts4 && vts5 && vts6 && fmh && pmh) {
+            if (ccn && dgs && dto && vts1 && vts2 && vts3 && vts4 && vts5 && vts6 && fmh && pmh && mec) {
                 return true;
             } else {
                 return false;
@@ -65,7 +70,7 @@ public class NewMain {
 
 
         try {
-            String sql1 = "SELECT sii.NATIONAL_ID_NO, sii.PERSON_ID_NO, sii.PERSON_STATUS, sii.LOCATION_CODE, ppb.* FROM PMS_PATIENT_BIODATA ppb, special_integration_information sii WHERE ppb.NEW_IC_NO = sii.NATIONAL_ID_NO LIMIT 100,100";
+            String sql1 = "SELECT sii.NATIONAL_ID_NO, sii.PERSON_ID_NO, sii.PERSON_STATUS, sii.LOCATION_CODE, ppb.* FROM PMS_PATIENT_BIODATA ppb, special_integration_information sii WHERE ppb.NEW_IC_NO = sii.NATIONAL_ID_NO LIMIT 30";
             ArrayList<ArrayList<String>> data1 = rc.getQuerySQL(Config.ipAddressServer, Config.portServer, sql1);
             
             
@@ -119,6 +124,9 @@ public class NewMain {
                     // PMH
                     String dataPMH[][] = mr.getData("PMH");
                     int rowsPMH = mr.getRowNums();
+                    
+                    String dataMEC[][] = mr.getData("MEC");
+                    int rowsMEC = mr.getRowNums();                    
                     
         //            System.out.println("Central Code " + Central_Code); //this line is to display Central_Code column data.
         //            System.out.println("Episode " + episode + "\nCCN:" + rowsCCN + " DGS:" + rowsDGS + " DTO:" + rowsDTO + " VTS:" + rowsVTS);
@@ -186,12 +194,13 @@ public class NewMain {
 
                     }
 
+                    DGS dgsB = new DGS(); //declare outside so can display data outside bracket
                     if (rowsDGS > 0) {
 
                         ArrayList<DGS> dgsBr = new ArrayList<DGS>();
                         for (int n = 0; n < rowsDGS; n++) {
 
-                            DGS dgsB = new DGS();
+                            
                             dgsB.setPMI_no(PMI_no);
                             dgsB.setEpisode_Date(dataDGS[n][0]);
                             dgsB.setDiagnosis_Type(dataDGS[n][1]);
@@ -275,7 +284,8 @@ public class NewMain {
                             dgsBr.add(dgsB);
                         }
 
-                    }
+                    }             
+                    
 
                     if (rowsDTO > 0) {
 
@@ -723,8 +733,8 @@ public class NewMain {
                                     + "'" + LOCATION_CODE + "')";
 
                             boolean status_fmh_lhr_fh = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, query_fmh_lhr_fh);
-                            System.out.println("status : " + status_fmh_lhr_fh);
-                            System.out.println("query : " + query_fmh_lhr_fh);
+                            System.out.println("status fmh : " + status_fmh_lhr_fh);
+                            System.out.println("query fmh : " + query_fmh_lhr_fh);
 
                             fmh_ArrayList.add(fmh_Obj);
                         }
@@ -758,7 +768,7 @@ public class NewMain {
                             pmh_Obj.setICD10_Code(dataPMH[pmh_i][16]);                            
                             pmh_Obj.setICD10_Desc(dataPMH[pmh_i][17]);
                             
-                            String query_pmh_lhr_pmh = "insert into lhr_past_medical_history (PMI_no, "
+                            String query_lhr_pmh = "insert into lhr_past_medical_history (PMI_no, "
                                     + "hfc_cd, "
                                    // + "onset_date, "                                    
                                     + "encounter_date, "                                    
@@ -793,14 +803,87 @@ public class NewMain {
                                     + "'" + PERSON_STATUS + "',"
                                     + "'" + LOCATION_CODE + "')";
 
-                            boolean status_pmh_lhr_pmh = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, query_pmh_lhr_pmh);
-                            System.out.println("status : " + status_pmh_lhr_pmh);
-                            System.out.println("query : " + query_pmh_lhr_pmh);
+                            boolean status_lhr_pmh = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, query_lhr_pmh);
+                            System.out.println("status : " + status_lhr_pmh);
+                            System.out.println("query : " + query_lhr_pmh);
 
                             pmh_ArrayList.add(pmh_Obj);
                         }
 
                     } //FMH end
+                    
+                    
+                    //insert into lhr_med_leave table
+                    if (rowsMEC > 0) {
+
+                        ArrayList<MEC> mecBeans = new ArrayList<MEC>();
+                        for (int k = 0; k < rowsMEC; k++) {
+
+                            MEC mecBean = new MEC();
+                            mecBean.setPMI_No(PMI_no);
+                            mecBean.setEpisode_Date(dataMEC[k][0]);                            
+                            mecBean.setDiagnosis_Code_Read_Code(dataMEC[k][1]);
+                            mecBean.setDiagnosis_Desc_Read_Code(dataMEC[k][2]);
+                            mecBean.setDiagnosis_Code_ICD10(dataMEC[k][3]);
+                            mecBean.setDiagnosis_Desc_ICD10(dataMEC[k][4]);                            
+                            mecBean.setComplaint_Code_Read_Code(dataMEC[k][5]);
+                            mecBean.setComplaint_Desc_Read_Code(dataMEC[k][6]);
+                            mecBean.setComplaint_Code_ICD10(dataMEC[k][7]);
+                            mecBean.setComplaint_Desc_ICD10(dataMEC[k][8]);
+                            mecBean.setComments(dataMEC[k][9]);
+                            mecBean.setTime_From(dataMEC[k][10]);
+                            mecBean.setTime_To(dataMEC[k][11]);   
+                            mecBean.setDate_From(dataMEC[k][12]);  
+                            mecBean.setDate_To(dataMEC[k][13]);                              
+                            mecBean.setTxn_Date(dataMEC[k][14]);                              
+                            mecBean.setStatus(dataMEC[k][15]);                              
+                            mecBean.setEncounter_Date(dataMEC[k][16]);                              
+                            mecBean.setHFC(dataMEC[k][17]);                              
+                            mecBean.setDoctor_ID(dataMEC[k][18]);  
+                            mecBean.setDoctor_Name(dataMEC[k][19]);                             
+
+                            String query_lhr_ml = "insert into lhr_med_leave "
+                                    + "(pmi_no,"
+                                    + "hfc_cd,"
+                                    + "episode_date, "
+                                    + "encounter_date, "
+                                  //  + "leave_type, "
+                                    + "start_date, "
+                                    + "end_date,  "
+                                    + "start_time,  "
+                                    + "end_time,  "
+                                    + "Comment,  " 
+                                    + "doctor_id,  " 
+                                    + "doctor_name,  "                                      
+                                    + "NATIONAL_ID_NO, "
+                                    + "PERSON_ID_NO, "
+                                    + "PERSON_STATUS, "
+                                    + "Centre_Code)"
+                                    + "values ('" + mecBean.getPMI_No() + "',"
+                                    + "'" + mecBean.getHFC() + "',"                                    
+                                    + "'" + mecBean.getEpisode_Date() + "',"
+                                    + "'" + mecBean.getEncounter_Date() + "',"    
+                                  //  + "'" + mecBean.getLeave_Type + "',"                                    
+                                    + "'" + mecBean.getDate_From() + "',"
+                                    + "'" + mecBean.getDate_To() + "',"
+                                    + "'" + mecBean.getTime_From() + "'," 
+                                    + "'" + mecBean.getTime_To() + "'," 
+                                    + "'" + mecBean.getComments() + "'," 
+                                    + "'" + mecBean.getDoctor_ID() + "',"                                     
+                                    + "'" + mecBean.getDoctor_Name() + "',"                                     
+                                    + "'" + NATIONAL_ID_NO + "',"
+                                    + "'" + PERSON_ID_NO + "',"
+                                    + "'" + PERSON_STATUS + "',"
+                                    + "'" + Centre_Code + "')";
+
+                            boolean status_lhr_ml = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, query_lhr_ml);
+                            System.out.println("query MEC: " + query_lhr_ml);
+                            System.out.println("status MEC " + status_lhr_ml);
+
+                            mecBeans.add(mecBean);
+                        }
+
+                    }                    
                     
                     String sql_update_ehr_central = "UPDATE `ehr_central` SET `STATUS` = '3' WHERE `ehr_central`.`CENTRAL_CODE` = '" + Central_Code + "'"; // Update patient status to 3 by using CENTRAL_CODE unique column data.
                     boolean update_ehr_central_boolean = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, sql_update_ehr_central);                      
@@ -811,6 +894,35 @@ public class NewMain {
                         System.out.println("Patient with Central Code : " + Central_Code + " has failed update to 3");
                     }                    
 
+
+                    // update table with doctor_id & doctor_name data
+                    
+                    String update_lhr_family_history = "UPDATE lhr_family_history SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_family_history);
+                    String update_lhr_medication = "UPDATE lhr_medication SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_medication);                    
+                    String update_lhr_med_leave = "UPDATE lhr_med_leave SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_med_leave);                      
+                    String update_lhr_signs = "UPDATE lhr_signs SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_signs);  
+                    String update_lhr_test = "UPDATE lhr_test SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_test);                      
+                    String update_lhr_weight_height = "UPDATE lhr_weight_height SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_weight_height);  
+                    String update_lhr_bp = "UPDATE lhr_bp SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_bp);  
+                    String update_lhr_spo2 = "UPDATE lhr_spo2 SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_spo2);                        
+                    String update_lhr_temperature = "UPDATE lhr_temperature SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_temperature);      
+                    String update_lhr_blood_glucose = "UPDATE lhr_blood_glucose SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_blood_glucose);     
+                    String update_lhr_procedure = "UPDATE lhr_procedure SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_procedure);                       
+                    String update_lhr_past_medical_history = "UPDATE lhr_past_medical_history SET doctor_id = '" + dgsB.getDoctor_ID() + "', doctor_name = '" + dgsB.getDoctor_Name() + "' WHERE pmi_no = '" + dgsB.getPMI_no() + "' AND episode_date =  '"+ dgsB.getEpisode_Date() + "' ";
+                    rc.setQuerySQL(Config.ipAddressServer, Config.portServer, update_lhr_past_medical_history);                        
+                    
+                    
                     
                 } // for loop for EHR_Central records end 
 
