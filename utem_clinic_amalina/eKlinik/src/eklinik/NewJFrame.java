@@ -341,7 +341,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         Document document = new Document(PageSize.A4, 36, 36, 64, 36);
         
-        //document.setMargins(30, 14, 50, 14);
+        document.setMargins(30, 30, 20, 20);
         //String faculty = null;
         //jTextArea1.setText(""); //clear textarea
         Object selectedItem = jComboBox1.getSelectedItem();
@@ -382,10 +382,10 @@ public class NewJFrame extends javax.swing.JFrame {
                     String female_total_result = null;
                     
                     //initialize pdf
-                    Font teks = new Font(Font.HELVETICA, 18, Font.BOLD);
-                    Color orange = WebColors.getRGBColor("Orange");
-                    Color magenta = WebColors.getRGBColor("#FF00FF");
-                    Color cyan = WebColors.getRGBColor("#00FFFF");
+                    Font teks = new Font(Font.HELVETICA, 10, Font.BOLD);
+//                    Color orange = WebColors.getRGBColor("Orange");
+//                    Color magenta = WebColors.getRGBColor("#FF00FF");
+//                    Color cyan = WebColors.getRGBColor("#00FFFF");
 
 
 //                    connectionURL = "jdbc:mysql://127.0.0.1/servercis?user=root&password=1234";
@@ -485,20 +485,23 @@ public class NewJFrame extends javax.swing.JFrame {
 
                         // 1 columns.
                         Image logo = Image.getInstance("logoUTeMPNG.png");
-                        logo.scaleAbsolute(230, 100); 
-                        //logo.scalePercent(7.3f);
+                        logo.scaleAbsolute(121, 56);
+                        //logo.setAbsolutePosition(260,700);
+                        //logo.scalePercent(8);
+                        //document.add(logo);
+                        
                         
                         PdfPCell cell1 = new PdfPCell(logo);
                         cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
                         cell1.setBorder(Rectangle.NO_BORDER);
-                        //cell1.setLeading(15f, 0.3f);
+                        cell1.setLeading(15f, 0.3f);
                         header_table1.addCell(cell1);
                         
 
                         
-                        DateFormat header_fmt = new SimpleDateFormat("dd-MM-yyyy");
+                        DateFormat header_fmt = new SimpleDateFormat("dd/MM/yyyy");
 
-                        PdfPCell cell3 = new PdfPCell(new Paragraph("\nDiagnosis Report by Faculty \nFrom " +header_fmt.format(d1)+ " to " +header_fmt.format(d2)+" \n", teks));
+                        PdfPCell cell3 = new PdfPCell(new Paragraph("\nList International Classification of Disease (ICD10)\n\nFrom " +header_fmt.format(d1)+ " to " +header_fmt.format(d2)+" \n", teks));
                         cell3.setBorder(Rectangle.NO_BORDER);
                         cell3.setColspan(2);
                         cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -512,21 +515,24 @@ public class NewJFrame extends javax.swing.JFrame {
                         header_table.setWidths(new float[]{1f, 1f});
                         header_table.setWidthPercentage(100);
                         
-                        PdfPCell cell5 = new PdfPCell(new Paragraph("\nFaculty : " + faculty));
+                        PdfPCell cell5 = new PdfPCell(new Paragraph("\nCategory : " + patient_type_label)); //remove with space and dash
                         cell5.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell5);
                         
+                        
                         PdfPCell cell6 = new PdfPCell(new Paragraph("\nReport ID : ECSS_RPT_001"));
-                        cell6.setBorder(Rectangle.NO_BORDER);      
+                        cell6.setBorder(Rectangle.NO_BORDER); 
+                        cell6.setHorizontalAlignment(Rectangle.ALIGN_RIGHT);
                         header_table.addCell(cell6);
                         
-                        PdfPCell cell8 = new PdfPCell(new Paragraph("Patient Type : " + patient_type_label)); //remove with space and dash
+                        PdfPCell cell8 = new PdfPCell(new Paragraph("Faculty/Centre : " + faculty));
                         cell8.setBorder(Rectangle.NO_BORDER);
                         header_table.addCell(cell8);
                         
-                        String timeStamp = new SimpleDateFormat("dd-MM-yyyy h:mm a").format(Calendar.getInstance().getTime()); 
+                        String timeStamp = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()); 
                         PdfPCell cell7 = new PdfPCell(new Paragraph("Date : " + timeStamp));
                         cell7.setBorder(Rectangle.NO_BORDER);
+                        cell7.setHorizontalAlignment(Rectangle.ALIGN_RIGHT);
                         header_table.addCell(cell7);
 
                         document.add(header_table);
@@ -1109,7 +1115,7 @@ public class NewJFrame extends javax.swing.JFrame {
                
                Font teks1 = new Font(Font.BOLD);
                 Paragraph paragraph = new Paragraph();
-			paragraph.add("\n-End of Report-");
+			paragraph.add("\n*** End of Report ***");
 			paragraph.setAlignment(Element.ALIGN_CENTER);
                         paragraph.setFont(teks1);
                        
@@ -1210,7 +1216,7 @@ public class NewJFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-//    private static void main(String args[]) {
+//    public static void main(String args[]) {
 //        
 //        /* Set the Nimbus look and feel */
 //        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
