@@ -341,7 +341,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         Document document = new Document(PageSize.A4, 36, 36, 64, 36);
         
-        document.setMargins(30, 30, 20, 20);
+        document.setMargins(30, 30, 50, 50);
         //String faculty = null;
         //jTextArea1.setText(""); //clear textarea
         Object selectedItem = jComboBox1.getSelectedItem();
@@ -371,6 +371,8 @@ public class NewJFrame extends javax.swing.JFrame {
                     
                     //initialize mysql con and var data type
                     String tot_by_fac = null;
+                    String tot_by_gm = null;
+                    String tot_by_gf = null;
                     ResultSet rs = null;
                     ResultSet rs_block;
                     ResultSet rs_code;
@@ -478,6 +480,76 @@ public class NewJFrame extends javax.swing.JFrame {
 
                         //jTextArea1.append("Total patient by faculty : " + tot_by_fac);
                         //jTextArea1.append("\nTotal patient by chapter : \n\n");
+                        
+                        
+                        
+                        
+                        //-----------------male------------------>
+                        
+                        ArrayList<ArrayList<String>> tot_by_gm_list = null ;
+                        
+                        if ("ALL".equals(faculty)){ 
+                            sql = "SELECT "
+                                    + "COALESCE(SUM(CASE WHEN Person_Status = 'L' THEN 1 ELSE 0 END),0) AS tot_by_gm "
+                                    + "FROM `lhr_diagnosis` ld, icd10_codes ic "
+                                    + "WHERE ic.icd10_code = ld.Diagnosis_Cd "
+                                    + "AND LENGTH(Person_Id_No) = '"+ patient_type +"' "
+                                    + "AND CAST(ld.Episode_Date as DATE) BETWEEN '"+ date1 +"' AND '"+ date2 +"'";
+
+                        
+                        }else{ 
+                            
+                            sql = "SELECT "
+                                    + "COALESCE(SUM(CASE WHEN Person_Status = 'L' THEN 1 ELSE 0 END),0) AS tot_by_gm" 
+                                    + "FROM `lhr_diagnosis` ld, icd10_codes ic "
+                                    + "WHERE `ld`.`centre_code` = '"+ faculty +"' "
+                                    + "AND ic.icd10_code = ld.Diagnosis_Cd "
+                                    + "AND LENGTH(Person_Id_No) = '"+ patient_type +"' "
+                                    + "AND CAST(ld.Episode_Date as DATE) BETWEEN '"+ date1 +"' AND '"+ date2 +"'";
+                           
+                        }
+                        tot_by_gm_list = rc.getQuerySQL(host, port, sql);
+                        
+                        for (int i = 0; i < tot_by_gm_list.size(); i++) {
+                            tot_by_gm = tot_by_gm_list.get(i).get(0); 
+                        }
+                        
+                        //------------------------------->
+                        
+                        //-----------------female------------------>
+                        
+                        
+                        ArrayList<ArrayList<String>> tot_by_gf_list = null ;
+                        
+                        if ("ALL".equals(faculty)){ 
+                            sql = "SELECT "
+                                    + "COALESCE(SUM(CASE WHEN Person_Status = 'F' THEN 1 ELSE 0 END),0) AS tot_by_gf " 
+                                    + "FROM `lhr_diagnosis` ld, icd10_codes ic "
+                                    + "WHERE ic.icd10_code = ld.Diagnosis_Cd "
+                                    + "AND LENGTH(Person_Id_No) = '"+ patient_type +"' "
+                                    + "AND CAST(ld.Episode_Date as DATE) BETWEEN '"+ date1 +"' AND '"+ date2 +"'";
+
+                        
+                        }else{ 
+                            
+                            sql = "SELECT "
+                                    + "COALESCE(SUM(CASE WHEN Person_Status = 'F' THEN 1 ELSE 0 END),0) AS tot_by_gf " 
+                                    + "FROM `lhr_diagnosis` ld, icd10_codes ic "
+                                    + "WHERE `ld`.`centre_code` = '"+ faculty +"' "
+                                    + "AND ic.icd10_code = ld.Diagnosis_Cd "
+                                    + "AND LENGTH(Person_Id_No) = '"+ patient_type +"' "
+                                    + "AND CAST(ld.Episode_Date as DATE) BETWEEN '"+ date1 +"' AND '"+ date2 +"'";
+                           
+                        }
+                        tot_by_gf_list = rc.getQuerySQL(host, port, sql);
+                        
+                        for (int i = 0; i < tot_by_gf_list.size(); i++) {
+                            tot_by_gf = tot_by_gf_list.get(i).get(0); 
+                        }
+                        
+                        //------------------------------->
+                        
+                        
                         
                         PdfPTable header_table1 = new PdfPTable(1);
                         float[] columnWidths = {3f};
@@ -714,7 +786,7 @@ public class NewJFrame extends javax.swing.JFrame {
                               if ("ALL".equals(faculty)){ //no prepared statement in this loop for faculty == ALL
                                   sql = "SELECT "
                                           + "COALESCE(SUM(CASE WHEN Person_Status = 'L' THEN 1 ELSE 0 END),0) AS M, "
-                                          + "COALESCE(SUM(CASE WHEN Person_Status = 'P' THEN 1 ELSE 0 END),0) AS F "
+                                          + "COALESCE(SUM(CASE WHEN Person_Status = 'F' THEN 1 ELSE 0 END),0) AS F "
                                           + "FROM lhr_diagnosis ld, icd10_codes ic "
                                           + "WHERE Diagnosis_Cd REGEXP '^[a-zA-Z0-9]+$'  "
                                           + "AND ic.icd10_code = ld.Diagnosis_Cd "
@@ -728,7 +800,7 @@ public class NewJFrame extends javax.swing.JFrame {
                             	  
                                   sql = "SELECT "
                                           + "COALESCE(SUM(CASE WHEN Person_Status = 'L' THEN 1 ELSE 0 END),0) AS M, "
-                                          + "COALESCE(SUM(CASE WHEN Person_Status = 'P' THEN 1 ELSE 0 END),0) AS F "
+                                          + "COALESCE(SUM(CASE WHEN Person_Status = 'F' THEN 1 ELSE 0 END),0) AS F "
                                           + "FROM lhr_diagnosis ld, icd10_codes ic "
                                           + "WHERE Diagnosis_Cd REGEXP '^[a-zA-Z0-9]+$' "
                                           + "AND ic.icd10_code = ld.Diagnosis_Cd "
@@ -785,6 +857,8 @@ public class NewJFrame extends javax.swing.JFrame {
                               
                               document.add(reportObj.get("chapter"));
                               
+                              
+                              
                               if (!"0".equals(chapter_total_result)){	// check chapter_total_result. if != 0 enter loop
                               
                                   //jTextArea1.append("\n\n\tTotal Patient by Block :");
@@ -819,7 +893,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                               + "(SELECT Diagnosis_Cd, substring(Diagnosis_Cd,3,3) AS diag, "
                                               + "count(*) as total, "
                                               + "COALESCE(SUM(CASE WHEN Person_Status = 'L' THEN 1 ELSE 0 END),0) AS M, "
-                                              + "COALESCE(SUM(CASE WHEN Person_Status = 'P' THEN 1 ELSE 0 END),0) AS F "
+                                              + "COALESCE(SUM(CASE WHEN Person_Status = 'F' THEN 1 ELSE 0 END),0) AS F "
                                               + "from lhr_diagnosis ld, icd10_codes ic "
                                               + "WHERE Diagnosis_Cd REGEXP '^[a-zA-Z0-9]+$' "
                                               + "AND ic.icd10_code = ld.Diagnosis_Cd "
@@ -840,7 +914,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                               + "(SELECT Diagnosis_Cd, substring(Diagnosis_Cd,3,3) AS diag, "
                                               + "count(*) as total, "
                                               + "COALESCE(SUM(CASE WHEN Person_Status = 'L' THEN 1 ELSE 0 END),0) AS M, "
-                                              + "COALESCE(SUM(CASE WHEN Person_Status = 'P' THEN 1 ELSE 0 END),0) AS F "
+                                              + "COALESCE(SUM(CASE WHEN Person_Status = 'F' THEN 1 ELSE 0 END),0) AS F "
                                               + "from lhr_diagnosis ld, icd10_codes ic "
                                               + "WHERE Diagnosis_Cd REGEXP '^[a-zA-Z0-9]+$' "
                                               + "AND ic.icd10_code = ld.Diagnosis_Cd "
@@ -974,7 +1048,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                                   + "ld.diagnosis_Cd, substring(Diagnosis_Cd,6,5) as icd10_code_strip, "
                                                   + "ic.icd10_desc, ib.Id AS icd10_block, "
                                                   + "COALESCE(SUM(CASE WHEN Person_Status = 'L' THEN 1 ELSE 0 END),0) AS M, "
-                                                  + "COALESCE(SUM(CASE WHEN Person_Status = 'P' THEN 1 ELSE 0 END),0) AS F, "
+                                                  + "COALESCE(SUM(CASE WHEN Person_Status = 'F' THEN 1 ELSE 0 END),0) AS F, "
                                                   + "COUNT(Diagnosis_Cd) as total "
                                                   + "from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic "
                                                   + "WHERE Diagnosis_Cd REGEXP '^[a-zA-Z0-9]+$' "
@@ -993,7 +1067,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                                   + "ld.diagnosis_Cd, substring(Diagnosis_Cd,6,5) as icd10_code_strip, "
                                                   + "ic.icd10_desc, ib.Id AS icd10_block, "
                                                   + "COALESCE(SUM(CASE WHEN Person_Status = 'L' THEN 1 ELSE 0 END),0) AS M, "
-                                                  + "COALESCE(SUM(CASE WHEN Person_Status = 'P' THEN 1 ELSE 0 END),0) AS F, "
+                                                  + "COALESCE(SUM(CASE WHEN Person_Status = 'F' THEN 1 ELSE 0 END),0) AS F, "
                                                   + "COUNT(Diagnosis_Cd) as total "
                                                   + "from lhr_diagnosis ld, icd10_blocks ib, icd10_codes ic "
                                                   + "WHERE Diagnosis_Cd REGEXP '^[a-zA-Z0-9]+$' "
@@ -1094,9 +1168,38 @@ public class NewJFrame extends javax.swing.JFrame {
                               
                               //jTextArea1.append("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
                               //jTextArea1.append("\n\n");
-                        } // for loop end       
+                        } // for loop end     
+                        
+                        //total------------------------------->
+                        PdfPTable table1 = new PdfPTable(5);
+                        table1.setWidths(new float[]{ 0.57f, 4f, 0.57f, 0.57f, 0.63f});
+                        table1.setLockedWidth(true);
+                        table1.setTotalWidth(document.right() - document.left());
+                        cell = new PdfPCell(new Phrase("Total Diagnosis"));
+                        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        
+                        cell.setRowspan(2);
+                        cell.setColspan(2);
+                        table1.addCell(cell);
+                        
+                        cell = new PdfPCell(new Phrase(tot_by_gm));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table1.addCell(cell);
+                        
+                        cell = new PdfPCell(new Phrase(tot_by_gf));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        table1.addCell(cell);
+                        
+                        cell = new PdfPCell(new Phrase(tot_by_fac));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cell.setRowspan(2);
+                        table1.addCell(cell);
 
-                        document.add(new Phrase("\nTotal Diagnosis: " + tot_by_fac));
+
+                        document.add(table1); 
+                        
+                        
+                        //document.add(new Phrase("\nTotal Diagnosis: " + tot_by_fac));
                         
                         if (invalid_record_list.size() != 0){
                         	document.add(new Phrase("\n"));
