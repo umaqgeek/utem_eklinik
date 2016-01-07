@@ -8,6 +8,7 @@ package queue;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import main.RMIConnector;
@@ -22,6 +23,7 @@ public class CreateQ extends javax.swing.JFrame {
     RMIConnector rc = new RMIConnector();
     java.util.Date d1, d2 = null;
     String date1, date2 = null;
+    Date date3, date4, date5, date6 = null;
 
     /**
      * Creates new form CreateQ
@@ -69,6 +71,7 @@ public class CreateQ extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Create Queue");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Queue Info"));
 
@@ -199,6 +202,11 @@ public class CreateQ extends javax.swing.JFrame {
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
@@ -333,6 +341,7 @@ public class CreateQ extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String Jcombo1 = (String) jComboBox1.getSelectedItem();
         String Jcombo2 = (String) jComboBox2.getSelectedItem();
+        String Jcombo3 = (String) jComboBox3.getSelectedItem();
         String Jtext1 = (String) jTextField1.getText();
         String Jtext2 = (String) jTextField2.getText();
         String Jtext3 = (String) jTextField3.getText();
@@ -352,14 +361,14 @@ public class CreateQ extends javax.swing.JFrame {
         } else if (Jtext4 != null) {
             try {
                 
-                String sqlinsert2 = "insert into pms_queue_list(queue_type, queue_name, user_id, start_date, end_date, hfc_cd, discipline_cd, asdsazscsaf)"
-                        + "values('"+Jcombo1+"','"+Jtext3+"','"+Jtext4+"','"+Jtext6+"',"+Jno1+" )";
+                String sqlinsert2 = "insert into pms_queue_list(queue_type, queue_name, user_id, start_date, end_date, hfc_cd, discipline_cd, sub_discipline_cd, status)"
+                        + "values('"+Jcombo1+"','"+Jtext1+"','"+Jcombo2+"','"+date1+"','"+date2+"','"+Jtext2+"','"+Jtext3+"','"+Jtext4+"','"+Jcombo3+"' )";
                 
-                boolean insert2 = rc.setQuerySQL(host, port, sqlinsert2);
+                boolean insert = rc.setQuerySQL(host, port, sqlinsert2);
                 String infoMessage = "Success add data";
                 JOptionPane.showMessageDialog(null, infoMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
-                fillcombo();
-                Table2();
+//                fillcombo();
+                Table();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
@@ -368,21 +377,118 @@ public class CreateQ extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        String Jcombo1 = (String) jComboBox1.getSelectedItem();
+        String Jcombo2 = (String) jComboBox2.getSelectedItem();
+        String Jcombo3 = (String) jComboBox3.getSelectedItem();
+        String Jtext1 = (String) jTextField1.getText();
+        String Jtext2 = (String) jTextField2.getText();
+        String Jtext3 = (String) jTextField3.getText();
+        String Jtext4 = (String) jTextField4.getText();
+         
+        d1 = jDateChooser1.getDate();
+        d2 = jDateChooser2.getDate();
+        DateFormat fmt = new SimpleDateFormat("yyyy-MM-d");
+        date1 = fmt.format(d1);
+        date2 = fmt.format(d2);
+
+        if (Jcombo1 == null) {
+            String infoMessage = "Please insert data in Queue type textbox.";
+            JOptionPane.showMessageDialog(null, infoMessage, "Warning", JOptionPane.WARNING_MESSAGE);
+
+        } else if (Jtext3 != null) {
+            try {;
+                String sqlupdate = "UPDATE pms_queue_list\n"
+                        + "SET start_date='"+date1+"', end_date='"+date2+"', hfc_cd='"+Jtext2+"', discipline_cd='"+Jtext3+"', sub_discipline_cd='"+Jtext4+"', status='"+Jcombo3+"' \n"
+                        + "WHERE queue_name='"+Jtext1+"' ";
+
+                boolean update = rc.setQuerySQL(host, port, sqlupdate);
+                String infoMessage = "Success update data";
+                JOptionPane.showMessageDialog(null, infoMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
+//                fillcombo();
+                Table();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        String Jcombo1 = (String) jComboBox1.getSelectedItem();
+        String Jcombo2 = (String) jComboBox2.getSelectedItem();
+        String Jcombo3 = (String) jComboBox3.getSelectedItem();
+        String Jtext1 = (String) jTextField1.getText();
+        String Jtext2 = (String) jTextField2.getText();
+        String Jtext3 = (String) jTextField3.getText();
+        String Jtext4 = (String) jTextField4.getText();
+         
+        d1 = jDateChooser1.getDate();
+        d2 = jDateChooser2.getDate();
+        DateFormat fmt = new SimpleDateFormat("yyyy-MM-d");
+        date1 = fmt.format(d1);
+        date2 = fmt.format(d2);
+        
+        if (Jcombo1 == null) {
+            String infoMessage = "Please insert data in Queue type textbox.";
+            JOptionPane.showMessageDialog(null, infoMessage, "Warning", JOptionPane.WARNING_MESSAGE);
+
+        } else if (Jcombo1 != null) {
+            try {
+//                String sqldelete2 = "DELETE FROM pms_queue_name WHERE queue_type='"+Jcombo1+"' and queue_name='"+Jtext3+"';";
+                String sqldelete = "DELETE FROM pms_queue_list WHERE queue_name='"+Jtext1+"';";
+
+                boolean delete = rc.setQuerySQL(host, port, sqldelete);
+                String infoMessage = "Success delete data";
+                JOptionPane.showMessageDialog(null, infoMessage, "Success", JOptionPane.INFORMATION_MESSAGE);
+//                fillcombo();
+                Table();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         jComboBox1.setSelectedItem("-Please Select-");
+        jComboBox2.setSelectedItem("-Please Select-");
+        jComboBox3.setSelectedItem("-Please Select-");
         jTextField1.setText("");
         jTextField2.setText("");
         jTextField3.setText("");
         jTextField4.setText("");
+        jDateChooser1.setDate(null);
+        jDateChooser2.setDate(null);
 
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        try{
+            int row =jTable1.getSelectedRow();
+            String Table_click = (jTable1.getModel().getValueAt(row, 0).toString());
+            String sqlclick = "select queue_type, queue_name, user_id, start_date, end_date, hfc_cd, discipline_cd, sub_discipline_cd, status from pms_queue_list where queue_type='"+Table_click+"'";
+            ArrayList<ArrayList<String>> data = rc.getQuerySQL(host, port, sqlclick);// execute query
+          
+            DateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd");
+            date3 = fmt2.parse(data.get(0).get(3));
+            date4 = fmt2.parse(data.get(0).get(4));
+            new SimpleDateFormat("d-MMM-yyyy").format(date3);
+            new SimpleDateFormat("d-MMM-yyyy").format(date4);
+
+            jComboBox1.setSelectedItem(data.get(0).get(0));
+            jTextField1.setText(data.get(0).get(1));
+            jComboBox2.setSelectedItem(data.get(0).get(2));
+            jDateChooser1.setDate(date3);
+            jDateChooser2.setDate(date4);
+            jTextField2.setText(data.get(0).get(5));
+            jTextField3.setText(data.get(0).get(6));
+            jTextField4.setText(data.get(0).get(7));
+            jComboBox3.setSelectedItem(data.get(0).get(8));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     
     private void fillcombo1() {
