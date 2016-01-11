@@ -28,7 +28,7 @@ public class CCN {
     private String Comment;
     private String txnDate;
     private String Status;
-    private String encounterdate;
+    private String Encounter_Date;
     private String hfc_cd;
     private String Doctor_ID;
     private String Doctor_Name;
@@ -262,20 +262,6 @@ public class CCN {
     }
 
     /**
-     * @return the encounterdate
-     */
-    public String getEncounterdate() {
-        return encounterdate;
-    }
-
-    /**
-     * @param encounterdate the encounterdate to set
-     */
-    public void setEncounterdate(String encounterdate) {
-        this.encounterdate = encounterdate;
-    }
-
-    /**
      * @return the hfc_cd
      */
     public String getHfc_cd() {
@@ -371,6 +357,14 @@ public class CCN {
      */
     public void setTerm_Type(String Term_Type) {
         this.Term_Type = Term_Type;
+    }
+
+    public String getEncounter_Date() {
+        return Encounter_Date;
+    }
+
+    public void setEncounter_Date(String Encounter_Date) {
+        this.Encounter_Date = Encounter_Date;
     }
 
 
