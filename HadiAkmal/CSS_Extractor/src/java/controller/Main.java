@@ -34,6 +34,7 @@ public class Main {
     
     public boolean deleteAll() {
         try {
+            if (true) { return false; }
 
             String sql1 = "TRUNCATE lhr_signs";
             boolean ccn = rc.setQuerySQL(Config.ipAddressServer, Config.portServer, sql1);
@@ -79,7 +80,9 @@ public class Main {
 
 
         try {
-            String sql1 = "SELECT sii.NATIONAL_ID_NO, sii.PERSON_ID_NO, sii.PERSON_STATUS, sii.LOCATION_CODE, ppb.* FROM PMS_PATIENT_BIODATA ppb, special_integration_information sii WHERE ppb.NEW_IC_NO = sii.NATIONAL_ID_NO";
+            String sql1 = "SELECT sii.NATIONAL_ID_NO, sii.PERSON_ID_NO, sii.PERSON_STATUS, sii.LOCATION_CODE, ppb.* "
+                    + "FROM PMS_PATIENT_BIODATA ppb, special_integration_information sii "
+                    + "WHERE ppb.NEW_IC_NO = sii.NATIONAL_ID_NO";
             ArrayList<ArrayList<String>> data1 = rc.getQuerySQL(Config.ipAddressServer, Config.portServer, sql1);
            
             int total_fail_insert = 0; //total of failed insert

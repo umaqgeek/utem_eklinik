@@ -11,6 +11,6 @@ package Config_Pack;
  */
 public class Config {
     
-    public final static String ipAddressServer = "biocore-stag.utem.edu.my";
+    public final static String ipAddressServer = "ecss.utem.edu.my";
     public final static int portServer = 1099;
 }
