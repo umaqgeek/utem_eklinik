@@ -1,0 +1,1 @@
+call "report1" function to run the sistem

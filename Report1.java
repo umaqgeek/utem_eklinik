@@ -5,17 +5,66 @@
  */
 package report;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import static java.nio.file.Files.list;
+import static java.rmi.Naming.list;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import static java.util.Collections.list;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import main.RMIConnector;
+import static org.eclipse.persistence.jpa.jpql.utility.CollectionTools.list;
+
 /**
  *
  * @author adam
  */
 public class Report1 extends javax.swing.JFrame {
 
+    Connection conn = null;
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+    Connection conn1 = null;
+    ResultSet rs1 = null;
+    PreparedStatement pst1 = null;
+    String Sub, Sub2 = null;
+
+    //Declare PDF Report function
+    private BaseFont bfBold;
+    private BaseFont bf;
+    private int pageNumber = 0;
+
     /**
      * Creates new form Report1
      */
     public Report1() {
         initComponents();
+//        fillcombo();
     }
 
     /**
@@ -27,164 +76,227 @@ public class Report1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBox3 = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
+        jComboBox5 = new javax.swing.JComboBox();
+        jComboBox4 = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable3.setAutoCreateRowSorter(true);
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"a", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"s", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"d", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"f", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"g", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Category", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"
+        jLabel1.setText("Report Type: ");
+
+        jLabel3.setText("By:");
+
+        jComboBox3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
-        ));
-        jTable3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane3.setViewportView(jTable3);
-        if (jTable3.getColumnModel().getColumnCount() > 0) {
-            jTable3.getColumnModel().getColumn(0).setMinWidth(60);
-        }
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 809, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 787, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 319, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-
-        jTabbedPane1.addTab("tab2", jPanel1);
-
-        jTable4.setAutoCreateRowSorter(true);
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"a", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"s", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"d", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"f", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"g", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Category", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jComboBox3PopupMenuWillBecomeInvisible(evt);
             }
-        ));
-        jTable4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane4.setViewportView(jTable4);
-        if (jTable4.getColumnModel().getColumnCount() > 0) {
-            jTable4.getColumnModel().getColumn(0).setMinWidth(60);
-        }
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 723, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 777, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel6.setText("Report and statistic of pharmacy");
 
-        jTabbedPane1.addTab("tab3", jPanel2);
-
-        jTable2.setAutoCreateRowSorter(true);
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"a", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"s", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"d", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"f", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {"g", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Category", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-Please Select-", "Total & Drug Type", "Total Drug Expenses", "Stock Take & Stock Count" }));
+        jComboBox1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
-        ));
-        jTable2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane2.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setMinWidth(60);
-        }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jComboBox1PopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
 
-        jTabbedPane1.addTab("tab1", jScrollPane2);
+        jLabel9.setText("Facuty:");
+
+        jComboBox5.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jComboBox5PopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+
+        jComboBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox4ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Of:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 814, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel3))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jLabel6)))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jComboBox1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBox1PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+        String jcombox = (String) jComboBox1.getSelectedItem();
+//        //ArrayList<String> list = new ArrayList<String>();
+        Sub = jcombox;
+
+        // Combo box data -> automatically change data content according to the 
+        //choose
+        if ("Total & Drug Type".equals(Sub)) {//report of total & drug type 
+            //consist of 2 type :
+            jComboBox2.removeAllItems();
+            jComboBox2.addItem("That has been used");//1 type
+            jComboBox2.addItem("That has been expired");//2 type
+            jComboBox3.removeAllItems();
+            jComboBox3.addItem("Weeks"); //report can be choose based on week or
+            jComboBox3.addItem("Months");//month
+            jComboBox3.addItem("Years");//year
+            //week();
+            fillcombo();
+
+        } else if ("Total Drug Expenses".equals(Sub)) {//report of Total Drug 
+            //Expenses consist of 4 type :
+            jComboBox2.removeAllItems();
+            jComboBox2.addItem("All");//1 type
+            jComboBox2.addItem("Student");//2 type
+            jComboBox2.addItem("International Student");//3 type
+            jComboBox2.addItem("Staff");//4 type
+            jComboBox3.removeAllItems();
+            jComboBox3.addItem("Months");//report can be choose based on month or
+            jComboBox3.addItem("Years");//year
+            
+            fillcombo();
+
+        } else if ("Stock Take & Stock Count".equals(Sub)) {//report of Stock 
+            //Take & Stock Count consist of 3 type :
+            jComboBox2.removeAllItems();
+            jComboBox2.addItem("Total Drug in Storage & Drug Usage");//1 type
+            jComboBox2.addItem("Batch Number");//2 type
+            jComboBox2.addItem("Drug Type");//3 type
+            jComboBox3.removeAllItems();
+            jComboBox3.addItem("Months");//1 type
+            jComboBox3.addItem("Years");//2 type
+            
+            fillcombo();
+
+        } else {
+            jComboBox2.removeAllItems();
+            jComboBox3.removeAllItems();
+//            jComboBox4.removeAllItems();
+            jComboBox5.removeAllItems();
+
+        }
+    }//GEN-LAST:event_jComboBox1PopupMenuWillBecomeInvisible
+
+    private void jComboBox3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBox3PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+        /*String comboB52 = (String) jComboBox3.getSelectedItem();
+        Sub2 = comboB52;
+
+        if ("Weeks".equals(Sub2)) {
+            week();
+
+        } else if ("Months".equals(Sub2)) {
+            month();
+
+        } else if ("Years".equals(Sub2)) {
+            year();
+        }*/
+    }//GEN-LAST:event_jComboBox3PopupMenuWillBecomeInvisible
+
+    private void jComboBox5PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBox5PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+//        java.sql.Date sqldate = new java.sql.Date(jDateChooser1.getDate().getTime());
+        String comboB5 = (String) jComboBox5.getSelectedItem();
+        String pdfFilename = "Report1";
+
+        try {
+
+            generateReportPDF(pdfFilename);
+        } catch (SQLException ex) {
+            Logger.getLogger(Report1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            //Report file will be open from this folder path
+            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + "D:\\Report\\" + pdfFilename + "(" + comboB5 + ").pdf");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error");
+        }
+    }//GEN-LAST:event_jComboBox5PopupMenuWillBecomeInvisible
+
+    private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws SQLException, DocumentException, FileNotFoundException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -216,17 +328,334 @@ public class Report1 extends javax.swing.JFrame {
         });
     }
 
+    /*private void week() {
+        jComboBox4.removeAllItems();
+        jComboBox4.addItem("-Please Select-");
+        jComboBox4.addItem("ALL");
+        jComboBox4.addItem("1");
+        jComboBox4.addItem("2");
+        jComboBox4.addItem("3");
+        jComboBox4.addItem("4");
+        jComboBox4.addItem("5");
+        jComboBox4.addItem("6");
+        jComboBox4.addItem("7");
+    }
+
+    private void month() {
+        jComboBox4.removeAllItems();
+        jComboBox4.addItem("-Please Select-");
+        jComboBox4.addItem("January");
+        jComboBox4.addItem("February");
+        jComboBox4.addItem("March");
+        jComboBox4.addItem("April");
+        jComboBox4.addItem("May");
+        jComboBox4.addItem("June");
+        jComboBox4.addItem("July");
+        jComboBox4.addItem("August");
+        jComboBox4.addItem("September");
+        jComboBox4.addItem("October");
+        jComboBox4.addItem("November");
+        jComboBox4.addItem("December");
+    }
+
+    private void year() {
+        jComboBox4.removeAllItems();
+        jComboBox4.addItem("-Please Select-");
+        jComboBox4.addItem("ALL");
+        RMIConnector rc3 = new RMIConnector();
+        String host = "biocore-stag.utem.edu.my";// declaration host
+        int port = 1099; //declaration port //for now, stick to this port
+
+        String sql3 = "Select distinct(year(Episode_date)) as year from lhr_medication order by year(Episode_date) desc";
+        ArrayList<ArrayList<String>> data3 = rc3.getQuerySQL(host, port, sql3);// execute query
+
+        for (int i = 0; i < data3.size(); i++) {
+            jComboBox4.addItem(data3.get(i).get(0));
+        }
+    }*/
+
+    private void fillcombo() {
+        jComboBox5.removeAllItems();
+        jComboBox5.addItem("-Please Select-");
+        jComboBox5.addItem("Total");
+        jComboBox5.addItem("ALL Division");
+        RMIConnector rc = new RMIConnector();
+        String host = "biocore-stag.utem.edu.my";// declaration host
+        int port = 1099; //declaration port //for now, stick to this port
+
+        String sql = "Select distinct(location_code) from lhr_medication order by location_code";
+        ArrayList<ArrayList<String>> data = rc.getQuerySQL(host, port, sql);// execute query
+
+        for (int i = 0; i < data.size(); i++) {
+            jComboBox5.addItem(data.get(i).get(0));
+        }
+    }
+
+    //Begin PDF report////
+    private void generateReportPDF(String pdfFilename) throws SQLException {
+        Document doc = new Document(PageSize.A4, 36, 36, 64, 36);
+        PdfWriter docWriter = null;
+        initializeFonts();
+
+        String comboB5 = (String) jComboBox5.getSelectedItem();
+
+        try {
+            //Report file will be save to this folder path
+            String path = "D:\\Report\\" + pdfFilename + "(" + comboB5 + ").pdf";
+            docWriter = PdfWriter.getInstance(doc, new FileOutputStream(path));
+            doc.addAuthor("Adam");
+            doc.addCreationDate();
+            doc.addProducer();
+            doc.addCreator("MySampleCode.com");
+            doc.addTitle("Report1");
+            doc.setPageSize(PageSize.LETTER);
+
+            doc.open();
+            PdfContentByte cb = docWriter.getDirectContent();
+
+            generateDetail(doc, cb);
+
+        } catch (DocumentException dex) {
+            dex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (doc != null) {
+                doc.close();
+            }
+            if (docWriter != null) {
+                docWriter.close();
+            }
+        }
+
+    }
+
+    private void generateDetail(Document doc, PdfContentByte cb) {//write detail
+        //of report in pdf
+
+        String sql = null;
+        RMIConnector rc = new RMIConnector();
+        String host = "biocore-stag.utem.edu.my";// declaration host
+        int port = 1099; //declaration port //for now, stick to this port
+        ArrayList<ArrayList<String>> data = null;
+
+        String comboB1 = (String) jComboBox1.getSelectedItem();
+        String comboB2 = (String) jComboBox2.getSelectedItem();
+        String comboB3 = (String) jComboBox3.getSelectedItem();
+        String comboB5 = (String) jComboBox5.getSelectedItem();
+        
+
+        if (comboB5 != null && comboB5 != "-Please Select-" ) {
+            if ("Total".equals(comboB5)) {
+                sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
+                        + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
+                        + "Sum(case when PERSON_STATUS='P' then 1 else 0 end) AS Female,\n"
+                        + "COUNT(l.Medication_code) as PTotal, COUNT(LOCATION_CODE) as TTotal,\n"
+                        + "COUNT(DISTINCT(l.Medication_code)) as MTotal, MONTH(Episode_date),\n"
+                        + "p.D_SELL_PRICE as RM, \n"
+                        + "COUNT(l.Medication_code)*p.D_SELL_PRICE as total_RM\n"
+                        + "from servercis.lhr_medication AS l\n"
+                        + "inner join servercis.pis_mdc2 AS p \n"
+                        + "on l.Medication_code=p.UD_MDC_CODE\n"
+                        + "where l.Medication_code in\n"
+                        + "(\n"
+                        + "select UD_MDC_CODE from pis_mdc2\n"
+                        + ")\n"
+                        + "group by l.Medication_code";
+
+            } else {
+                sql = "select l.LOCATION_CODE, l.Medication_code, l.Medication_desc,\n"
+                        + "Sum(case when PERSON_STATUS='L' then 1 else 0 end) AS Male,\n"
+                        + "Sum(case when PERSON_STATUS='P' then 1 else 0 end) AS Female,\n"
+                        + "COUNT(l.Medication_code) as PTotal, COUNT(LOCATION_CODE) as TTotal,\n"
+                        + "COUNT(DISTINCT(l.Medication_code)) as MTotal, MONTH(Episode_date),\n"
+                        + "p.D_SELL_PRICE as RM, \n"
+                        + "COUNT(l.Medication_code)*p.D_SELL_PRICE as total_RM\n"
+                        + "from servercis.lhr_medication AS l\n"
+                        + "inner join servercis.pis_mdc2 AS p \n"
+                        + "on l.Medication_code=p.UD_MDC_CODE\n"
+                        //+ "where l.LOCATION_CODE = '" + comboB5 + "' and year(Episode_date)='" + comboB4 + "' and l.Medication_code in\n"
+                        + "where l.LOCATION_CODE = '" + comboB5 + "' and l.Medication_code in\n"
+                        + "(\n"
+                        + "select UD_MDC_CODE from pis_mdc2\n"
+                        + ")\n"
+                        + "group by l.Medication_code";
+            }
+
+            data = rc.getQuerySQL(host, port, sql);
+
+            boolean beginPage = true;
+            int y = 0;
+
+            //the layout and contain of pdf report
+            for (int i = 0; i < data.size(); i++) {
+                if (beginPage) {
+                    beginPage = false;
+                    generateLayout(doc, cb);//the layout of pdf report
+                    generateHeader(doc, cb);//the header of pdf report
+                    y = 615;
+                }
+
+                if (y < 50) {
+                    printPageNumber(cb);//the page number of pdf report
+                    doc.newPage();
+                    beginPage = true;
+                }
+            }
+            printPageNumber(cb);//the page number of pdf report
+
+            int i = 0;
+            for (int j = 0; j < data.size(); j++) {
+
+                if (i < data.size()) {//data contain in the table
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    df.setMaximumFractionDigits(2);
+                    createContent(cb, 63, y, String.valueOf(i + 1), PdfContentByte.ALIGN_RIGHT);//first column data
+                    createContent(cb, 72, y, data.get(j).get(1), PdfContentByte.ALIGN_LEFT);//2nd column data
+                    createContent(cb, 145, y, data.get(j).get(2), PdfContentByte.ALIGN_LEFT);//3rd column data
+
+                    String RM = df.format(Double.parseDouble(data.get(j).get(9)));
+                    createContent(cb, 448, y, RM, PdfContentByte.ALIGN_RIGHT);//4th column data
+
+                    createContent(cb, 518, y, data.get(j).get(5), PdfContentByte.ALIGN_RIGHT);//5th column data
+
+                    String RMTotal = df.format(Double.parseDouble(data.get(j).get(10)));
+                    createContent(cb, 588, y, RMTotal, PdfContentByte.ALIGN_RIGHT);//6th column data
+                    y = y - 15;
+                    if (y < 50) {
+                        printPageNumber(cb);//the page number of pdf report
+                        doc.newPage();
+                        beginPage = true;
+                    }
+                }
+                i++;
+            }
+        } else {
+
+        }
+    }
+
+    private void generateLayout(Document doc, PdfContentByte cb) {//layout of table
+
+        try {
+
+            cb.setLineWidth(1f);
+
+            cb.rectangle(40, 50, 550, 600);//table line
+            cb.moveTo(40, 630);//horizontal line of table
+            cb.lineTo(590, 630);//horizontal line of table
+
+            cb.moveTo(70, 50);//No line
+            cb.lineTo(70, 650);
+            cb.moveTo(143, 50);//Drug Code line
+            cb.lineTo(143, 650);
+            cb.moveTo(405, 50);//Desc line
+            cb.lineTo(405, 650);
+            cb.moveTo(450, 50);//Price line
+            cb.lineTo(450, 650);
+            cb.moveTo(520, 50);//Total Amount line
+            cb.lineTo(520, 650);
+            cb.stroke();
+
+            // Report Detail box Text Headings 
+            createHeadings(cb, 48, 633, "No");
+            createHeadings(cb, 72, 633, "Drug Code");
+            createHeadings(cb, 145, 633, "Description");
+            createHeadings(cb, 415, 633, "Price");
+            createHeadings(cb, 457, 633, "Total Patient");
+            createHeadings(cb, 522, 633, "Total Amount");
+
+            //add the images
+            Image Logo = Image.getInstance("LogoUTeM2.gif");
+            Logo.setAbsolutePosition(45, 700);
+            Logo.scalePercent(9);
+            doc.add(Logo);
+
+        } catch (DocumentException dex) {
+            dex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    private void generateHeader(Document doc, PdfContentByte cb) {//pdf report header
+
+        String comboB5 = (String) jComboBox5.getSelectedItem();
+        String comboB3 = (String) jComboBox3.getSelectedItem();
+
+        createHeadings(cb, 215, 762, "Pusat Kesihatan");
+        createHeadings(cb, 215, 742, "Universiti Teknikal Malaysia, Melaka");
+        createHeadings(cb, 215, 722, "54500 Durian Tunggal");
+        createHeadings(cb, 215, 702, "Melaka");
+
+        createHeadings(cb, 45, 684, "Report of Drug Sales by " + comboB3);
+        createHeadings(cb, 45, 672, "Faculty: " + comboB5);
+        createHeadings(cb, 45, 660, "Report ID: ECSS RPT 002");
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        createHeadings(cb, 465, 660, "Date: " + dateFormat.format(date));//2014/08/06 15:59:48
+
+    }
+
+    private void createHeadings(PdfContentByte cb, float x, float y, String text) {//header font & etc
+
+        cb.beginText();
+        cb.setFontAndSize(bfBold, 10);
+        cb.setTextMatrix(x, y);
+        cb.showText(text.trim());
+        cb.endText();
+
+    }
+
+    private void printPageNumber(PdfContentByte cb) {//page number font & etc
+
+        cb.beginText();
+        cb.setFontAndSize(bfBold, 9);
+        cb.showTextAligned(PdfContentByte.ALIGN_RIGHT, "Page No. " + (pageNumber + 1), 570, 25, 0);
+        cb.endText();
+
+        pageNumber++;
+
+    }
+
+    private void createContent(PdfContentByte cb, float x, float y, String text, int align) {//data content font & etc
+
+        cb.beginText();
+        cb.setFontAndSize(bf, 10);
+        cb.showTextAligned(align, text.trim(), x, y, 0);
+        cb.endText();
+
+    }
+
+    //initialize font type
+    private void initializeFonts() {//general font & etc
+
+        try {
+            bfBold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    //End PDF report////
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JComboBox jComboBox3;
+    private javax.swing.JComboBox jComboBox4;
+    private javax.swing.JComboBox jComboBox5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
 }
