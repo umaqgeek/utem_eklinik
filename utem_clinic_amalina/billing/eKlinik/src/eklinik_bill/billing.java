@@ -9,7 +9,7 @@ package eklinik_bill;
  *
  * @author Amalina
  */
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+//import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,9 +24,9 @@ import javax.swing.table.TableRowSorter;
 import main.RMIConnector;
 import java.util.Scanner;
 
-import javax.inject.Inject;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+//import javax.inject.Inject;
+//import javax.enterprise.context.RequestScoped;
+//import javax.inject.Named;
 import eklinik_bill.generate;
 
 public class billing extends javax.swing.JFrame {
@@ -36,7 +36,7 @@ public class billing extends javax.swing.JFrame {
 
     private String Table_click;
     // declaration host and port
-    String host = "biocore-devp.utem.edu.my";
+    String host = "biocore-stag.utem.edu.my";
     int port = 1099; // for now, stick to this port
 
     
@@ -428,9 +428,9 @@ public class billing extends javax.swing.JFrame {
                 String text = jTextField1.getText();
 
                 if (text.trim().length() == 0) {
-                    rowSorter.setRowFilter(null);
+//                    rowSorter.setRowFilter(null);
                 } else {
-                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+//                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
                 }
             }
 
@@ -439,9 +439,9 @@ public class billing extends javax.swing.JFrame {
                 String text = jTextField1.getText();
 
                 if (text.trim().length() == 0) {
-                    rowSorter.setRowFilter(null);
+//                    rowSorter.setRowFilter(null);
                 } else {
-                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+//                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
                 }
             }
 
